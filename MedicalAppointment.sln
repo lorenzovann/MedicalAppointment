@@ -5,9 +5,11 @@ VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnd", "BackEnd", "{F1BD7852-53FF-48BF-94C0-EA0B6C01834A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{ABF2F340-CA10-48EB-9438-A5521ABD8A98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Domain", "MedicalAppointment.Domain\MedicalAppointment.Domain.csproj", "{6EC731CD-FAC0-46F8-9837-B105B7A50D1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Domain", "MedicalAppointment.Domain\MedicalAppointment.Domain.csproj", "{6EC731CD-FAC0-46F8-9837-B105B7A50D1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicaI.nfractuture.cs", "MedicaInfractuture\MedicaI.nfractuture.cs.csproj", "{47E0F7F8-61C0-4D3A-8C15-1566F95EDC14}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Medical.Percistances.cs", "Medical.Percistances.cs\Medical.Percistances.cs.csproj", "{EA04D9F8-364C-4DD6-98EF-58C4B66281EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,14 @@ Global
 		{6EC731CD-FAC0-46F8-9837-B105B7A50D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EC731CD-FAC0-46F8-9837-B105B7A50D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EC731CD-FAC0-46F8-9837-B105B7A50D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47E0F7F8-61C0-4D3A-8C15-1566F95EDC14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E0F7F8-61C0-4D3A-8C15-1566F95EDC14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E0F7F8-61C0-4D3A-8C15-1566F95EDC14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E0F7F8-61C0-4D3A-8C15-1566F95EDC14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA04D9F8-364C-4DD6-98EF-58C4B66281EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA04D9F8-364C-4DD6-98EF-58C4B66281EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA04D9F8-364C-4DD6-98EF-58C4B66281EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA04D9F8-364C-4DD6-98EF-58C4B66281EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
