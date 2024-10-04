@@ -1,12 +1,15 @@
 ﻿
 
 using MedicalAppointment.Domain.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalAppointment.Domain.Entities.Confi.User
 
 {
     public sealed class UserDoctor : BaseEntity
-    { 
+    {
+
+        [Key]
         public int IDDoctor { get; set; } 
         public int SpecialtyID { get; set; }    
         public string LicenseNumber { get; set; }   

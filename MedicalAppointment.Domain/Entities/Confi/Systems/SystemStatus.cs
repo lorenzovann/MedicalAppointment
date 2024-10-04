@@ -8,3 +8,4 @@ namespace MedicalAppointment.Domain.Entities.Confi.Systems
         public string StatusName { get; set; }
     }
 }
+    
