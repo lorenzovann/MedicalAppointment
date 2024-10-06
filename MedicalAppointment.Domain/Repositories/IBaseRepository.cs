@@ -14,6 +14,6 @@ namespace MedicalAppointment.Domain.Repositories
         Task<OperationResult> Delete (TEntity entity);
         Task<OperationResult> GetAll();
         Task<OperationResult> GetEntityBy(int id);
-        Task<OperationResult> Exist(Expression<Func<TEntity, bool>> filter);
+        Task<bool> Exist(Expression<Func<TEntity, bool>> filter);
     }
 }

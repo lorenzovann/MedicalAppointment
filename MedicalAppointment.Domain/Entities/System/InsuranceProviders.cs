@@ -1,10 +1,14 @@
 ﻿
 using MedicalAppointment.Domain.Base;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.Configuration
 {
-    public class InsuranceProviders : BaseEntity
+    [Table("InsuranceProviders", Schema = "Insurance")]
+    public class InsuranceProviders : BaseEntity 
     {
+        [Key]
         public int InsuranceProviderID { get; set; }
         public string Name { get; set; }
         public string ContactNumber { get; set; }
@@ -23,6 +27,7 @@ namespace MedicalAppointment.Domain.Entities.Configuration
         public string? AcceptedRegions { get; set; }
         public decimal? MaxCoverageAmount { get; set; }
         public bool IsActive { get; set; }
+       
 
 
     }
