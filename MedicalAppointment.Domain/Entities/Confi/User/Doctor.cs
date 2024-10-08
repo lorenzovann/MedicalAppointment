@@ -1,16 +1,19 @@
 ﻿
 
-using MedicalAppointment.Domain.Base;
+using Medical.Domain.Base;
+
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.Confi.User
-
 {
-    public sealed class UserDoctor : BaseEntity
+    [Table("Doctors", Schema = "User")] // mapeo 
+    public sealed class Doctor : BaseEntitie
     {
 
         [Key]
         public int IDDoctor { get; set; } 
+        public string? Name { get; set; }    
         public int SpecialtyID { get; set; }    
         public string LicenseNumber { get; set; }   
         public int YearofExperinces {  get; set; }  
@@ -22,4 +25,4 @@ namespace MedicalAppointment.Domain.Entities.Confi.User
         public DateTime LicenseExpirationDate { get; set; } 
 
     }
-}
+}                   

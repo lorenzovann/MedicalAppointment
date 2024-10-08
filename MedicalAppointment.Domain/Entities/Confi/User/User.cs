@@ -1,11 +1,13 @@
 ﻿
-using MedicalAppointment.Domain.Base;
+
+using Medical.Domain.Base;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.Confi.User
-
 {
-    public class User : BaseEntity
+    [Table("Users", Schema = "User")]
+    public class User : BaseEntitie
     {
         [Key]
         public int IDUser {  get; set; }
@@ -17,3 +19,4 @@ namespace MedicalAppointment.Domain.Entities.Confi.User
 
     }
 }
+            

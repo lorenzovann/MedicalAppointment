@@ -1,9 +1,11 @@
 ﻿
 
 using MedicalAppointment.Domain.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.Confi.Systems
 {
+    [Table("Notifications", Schema = "System")]
     public sealed class SystemNotifications 
     {  
 
@@ -14,3 +16,4 @@ namespace MedicalAppointment.Domain.Entities.Confi.Systems
 
     }
 }
+                   

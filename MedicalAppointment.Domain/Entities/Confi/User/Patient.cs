@@ -1,14 +1,18 @@
 ﻿
 
-using MedicalAppointment.Domain.Base;
+using Medical.Domain.Base;
+
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointment.Domain.Entities.Confi.User
 {
-    public sealed class UserPatient : BaseEntity
+    [Table("Patients", Schema = "User")]
+    public sealed class Patient : BaseEntitie
     {
         [Key]
-        public int PatiendID { get; set; }
+        public int PatiendID { get; set; } 
+        public string? Name { get; set; }  
         public DateTime DateofBirth { get; set; }   
         public char Gender { get; set; }    
         public string Address { get; set; }  
@@ -20,4 +24,4 @@ namespace MedicalAppointment.Domain.Entities.Confi.User
 
     }
 }
-        
+                           
