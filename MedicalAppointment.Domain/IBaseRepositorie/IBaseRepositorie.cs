@@ -10,15 +10,11 @@ namespace MedicalAppointment.Domain.IBaseRepositorie
         // Métodos CRUD
 
         Task<OperationResult> Add(TEntities entities);
-
-  
         Task<OperationResult> Delete(TEntities entities);
         Task<OperationResult> Update(TEntities entities);
-        Task<OperationResult> GetEntitiebyId(int id); 
-        
+        Task<OperationResult> GetEntitiebyId(int id);     
         Task<OperationResult> Getall();
-
-        Task<OperationResult> Exist(Expression<Func<TEntities, bool>> filter);  
+        Task<bool> Exist(Expression<Func<TEntities, bool>> filter);  
     }
 }
-        
+     
