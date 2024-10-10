@@ -1,6 +1,6 @@
 ﻿
-using MedicalAppointment.Domain.Entities.Confi.Systems;
-using MedicalAppointment.Domain.Entities.Confi.User;
+using Medical.Domain.Entities.Confi.Systems;
+using Medical.Domain.Entities.Confi.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 
@@ -10,20 +10,20 @@ namespace Medical.Percistances.cs.Context
     {
         public Context(DbContextOptions<Context> options) : base(options)
         {
-            #region confi Entities
-            #endregion
+         
+
 
         }
         // Mapeo de las entidades
 
-        #region " Entities User "
+        #region " Entities Users "
         public DbSet<User> Users { get; set; }
         public DbSet<Doctor> UserDoctor { get; set; } 
         public DbSet<Patient> userPatients { get; set; }
         #endregion 
 
 
-        #region #region " Entities System " 
+        #region  " Entities Systems " 
 
         public DbSet<SystemStatus> systemStatus { get; set; }
         public DbSet<SystemNotifications> systemNotifications { get; set; }

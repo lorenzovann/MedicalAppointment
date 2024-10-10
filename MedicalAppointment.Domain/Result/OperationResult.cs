@@ -14,7 +14,5 @@ namespace MedicalAppointment.Domain.Result
         public dynamic? data { get; set; }
 
 
-
-
     }
 }
