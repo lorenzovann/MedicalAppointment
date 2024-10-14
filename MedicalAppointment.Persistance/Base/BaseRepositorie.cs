@@ -56,7 +56,7 @@ namespace Medical.Percistances.cs.Base
             {
                 // Eliminar la entidad del contexto
                 entities1.Remove(entities);
-
+                
                 // Confirmar los cambios en la base de datos
                 await _context.SaveChangesAsync(); 
 
@@ -67,7 +67,7 @@ namespace Medical.Percistances.cs.Base
             catch (Exception ex)
             {
                 result.Sucess = false;
-                result.Message = $"Ocurrió un error: {ex.Message} al intentar eliminar este artículo.";
+                result.Message = $"Ocurrió un error: {ex.Message} al intentar eliminar este regitro.";
             }
 
             return result;
@@ -100,7 +100,7 @@ namespace Medical.Percistances.cs.Base
             {  
                 entities1.Update(entities);
                 await _context.SaveChangesAsync();
-                result.Message = "Cambio ejecutado exitosamente!";
+                result.Message = "Modificacion ejecutada exitosamente!";
             }
             catch (Exception ex)
             {

@@ -6,11 +6,11 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Medical.Percistances.cs.Context
 {
-    public partial class Context : DbContext
+    public partial class MedicalContext : DbContext
     {
-        public Context(DbContextOptions<Context> options) : base(options)
+        public MedicalContext(DbContextOptions<MedicalContext> options) : base(options)
         {
-         
+
 
 
         }
@@ -18,16 +18,16 @@ namespace Medical.Percistances.cs.Context
 
         #region " Entities Users "
         public DbSet<User> Users { get; set; }
-        public DbSet<Doctor> UserDoctor { get; set; } 
-        public DbSet<Patient> userPatients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Patient> Patients { get; set; }
         #endregion 
 
 
         #region  " Entities Systems " 
 
-        public DbSet<SystemStatus> systemStatus { get; set; }
-        public DbSet<SystemNotifications> systemNotifications { get; set; }
-        public DbSet<SystemRole> systemRoles { get; set; }
+        public DbSet<Status> Status { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
+        public DbSet<Role>  Roles { get; set; }
         #endregion 
 
 
