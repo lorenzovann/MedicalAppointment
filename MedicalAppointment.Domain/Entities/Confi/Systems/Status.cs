@@ -1,11 +1,15 @@
 ﻿
 
 using Medical.Domain.Base;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Medical.Domain.Entities.Confi.Systems
 {
-    public sealed class SystemStatus : BaseEntitie
+    [Table("Status", Schema = "Systems")]
+    public sealed class Status : BaseEntitie
     {
+        [Key]
         public int StatusId { get; set; }
         public string StatusName { get; set; }
     }
