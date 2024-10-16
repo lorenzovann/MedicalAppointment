@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Medical.Domain.Entities.Confi.Users
 {
     [Table("Users", Schema = "User")]
-    public class User : BaseEntitie
+    public sealed class User : BaseEntitie
     {
         [Key]
         public int IDUser { get; set; }

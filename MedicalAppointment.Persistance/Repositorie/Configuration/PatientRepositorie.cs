@@ -17,7 +17,7 @@ using System.Xml.XPath;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    internal class PatientRepositorie : BaseRepositorie<Patient>, IPatientRepositorie
+    public class PatientRepositorie : BaseRepositorie<Patient>, IPatientRepositorie
     {
 
         private readonly MedicalContext _dbcontext;
@@ -262,6 +262,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                        patient.BloodType,
                                                        patient.Allergies,
                                                        patient.InsuranceProviderID,
+                                                       patient.CreateAt,
+                                                       patient.UpdateAt,
+                                                       patient.IsActive,
                                                        InsuranceProviderName = insuranceProvider.Name  // Nombre del proveedor de seguro
                                                    }).ToListAsync();
 
@@ -300,6 +303,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                              on patient.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
                                              where patient.PatiendID == id &&
                                              patient.IsActive == true
+                                             orderby patient descending
                                              select new
                                              {
                                                  patient.PatiendID,
@@ -311,6 +315,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                  patient.EmergencyContactPhone,
                                                  patient.BloodType,
                                                  patient.Allergies,
+                                                 patient.CreateAt,
+                                                 patient.UpdateAt,
                                                  InsuranceProviderName = insuranceProvider.Name  
                                              }).FirstOrDefaultAsync();
 

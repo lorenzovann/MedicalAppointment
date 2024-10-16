@@ -195,6 +195,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                 user.FirstName,
                                                 user.LastName,
                                                 user.Email,
+                                                user.CreateAt,
+                                                user.UpdateAt,
                                                 user.Pasword,
                                                 SystemRole.RoleName
                                             }).ToListAsync();
@@ -241,6 +243,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                           join role in _context.Roles
                                           on user.RoleId equals role.RoleId
                                           where user.IDUser == id
+                                          && user.IsActive == true
+                                          orderby user descending
                                           select new
                                           {
                                               user.IDUser,
@@ -248,10 +252,12 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                               user.LastName,
                                               user.Email,
                                               user.Pasword,
+                                              user.CreateAt,
+                                              user.UpdateAt,
                                               RoleName = role.RoleName  // Nombre del rol del usuario
                                           }).FirstOrDefaultAsync();
 
-                // Verificación si el usuario fue encontrado
+                // Verificación si el usuario no fue encontrado
                 if (userWithRole == null)
                 {
                     result.Sucess = false;

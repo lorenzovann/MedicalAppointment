@@ -8,7 +8,6 @@ using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq.Expressions;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
@@ -16,7 +15,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
     {
 
         private readonly MedicalContext _dbContext;
-        private  readonly Logger<DoctorRepositorie> _logger;
+        private readonly Logger<DoctorRepositorie> _logger;
 
         public DoctorRepositorie(MedicalContext context,
                   Logger<DoctorRepositorie> logger) : base(context)
@@ -79,13 +78,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                // Agregar doctor a la base de datos
-                await _dbContext.Doctors.AddAsync(entities);
-                await _dbContext.SaveChangesAsync();
 
 
+                result.data = await base.Add(entities); 
                 result.Message = " Doctor agregado exitosamente!";
-                result.data = entities; // Devolver el ID del doctor recién agregado
+        
 
             }
             catch (Exception ex)
@@ -156,7 +153,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
                 if (doctorRemove != null)
                 {
-                    await _dbContext.SaveChangesAsync();
+
                     result.data = await base.Delete(doctorRemove);
                     result.Message = $" Doctor {entities.IDDoctor} Eliminado Exitosamente! ";
                     return result;
@@ -254,7 +251,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 doctorUpdate.Bio = entities.Bio;
                 doctorUpdate.Education = entities.Education;
 
-                await _dbContext.SaveChangesAsync();
+
                 result.data = await base.Update(doctorUpdate);
                 result.Message = " Doctor actulizado exitosamente! ";
             }
@@ -326,12 +323,13 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                
+
                 // Consulta para obtener el doctor por ID, junto con su rol
                 var doctorWithRole = await (from doctor in _dbContext.Doctors
                                             join SystemRole in _dbContext.Roles on doctor.IDDoctor equals SystemRole.RoleId
                                             where doctor.IDDoctor == id
                                             && doctor.IsActive == true
+                                            orderby doctor descending
                                             select new
                                             {
                                                 doctor.IDDoctor,
@@ -344,8 +342,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                 doctor.ConsultacionFee,
                                                 doctor.ClinicAdress,
                                                 doctor.AvailabilityModeId,
+                                                doctor.IsActive,
+                                                doctor.UpdateAt,
+                                                doctor.CreateAt,
                                                 doctor.LicenseExpirationDate,
-                                                SystemRole.RoleName   // Nombre del rol del doctor
+                                                DoctorRole = SystemRole.RoleName   // Nombre del rol del doctor
                                             }).FirstOrDefaultAsync();
 
                 if (doctorWithRole == null)
@@ -355,7 +356,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                     return result;
                 }
 
-             
+
                 result.data = doctorWithRole;
             }
             catch (Exception ex)

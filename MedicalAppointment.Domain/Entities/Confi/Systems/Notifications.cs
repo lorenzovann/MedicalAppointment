@@ -1,12 +1,13 @@
 ﻿
 
+using Medical.Domain.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Medical.Domain.Entities.Confi.Systems
 {
     [Table("Notifications", Schema = "System")]
-    public sealed class Notifications
+    public sealed class Notifications 
     {
 
         [Key]
