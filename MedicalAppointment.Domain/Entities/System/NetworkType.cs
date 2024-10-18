@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalAppointment.Domain.Entities.Configuration
 {
     [Table("NetworkType", Schema = "Insurance")]
+    
     public class NetworkType : BaseEntity
     {
         [Key]

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalAppointment.Domain.Entities.Configuration
 {
     [Table("InsuranceProviders", Schema = "Insurance")]
+    
     public class InsuranceProviders : BaseEntity 
     {
         [Key]
