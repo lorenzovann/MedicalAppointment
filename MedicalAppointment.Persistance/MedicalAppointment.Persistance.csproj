@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\" />
-    <Folder Include="Repositories\" />
+    <Folder Include="Models\appointments\AppointmentsCRUD\" />
+    <Folder Include="Models\appointments\DoctorAvailabilityCRUD\" />
+    <Folder Include="Models\Insurance\InsuranceProvidersCRUD\" />
+    <Folder Include="Models\Insurance\NetworkTypeCRUD\" />
   </ItemGroup>
 
 </Project>

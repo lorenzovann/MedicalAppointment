@@ -3,7 +3,7 @@ using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Net.Http.Metrics;
+
 
 namespace MedicalAppointment.Persistance.Base
 {

@@ -3,18 +3,18 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace MedicalAppointment.Domain.Entities.Configuration
+namespace MedicalAppointment.Domain.Entities.Insurance
 {
     [Table("NetworkType", Schema = "Insurance")]
-    
-    public class NetworkType : BaseEntity
+
+    public class NetworkType : BaseEntity , IBaseEntity
     {
         [Key]
         public int NetworkTypeID { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; }
-        
+
 
     }
 }

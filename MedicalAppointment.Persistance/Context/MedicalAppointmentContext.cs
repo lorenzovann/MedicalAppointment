@@ -1,10 +1,7 @@
-﻿using MedicalAppointment.Domain.Entities.Configuration;
+﻿using MedicalAppointment.Domain.Entities.Insurance;
+using MedicalAppointment.Domain.Entities.appointments;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MedicalAppointment.Persistance.Context
 {
@@ -15,14 +12,20 @@ namespace MedicalAppointment.Persistance.Context
 
         }
 
-        #region "System Entities"
+        #region "appointments Entities"
         public DbSet<Appointments> Appointments { get; set; }
         public DbSet<DoctorAvailability> DoctorAvailability { get; set; }
-        public DbSet<InsuranceProviders> InsuranceProviders { get; set; }
-        public DbSet<NetworkType> NetworkType { get; set; }
+        
         #endregion
 
+        
+        
+        #region "Insurance entities"
 
+        public DbSet<InsuranceProviders> InsuranceProviders { get; set; }
+        public DbSet<NetworkType> NetworkType { get; set; }
+
+        #endregion
 
     }
 }

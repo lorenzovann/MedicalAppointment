@@ -4,7 +4,7 @@ using MedicalAppointment.Domain.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MedicalAppointment.Domain.Entities.Configuration
+namespace MedicalAppointment.Domain.Entities.appointments 
 {
    [Table("Appointments", Schema = "appointments")]
     
