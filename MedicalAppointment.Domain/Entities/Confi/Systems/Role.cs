@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Medical.Domain.Entities.Confi.Systems
 {
-    [Table("Role", Schema = "System")]
+    [Table("Roles", Schema = "system")]
     public sealed class Role : BaseEntitie
     {
         [Key]
-        public int RoleId { get; set; }
+        public int RoleID{ get; set; }
         public string RoleName { get; set; }
     }
 }

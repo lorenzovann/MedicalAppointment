@@ -16,14 +16,14 @@ namespace Medical.Percistances.cs.Context
         }
         // Mapeo de las entidades
 
-        #region " Entities Users "
+        #region " Users Entities "
         public DbSet<User> Users { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
         #endregion 
 
 
-        #region  " Entities Systems " 
+        #region  " Systems Entities " 
 
         public DbSet<Status> Status { get; set; }
         public DbSet<Notifications> Notifications { get; set; }

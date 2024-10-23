@@ -5,6 +5,6 @@ namespace MedicalAppointment.Persistance.Interfaces
 {
     public interface UserInterfaces : IBaseRepositorie<User>
     {
-
+       
     }
 }

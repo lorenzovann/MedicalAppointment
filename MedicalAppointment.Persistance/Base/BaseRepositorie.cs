@@ -11,44 +11,48 @@ namespace Medical.Percistances.cs.Base
     public abstract class BaseRepositorie<TEntities> : IBaseRepositorie<TEntities> where TEntities : class
     {
         // Implementación de los métodos de la interfaz IBaseRepositorie
-        private readonly DbContext _context;
-        public DbSet<TEntities> entities1;
+        private readonly MedicalContext _context;
+        private DbSet<TEntities> entities1;
 
-
-        public BaseRepositorie(DbContext context)
+        public BaseRepositorie(MedicalContext context)
         {
-            _context = context;
+             _context = context;
              this.entities1 = _context.Set<TEntities>();
         }
-
 
         public virtual async Task<bool> Exist(Expression<Func<TEntities, bool>> filter)
         {
             return await this.entities1.AnyAsync(filter);
         }
 
-        public  virtual async Task<OperationResult> Add(TEntities entities)
+
+        public virtual async Task<OperationResult> Add(TEntities entities)
+    {
+        OperationResult result = new OperationResult();
+
+        try
         {
-            OperationResult result = new OperationResult();
+            // Agregar la entidad al DbSet
+            entities1.Add(entities);
 
-            try
-            {
-               var datos =  this.entities1.AddAsync(entities);
-               // guardo los cambios en la base de datos
-               await _context.SaveChangesAsync();
-               result.data = datos; 
-            }
-            catch (Exception ex)
-            {
-                result.Sucess = false; 
-                result.Message = $"Ocurrio un error tipo {ex.Message} tratando de agregar este articulo! ";
-            }
+            // Guardar los cambios en la base de datos
+            await _context.SaveChangesAsync();
 
-            return result;
-
+           result.Message = "Cambios guardado exitosamente!";
+           
+        }
+        catch (Exception ex)
+        {
+            // Capturar excepciones internas
+            result.Sucess = false;
+            result.Message = $"Ocurrio un error tipo {ex.Message}. Detalles internos: {ex.InnerException?.Message}";
+          
         }
 
-        public virtual async Task<OperationResult> Delete(TEntities entities)
+        return result;
+    }
+
+    public virtual async Task<OperationResult> Delete(TEntities entities)
         {
             OperationResult result = new OperationResult();
 
@@ -136,6 +140,7 @@ namespace Medical.Percistances.cs.Base
             return result;
         }
 
+      
     }
 }
                                                                            

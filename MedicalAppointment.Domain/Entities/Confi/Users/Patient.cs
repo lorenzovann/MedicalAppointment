@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Medical.Domain.Entities.Confi.Users
 {
-    [Table("Patients", Schema = "User")]
+    [Table("Patients", Schema = "users")]
     public sealed class Patient : BaseEntitie
     {
         [Key]

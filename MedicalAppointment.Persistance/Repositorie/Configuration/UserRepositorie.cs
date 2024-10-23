@@ -14,7 +14,7 @@ using System.Xml.XPath;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public class UserRepositorie : BaseRepositorie<User>, UserInterfaces
+    public sealed class UserRepositorie : BaseRepositorie<User>, UserInterfaces
     {
 
         private readonly MedicalContext _context;
@@ -32,46 +32,43 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-            // manejo de exepciones 
-
-            if (entities.FirstName == null || entities.LastName == null || entities.Pasword == null || entities.Email == null)
+            // Validar campos obligatorios
+            if (string.IsNullOrWhiteSpace(entities.FirstName) ||
+                string.IsNullOrWhiteSpace(entities.LastName) ||
+                string.IsNullOrWhiteSpace(entities.Password) ||
+                string.IsNullOrWhiteSpace(entities.Email))
             {
                 result.Sucess = false;
-                result.Message = "No puede dejar valores vacios! ";
+                result.Message = "No puede dejar valores vacíos!";
                 return result;
             }
 
-            if (entities.IDUser <= 0 || entities.RoleId <= 0)
-            {
-                result.Sucess = false;
-                result.Message = " id no puede ser negativo ni 0! ";
-                return result;
-            }
+            // Validar UserId y RoleId si no son generados automáticamente
+          
 
-            if (await base.Exist(user => user.IDUser == entities.IDUser && user.RoleId == entities.RoleId))
-
+            // Verificar si el usuario ya existe
+            if (await base.Exist(user => user.UserId == entities.UserId && user.RoleId == entities.RoleId))
             {
                 result.Sucess = false;
                 result.Message = "El usuario ya se encuentra registrado!";
                 return result;
             }
 
-
             try
             {
-                result.data = await base.Add(entities);
-                result.Message = " Usuario agragado Exitosamente! ";
-               }
+                await base.Add(entities); 
+                result.data = entities;
+                result.Message = "Usuario agregado correctamente!";
+
+            }
             catch (Exception ex)
             {
                 result.Sucess = false;
-                result.Message = $" ERROR tipo {ex.Message} al tratar de agregar usuario! ";
+                result.Message = $"Error tratando de agregar usuario: {ex.Message}. Detalles internos: {ex.InnerException?.Message}";
                 _logger.LogError(result.Message, ToString());
-
             }
 
             return result;
-
         }
 
         public async override Task<OperationResult> Update(User entities)
@@ -79,7 +76,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             OperationResult result = new OperationResult();
 
             // Validación de los campos obligatorios
-            if (entities.FirstName == null || entities.LastName == null || entities.Pasword == null || entities.Email == null)
+            if (entities.FirstName == null || entities.LastName == null || entities.Password == null || entities.Email == null)
             {
                 result.Sucess = false;
                 result.Message = "No puede dejar valores vacíos!";
@@ -87,7 +84,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
             // Validación de los IDs
-            if (entities.IDUser <= 0 || entities.RoleId <= 0)
+            if (entities.UserId <= 0 || entities.RoleId <= 0)
             {
                 result.Sucess = false;
                 result.Message = "ID no puede ser negativo ni 0!";
@@ -95,7 +92,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
             // Verificación si el usuario ya existe
-            if (await base.Exist(user => user.IDUser == entities.IDUser && user.RoleId == entities.RoleId))
+            if (await base.Exist(user => user.UserId == entities.UserId && user.RoleId == entities.RoleId))
             {
                 result.Sucess = false;
                 result.Message = "El usuario ya está registrado!";
@@ -105,19 +102,30 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 // Usa "Users" en lugar de "User"
-                User? userUpdate = await _context.Users.FindAsync(entities.IDUser);
+                User? userUpdate = await _context.Users.FindAsync(entities.UserId);
 
 
-                userUpdate.IDUser = entities.IDUser;
+                if(userUpdate == null)
+                { 
+                    result.Sucess = false;
+                    result.Message = "Usuario modificar no encontrado! ";
+                    return result;
+
+                }
+
+                userUpdate.UserId = entities.UserId;
                 userUpdate.RoleId = entities.RoleId;
                 userUpdate.FirstName = entities.FirstName;
                 userUpdate.LastName = entities.LastName;
-                userUpdate.Pasword = entities.Pasword;
+                userUpdate.Password = entities.Password;
                 userUpdate.Email = entities.Email;
+                userUpdate.UpdatedAt = entities.UpdatedAt;
+                userUpdate.CreatedAt = entities.CreatedAt;
+                userUpdate.IsActive = entities.IsActive; 
 
 
-
-                result.data = await base.Update(userUpdate);
+                await base.Update(userUpdate);
+                result.data = userUpdate;
                 result.Message = " Usuario modificado Correctamente! ";
 
             }
@@ -131,55 +139,6 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             return result;
         }
 
-        public override async Task<OperationResult> Delete(User entities)
-        {
-
-            OperationResult result = new OperationResult();
-
-            if (entities.FirstName == null || entities.LastName == null || entities.Pasword == null || entities.Email == null)
-            {
-                result.Sucess = false;
-                result.Message = "No puede dejar valores vacíos!";
-                return result;
-            }
-
-            // Validación de los IDs
-            if (entities.IDUser <= 0 || entities.RoleId <= 0)
-            {
-                result.Sucess = false;
-                result.Message = "ID a eliminar no puede ser negativo ni 0!";
-                return result;
-            }
-
-            // Verificación si el usuario ya existe
-            if (await base.Exist(user => user.IDUser == entities.IDUser && user.RoleId == entities.RoleId))
-            {
-                result.Sucess = false;
-                result.Message = "El usuario ya está registrado!";
-                return result;
-
-            }
-            try
-            {
-                User? UserRemove = await _context.Users.FindAsync(entities.IDUser);
-                if (UserRemove != null)
-                { 
-         
-                    result.data = await base.Delete(UserRemove);
-                    result.Message = $"Usuario {entities.IDUser} eliminado exitosamente! ";
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Sucess = false;
-                result.Message = $"ERROR tipo {ex.Message} tratando de eliminar este usuario! ";
-            }
-
-            return result;
-
-        }
-
         public override async Task<OperationResult> Getall()
         {
             OperationResult result = new OperationResult();
@@ -188,20 +147,22 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 // consulta con base de datos 
                 var usersWithRoles = await (from user in _context.Users
-                                            join SystemRole in _context.Roles on user.RoleId equals SystemRole.RoleId
+                                            join role in _context.Roles on user.RoleId equals role.RoleID
                                             select new
                                             {
-                                                user.IDUser,
-                                                user.FirstName,
-                                                user.LastName,
-                                                user.Email,
-                                                user.CreateAt,
-                                                user.UpdateAt,
-                                                user.Pasword,
-                                                SystemRole.RoleName
-                                            }).ToListAsync();
+                                                Usuarioid = user.UserId,
+                                                NombreUsuario = user.FirstName,
+                                                ApellidoUsuario = user.LastName,
+                                                CorreoUsuario = user.Email,
+                                                FechaCreacion = user.CreatedAt,
+                                                Update = user.UpdatedAt,
+                                                user.IsActive,
+                                                PasswordUser = user.Password,
+                                                RoleUser = role.RoleName,
+                                            }).ToListAsync(); 
 
                 result.data = usersWithRoles;
+
             }
             catch (Exception ex)
             {
@@ -215,8 +176,6 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
 
             return result;
-
-
 
         }
 
@@ -241,19 +200,19 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 // Consulta para obtener el usuario y su rol
                 var userWithRole = await (from user in _context.Users
                                           join role in _context.Roles
-                                          on user.RoleId equals role.RoleId
-                                          where user.IDUser == id
+                                          on user.RoleId equals role.RoleID
+                                          where user.UserId == id
                                           && user.IsActive == true
                                           orderby user descending
                                           select new
                                           {
-                                              user.IDUser,
+                                              user.UserId,
                                               user.FirstName,
                                               user.LastName,
                                               user.Email,
-                                              user.Pasword,
-                                              user.CreateAt,
-                                              user.UpdateAt,
+                                              user.Password,
+                                              user.CreatedAt,
+                                              user.UpdatedAt,
                                               RoleName = role.RoleName  // Nombre del rol del usuario
                                           }).FirstOrDefaultAsync();
 
@@ -266,6 +225,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 }
 
                 // Usuario encontrado
+
                 result.data = userWithRole;
                 result.Message = "Usuario encontrado exitosamente.";
             }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Medical.Domain.Entities.Confi.Systems
 {
-    [Table("Notifications", Schema = "System")]
+    [Table("Notifications", Schema = "system")]
     public sealed class Notifications 
     {
 
@@ -14,7 +14,7 @@ namespace Medical.Domain.Entities.Confi.Systems
         public int NotificationId { get; set; }
         public int UserID { get; set; }
         public string Message { get; set; }
-        public DateTime SentAt { get; set; }
+        public DateTime? SentAt { get; set; }
 
     }
 }

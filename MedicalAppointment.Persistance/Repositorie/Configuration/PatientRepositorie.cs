@@ -17,19 +17,19 @@ using System.Xml.XPath;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public class PatientRepositorie : BaseRepositorie<Patient>, IPatientRepositorie
+    public class PatientRepositorie : BaseRepositorie<Patient>, IPatientInterfaces
     {
 
         private readonly MedicalContext _dbcontext;
-        private readonly Logger<PatientRepositorie> _logger;
+        private readonly ILogger<PatientRepositorie> _logger;
 
 
 
         public PatientRepositorie(MedicalContext context,
-                                 Logger<PatientRepositorie> logger) : base(context)
+                                 ILogger<PatientRepositorie> logger) : base(context)
         {
             _dbcontext = context;
-            this._logger = logger;
+             _logger = logger;
         }
 
         public override async Task<OperationResult> Add(Patient entities)
@@ -220,6 +220,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                     patientUpdate.EmergencyContactName = entities.EmergencyContactName;
                     patientUpdate.EmergencyContactPhone = entities.EmergencyContactPhone;
                     patientUpdate.Gender = entities.Gender;
+                    patientUpdate.CreatedAt = entities.CreatedAt;
+                    patientUpdate.IsActive = entities.IsActive;
                     patientUpdate.Address = entities.Address;  
                     
 
@@ -262,8 +264,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                        patient.BloodType,
                                                        patient.Allergies,
                                                        patient.InsuranceProviderID,
-                                                       patient.CreateAt,
-                                                       patient.UpdateAt,
+                                                       patient.CreatedAt,
+                                                       patient.UpdatedAt,
                                                        patient.IsActive,
                                                        InsuranceProviderName = insuranceProvider.Name  // Nombre del proveedor de seguro
                                                    }).ToListAsync();
@@ -315,8 +317,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                  patient.EmergencyContactPhone,
                                                  patient.BloodType,
                                                  patient.Allergies,
-                                                 patient.CreateAt,
-                                                 patient.UpdateAt,
+                                                 patient.CreatedAt,
+                                                 patient.UpdatedAt,
                                                  InsuranceProviderName = insuranceProvider.Name  
                                              }).FirstOrDefaultAsync();
 
@@ -336,7 +338,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 // Manejo de excepción
                 result.Sucess = false;
                 result.Message = $"Error tipo: {ex.Message} encontrando el paciente con ID {id}";
-                _logger.LogError(result.Message, ex);
+               _logger.LogError(result.Message, ex);
             }
 
             return result;

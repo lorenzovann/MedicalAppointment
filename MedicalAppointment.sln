@@ -11,7 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{2A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Persistance", "MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj", "{C545269C-514B-4879-9936-7344645C16DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppoiment.Infraectucture", "MedicalAppoiment.Infraectucture\MedicalAppoiment.Infraectucture.csproj", "{6ABFC8EC-DBC0-4B09-A5C4-E3E99ADA9E8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppoiment.Infraectucture", "MedicalAppoiment.Infraectucture\MedicalAppoiment.Infraectucture.csproj", "{6ABFC8EC-DBC0-4B09-A5C4-E3E99ADA9E8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{3E09C526-461E-40A0-998F-897D53A26F04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointement.Users.Api", "MedicalAppointement.Configuration.Api\MedicalAppointement.Users.Api.csproj", "{826E41EF-A751-4892-878E-D169B84C52DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppoiment.systems.Api", "MedicalAppoiment.systems.Api\MedicalAppoiment.systems.Api.csproj", "{6CF4459F-413C-4826-B4FF-A7F227F01ACC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +37,14 @@ Global
 		{6ABFC8EC-DBC0-4B09-A5C4-E3E99ADA9E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ABFC8EC-DBC0-4B09-A5C4-E3E99ADA9E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ABFC8EC-DBC0-4B09-A5C4-E3E99ADA9E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{826E41EF-A751-4892-878E-D169B84C52DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{826E41EF-A751-4892-878E-D169B84C52DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{826E41EF-A751-4892-878E-D169B84C52DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{826E41EF-A751-4892-878E-D169B84C52DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CF4459F-413C-4826-B4FF-A7F227F01ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CF4459F-413C-4826-B4FF-A7F227F01ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CF4459F-413C-4826-B4FF-A7F227F01ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CF4459F-413C-4826-B4FF-A7F227F01ACC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +53,8 @@ Global
 		{6EC731CD-FAC0-46F8-9837-B105B7A50D1E} = {4888748E-2B74-44B2-BF3A-D748119264D9}
 		{C545269C-514B-4879-9936-7344645C16DE} = {4888748E-2B74-44B2-BF3A-D748119264D9}
 		{6ABFC8EC-DBC0-4B09-A5C4-E3E99ADA9E8A} = {4888748E-2B74-44B2-BF3A-D748119264D9}
+		{826E41EF-A751-4892-878E-D169B84C52DE} = {3E09C526-461E-40A0-998F-897D53A26F04}
+		{6CF4459F-413C-4826-B4FF-A7F227F01ACC} = {3E09C526-461E-40A0-998F-897D53A26F04}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E64FB083-0990-4498-98E1-0340578795AE}

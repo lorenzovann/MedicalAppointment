@@ -17,9 +17,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
     {
 
         private readonly MedicalContext _context; 
-        private readonly Logger<RoleRepositorie> _logger;
+        private readonly ILogger<RoleRepositorie> _logger;
         public RoleRepositorie(MedicalContext context, 
-                Logger<RoleRepositorie> _logger) : base(context)
+                ILogger<RoleRepositorie> _logger) : base(context)
         { 
             _context = context;
             this._logger = _logger; 
@@ -33,7 +33,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             // exepciones 
 
-            if(entities.RoleId <= 0)
+            if(entities.RoleID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes generar id menores e iguales a 0";
@@ -49,7 +49,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
 
-            if (await base.Exist(e => e.RoleId == entities.RoleId))
+            if (await base.Exist(e => e.RoleID == entities.RoleID))
             {
                 result.Sucess = false;
                 result.Message = " id ya se encuentra registrado! ";
@@ -58,7 +58,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
 
             try
-            {     result.data = await base.Add(entities);
+            {
+                  await base.Add(entities);
+                  result.data = entities;
                   result.Message = " Role agregado exitosamente! ";
             }
             catch (Exception ex)
@@ -78,7 +80,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-            if (entities.RoleId <= 0)
+            if (entities.RoleID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes generar id menores e iguales a 0";
@@ -96,7 +98,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                  
-                Role? roleremove = await _context.Roles.FindAsync(entities.RoleId);
+                Role? roleremove = await _context.Roles.FindAsync(entities.RoleID);
                 if (roleremove == null)
                 {
                     result.Sucess = false;
@@ -121,7 +123,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-            if (entities.RoleId <= 0)
+            if (entities.RoleID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes generar id menores e iguales a 0";
@@ -138,7 +140,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                Role? RoleUpdate = await _context.Roles.FindAsync(entities.RoleId); 
+                Role? RoleUpdate = await _context.Roles.FindAsync(entities.RoleID); 
 
                 if (RoleUpdate == null)
                 {
@@ -147,11 +149,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                     return result;
                 }
 
-                RoleUpdate.RoleId = entities.RoleId;
+                RoleUpdate.RoleID = entities.RoleID;
                 RoleUpdate.RoleName = entities.RoleName;
-                RoleUpdate.UpdateAt = DateTime.Now;
-                RoleUpdate.CreateAt = DateTime.Now;
-                RoleUpdate.IsActive = true;
+                RoleUpdate.UpdatedAt = entities.UpdatedAt;
+                RoleUpdate.CreatedAt = entities.CreatedAt;
+                RoleUpdate.IsActive = entities.IsActive;
 
 
                 result.data = await base.Update(RoleUpdate);
@@ -177,10 +179,10 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 var RoleList = await (from Role in _context.Roles
                                       select new
                                       {
-                                          roleid = Role.RoleId,
+                                          roleid = Role.RoleID,
                                           rolename = Role.RoleName,
-                                          roleCreateAt = Role.CreateAt,
-                                          roleUpdateAt = Role.UpdateAt,
+                                          roleCreateAt = Role.CreatedAt,
+                                          roleUpdateAt = Role.UpdatedAt,
                                           roleActive = Role.IsActive
                                       }).ToListAsync();
 
@@ -215,16 +217,16 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 // manejo con la  base de datos
                 var FindValue = await (from Role in _context.Roles
                                        where
-                                       Role.RoleId == id
+                                       Role.RoleID == id
                                        &&
                                        Role.IsActive == true
                                        orderby Role descending
                                        select new
                                        {
-                                           Roleid = Role.RoleId,
+                                           Roleid = Role.RoleID,
                                            rolename = Role.RoleName,
-                                           roleCreateAt = Role.CreateAt,
-                                           roleUpdateAt = Role.UpdateAt,
+                                           roleCreateAt = Role.CreatedAt,
+                                           roleUpdateAt = Role.UpdatedAt,
                                        }).FirstOrDefaultAsync(); 
 
                 result.data = FindValue;

@@ -10,5 +10,6 @@ namespace MedicalAppointment.Persistance.Interfaces.Configuration.SystemInteface
 {
     public interface IStatusInterfaces : IBaseRepositorie<Status>
     {
+
     }
 }

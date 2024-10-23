@@ -7,7 +7,7 @@ namespace MedicalAppointment.Domain.Result
 
         public OperationResult() { this.Sucess = true; }
 
-        public bool? Sucess { get; set; }
+        public bool Sucess { get; set; }
 
         public string Message { get; set; }
 

@@ -4,7 +4,7 @@ using MedicalAppointment.Domain.IBaseRepositorie;
 
 namespace MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces
 {
-    public interface IPatientRepositorie : IBaseRepositorie<Patient>
+    public interface IPatientInterfaces : IBaseRepositorie<Patient>
     {
 
 

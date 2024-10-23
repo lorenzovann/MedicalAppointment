@@ -15,9 +15,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
     {
 
         private readonly MedicalContext _context; 
-        private readonly Logger<NotificationsRepositories> _logger;
+        private readonly ILogger<NotificationsRepositories> _logger;
         public NotificationsRepositories(MedicalContext context,
-                           Logger<NotificationsRepositories> _logger) : base(context)
+                           ILogger<NotificationsRepositories> _logger) : base(context)
         { 
 
             _context = context; 
@@ -30,119 +30,42 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-
-            if (entities.NotificationId <= 0 && entities.UserID <= 0)
-            {
-                result.Sucess = false;
-                result.Message = " No puedes generar id menor o igual a 0! ";
-                return result; 
-
-            }
-
+        
 
             if (string.IsNullOrEmpty(entities.Message))
             {
-                result.Sucess = false; 
-                result.Message = " No puedes dejar  el campos vasios! ";
-                return result;
-
-            }
-
-
-            if (entities.SentAt < DateTime.UtcNow)
-            {
                 result.Sucess = false;
-                result.Message = " No puedes ingresar valores antes de fecha! ";
+                result.Message = "No puedes dejar el campo vacío!";
                 return result;
             }
-
 
             if (await base.Exist(N => N.NotificationId == entities.NotificationId && N.UserID == entities.UserID))
             {
                 result.Sucess = false;
-                result.Message = " La notificacion ya existe! ";
-                return result;
-            }
-           
-
-            try
-            {
-                 
-                 result.data = await base.Add(entities);
-                 result.Message = "Notificacion agendada correctamente! ";
-
-            }
-            catch (Exception ex)
-            {
-                result.Sucess = false; 
-                result.Message = $"Error tipo: {ex.Message} agregando notificacion! ";
-               _logger.LogError(result.Message, ToString()); 
-
-            }
-
-            return result; 
-
-        }
-
-        public override async Task<OperationResult> Delete(Notifications entities)
-        {
-           
-            OperationResult result = new OperationResult();
-
-
-            if (entities.NotificationId <= 0 && entities.UserID <= 0)
-            {
-                result.Sucess = false;
-                result.Message = " No puedes generar id menor o igual a 0! ";
-                return result;
-
-            }
-
-
-            if (string.IsNullOrEmpty(entities.Message))
-            {
-                result.Sucess = false;
-                result.Message = " No puedes dejar  el campos vasios! ";
-                return result;
-
-            }
-
-
-            if (entities.SentAt < DateTime.UtcNow)
-            {
-                result.Sucess = false;
-                result.Message = " No puedes ingresar valores antes de fecha! ";
+                result.Message = "La notificación ya existe!";
                 return result;
             }
 
             try
             {
-                Notifications? notifications =  await _context.Notifications.FindAsync(entities.NotificationId);
-
-                if (notifications == null)
-                {
-                    result.Sucess = false;
-                    result.Message = "No puedes dejar valores vacios! ";
-                    return result;
-                }
-
-                result.data = await base.Delete(entities);
-                result.Message = $"Notificacion: {entities.NotificationId} eliminada con exito"; 
-
-
+                await base.Add(entities);
+                result.data = entities;
+                result.Message = "Notificación agendada correctamente!";
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
+                // Captura y muestra el detalle de la inner exception
+                var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 result.Sucess = false;
-                result.Message = $"Error tipo: {ex.Message} eliminando notificacion! ";
-                _logger.LogError(result.Message, ToString());
-            } 
+                result.Message = $"Error tipo: {innerExceptionMessage} agregando notificación!";
+                _logger.LogError(innerExceptionMessage, ToString());
+            }
 
-
-            return result; 
-
-
+            return result;
         }
+
+        
+       
 
         public override async Task<OperationResult> Update(Notifications entities)
         {
@@ -150,7 +73,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             OperationResult result = new OperationResult();
 
 
-            if (entities.NotificationId <= 0 || entities.UserID <= 0)
+           if(entities.UserID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "Error no puedes genera valores menores o iguales a 0";
@@ -188,7 +111,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 notificationsUpdate.Message = entities.Message;
                 notificationsUpdate.SentAt = entities.SentAt;
 
-                result.data = await base.Update(notificationsUpdate);
+                await base.Update(notificationsUpdate);
+                result.data = notificationsUpdate;
                 result.Message = " Notificacion modiificada! "; 
 
             }
@@ -210,16 +134,16 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 var Listar = await (from Notifications in _context.Notifications
-                                    join Users in _context.Users on Notifications.UserID equals Users.IDUser
+                                    join Users in _context.Users on Notifications.UserID equals Users.UserId
                                     select new
                                     {
                                         NotificationID = Notifications.NotificationId,
                                         NotificationMessage = Notifications.Message,
                                         NotificationSentAt = Notifications.SentAt,
-                                        UserID = Users.IDUser,
+                                        UserID = Users.UserId,
                                         UserName = Users.FirstName,
                                         UserEmail = Users.Email,
-                                        UserPassword = Users.Pasword
+                                        UserPassword = Users.Password
                                     }).ToListAsync();
                 result.data = Listar;  
 
@@ -250,7 +174,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 var ValueFind = await (from Notifications in _context.Notifications
-                                       join Users in _context.Users on Notifications.UserID equals Users.IDUser
+                                       join Users in _context.Users on Notifications.UserID equals Users.UserId
                                        where Notifications.NotificationId == id
                                        && Users.IsActive == true
                                        orderby Notifications descending 
@@ -259,10 +183,10 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                            NotificationID = Notifications.NotificationId,
                                            NotificationMessage = Notifications.Message,
                                            NotificationSentat = Notifications.SentAt, 
-                                           UsersIDUser = Users.IDUser,  
+                                           UsersIDUser = Users.UserId,
                                            UserName = Users.FirstName,
                                            UserslastName = Users.LastName,
-                                           UsersPassword = Users.Pasword,
+                                           UsersPassword = Users.Password,
                                            UserEmail = Users.Email
                                        }).FirstOrDefaultAsync(); 
 

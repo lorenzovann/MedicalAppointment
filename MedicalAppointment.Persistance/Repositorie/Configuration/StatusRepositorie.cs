@@ -17,9 +17,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
     {
 
         private readonly MedicalContext _context;
-        private readonly Logger<StatusRepositorie> _logger; 
+        private readonly ILogger<StatusRepositorie> _logger; 
         public StatusRepositorie(MedicalContext context,
-                    Logger<StatusRepositorie> logger) : base(context)
+                    ILogger<StatusRepositorie> logger) : base(context)
         {
             _context = context;
             this._logger = logger;
@@ -30,13 +30,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-            if(entities.StatusId <= 0)
-            {
-                result.Sucess = false;
-                result.Message = "Error no puedes generar id menor o igual 0";
-                return result; 
-
-            }
+        
 
             if (string.IsNullOrEmpty(entities.StatusName))
             {
@@ -63,51 +57,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
         }
 
-        public override async Task<OperationResult> Delete(Status entities)
-        { 
-
-            OperationResult result = new OperationResult();
-
-            if (entities.StatusId <= 0)
-            {
-                result.Sucess = false;
-                result.Message = "Error no puedes generar id menor o igual 0";
-                return result;
-            }
-
-            if (string.IsNullOrEmpty(entities.StatusName))
-            {
-                result.Sucess = false;
-                result.Message = " No puedes dejar campos vasios! ";
-                return result;
-
-            }
-
-            try
-            {
-                Status? statusRemove = await _context.Status.FindAsync(entities.StatusId);
-                if (statusRemove == null)
-                    {
-                        result.Sucess = false;
-                        result.Message = " Status no encontrado ";
-                        return result;
-                    }
-
-                result.data = await base.Delete(entities);
-                result.Message = $"Status {entities.StatusId} elimianado exitosamente! ";
-
-            }
-            catch (Exception ex)
-            {
-                result.Sucess = false;
-                result.Message = $" Error tipo {ex.Message} tratando de elimianar el Status ";
-               _logger.LogError(result.Message, ToString());
-            }
-
-
-            return result;
-        }
-
+   
 
         public override async Task<OperationResult> Update(Status entities)
         {
@@ -115,7 +65,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                Status? StatusUpdate = await _context.Status.FindAsync(entities.StatusId);
+                Status? StatusUpdate = await _context.Status.FindAsync(entities.StatusID);
                 if (StatusUpdate == null)
                 {
                     result.Sucess = false;
@@ -123,7 +73,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                     return result;
                 }
 
-                StatusUpdate.StatusId = entities.StatusId;  
+                StatusUpdate.StatusID = entities.StatusID; 
                 StatusUpdate.StatusName = entities.StatusName;
                 
                 result.data = await base.Update(StatusUpdate);
@@ -150,7 +100,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                         select new
                                         {
                                             StatusName = Status.StatusName,
-                                            StatuId = Status.StatusId,
+                                            StatuId = Status.StatusID,
                                         }).ToListAsync();  
 
                 result.data = ListValues;
@@ -178,11 +128,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 result.data = await (from Status in _context.Status
                                      where
-                                     Status.StatusId == id
+                                     Status.StatusID == id
                                      select new
                                      {
                                        StatusName = Status.StatusName,
-                                       StatusId = Status.StatusId,
+                                       StatusId = Status.StatusID,
                                      }).FirstOrDefaultAsync();
             }
             catch (Exception ex)
