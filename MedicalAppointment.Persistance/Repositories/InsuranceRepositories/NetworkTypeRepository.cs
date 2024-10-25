@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
 {
-    internal class NetworkTypeRepository
+    public class NetworkTypeRepository
     {
+
     }
 }

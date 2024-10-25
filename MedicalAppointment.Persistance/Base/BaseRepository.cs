@@ -17,7 +17,7 @@ namespace MedicalAppointment.Persistance.Base
             this._entities = medicalAppointmentContext.Set<TEntity>();
         }
 
-        public virtual async Task<bool> Exist(Expression<Func<TEntity, bool>> filter)
+        virtual public async Task<bool> Exist(Expression<Func<TEntity, bool>> filter)
         {
             return await this._entities.AnyAsync(filter);
         }
@@ -103,7 +103,7 @@ namespace MedicalAppointment.Persistance.Base
             }
             return result;  
         }
-        public async Task<OperationResult> Save(TEntity entity)
+         virtual public async Task<OperationResult> Save(TEntity entity)
         {
             OperationResult result = new OperationResult();
 
@@ -123,7 +123,7 @@ namespace MedicalAppointment.Persistance.Base
             return result;  
         }
 
-        public async Task<OperationResult> Update(TEntity entity)
+         virtual public async Task<OperationResult> Update(TEntity entity)
         {
             OperationResult result = new OperationResult() ;
 

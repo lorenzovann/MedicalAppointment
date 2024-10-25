@@ -7,14 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MedicalAppointment.Domain\MedicalAppointment.Domain.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\appointments\AppointmentsCRUD\" />
-    <Folder Include="Models\appointments\DoctorAvailabilityCRUD\" />
-    <Folder Include="Models\Insurance\InsuranceProvidersCRUD\" />
-    <Folder Include="Models\Insurance\NetworkTypeCRUD\" />
+    <ProjectReference Include="..\MedicalAppointment.Domain\MedicalAppointment.Domain.csproj" />
   </ItemGroup>
 
 </Project>
