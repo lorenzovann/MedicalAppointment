@@ -12,20 +12,20 @@ namespace MedicalAppointment.Persistance.Context
 
         }
 
-       
+        #region 'appointments entities '
         public DbSet<Appointments> Appointments { get; set; }
         public DbSet<DoctorAvailability> DoctorAvailability { get; set; }
-        
-     
+        #endregion
 
-        
-        
-       
 
+
+
+
+        #region 'Insurance entities'
         public DbSet<InsuranceProviders> InsuranceProviders { get; set; }
         public DbSet<NetworkType> NetworkType { get; set; }
+        #endregion
 
-       
 
     }
 }
