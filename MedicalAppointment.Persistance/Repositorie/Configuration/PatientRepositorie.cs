@@ -37,7 +37,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             OperationResult result = new OperationResult();
 
             // manejo de exepciones
-            if (string.IsNullOrEmpty(entities.Name) && string.IsNullOrEmpty(entities.Address) && string.IsNullOrEmpty(entities.EmergencyContactName)
+            if (string.IsNullOrEmpty(entities.NamePatient) && string.IsNullOrEmpty(entities.Address) && string.IsNullOrEmpty(entities.EmergencyContactName)
                 && string.IsNullOrEmpty(entities.EmergencyContactPhone) && string.IsNullOrEmpty(entities.Allergies))
             {
                 result.Sucess = false;
@@ -46,7 +46,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
 
-            if (entities.PatiendID <= 0 && entities.InsuranceProviderID <= 0)
+            if (entities.PatientID <= 0 && entities.InsuranceProviderID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes ingresar valores menores e iguales a 0 ";
@@ -71,7 +71,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
 
-            if (await base.Exist(patient => patient.PatiendID == entities.PatiendID && patient.InsuranceProviderID == entities.InsuranceProviderID))
+            if (await base.Exist(patient => patient.PatientID == entities.PatientID && patient.InsuranceProviderID == entities.InsuranceProviderID))
             {
                 result.Sucess = false;
                 result.Message = "Este usuario ya existe en el registro! ";
@@ -81,7 +81,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                result.data = await base.Add(entities);
+                await base.Add(entities); 
+                result.data = entities;
+
                 result.Message = "Paciente agregado exitosamente! ";
             }
             catch (Exception ex)
@@ -100,7 +102,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             OperationResult result = new OperationResult();
 
 
-            if (string.IsNullOrEmpty(entities.Name) || string.IsNullOrEmpty(entities.Allergies) ||
+            if (string.IsNullOrEmpty(entities.NamePatient) || string.IsNullOrEmpty(entities.Allergies) ||
                string.IsNullOrEmpty(entities.Address) || string.IsNullOrEmpty(entities.EmergencyContactName)||
                string.IsNullOrEmpty(entities.EmergencyContactPhone))
             {
@@ -126,7 +128,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             }
 
-            if (entities.PatiendID <= 0 && entities.InsuranceProviderID <= 0)
+            if (entities.PatientID <= 0 && entities.InsuranceProviderID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes ingresar valores menores e iguales a 0 ";
@@ -136,7 +138,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                Patient? patient = await _dbcontext.Patients.FindAsync(entities.PatiendID);
+                Patient? patient = await _dbcontext.Patients.FindAsync(entities.PatientID);
                 if (patient == null)
                 {
                     result.Message = " No puedes dejar valor vasio ";
@@ -146,7 +148,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 }
 
                 result.data = await base.Delete(patient);
-                result.Message = $"Paciente con id:{patient.PatiendID} eliminado correctamente!  ";
+                result.Message = $"Paciente con id:{patient.PatientID} eliminado correctamente!  ";
 
             }
             catch (Exception ex)
@@ -165,7 +167,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-            if (string.IsNullOrEmpty(entities.Name) || string.IsNullOrEmpty(entities.Allergies) ||
+            if (string.IsNullOrEmpty(entities.NamePatient) || string.IsNullOrEmpty(entities.Allergies) ||
            string.IsNullOrEmpty(entities.Address) || string.IsNullOrEmpty(entities.EmergencyContactName) ||
            string.IsNullOrEmpty(entities.EmergencyContactPhone))
             {
@@ -191,7 +193,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             }
 
-            if (entities.PatiendID <= 0 && entities.InsuranceProviderID <= 0)
+            if (entities.PatientID <= 0  && entities.InsuranceProviderID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes ingresar valores menores e iguales a 0 ";
@@ -211,8 +213,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
                  }
          
-                    patientUpdate.PatiendID = patientUpdate.PatiendID;
-                    patientUpdate.Name = entities.Name;
+                    patientUpdate.PatientID = patientUpdate.PatientID;
+                    patientUpdate.NamePatient = entities.NamePatient;
                     patientUpdate.Allergies = entities.Allergies;
                     patientUpdate.BloodType = entities.BloodType;
                     patientUpdate.DateofBirth = entities.DateofBirth;
@@ -254,8 +256,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                    on patient.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
                                                    select new
                                                    {
-                                                       patient.PatiendID,
-                                                       patient.Name,
+                                                       patient.PatientID,
+                                                       patient.NamePatient,
                                                        patient.DateofBirth,
                                                        patient.Gender,
                                                        patient.Address,
@@ -267,7 +269,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                        patient.CreatedAt,
                                                        patient.UpdatedAt,
                                                        patient.IsActive,
-                                                       InsuranceProviderName = insuranceProvider.Name  // Nombre del proveedor de seguro
+                                                       InsuranceProviderName = insuranceProvider.NamePatient // Nombre del proveedor de seguro
                                                    }).ToListAsync();
 
               
@@ -303,13 +305,13 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 var FindPatientById = await (from patient in _dbcontext.Patients
                                              join insuranceProvider in _dbcontext.Patients
                                              on patient.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
-                                             where patient.PatiendID == id &&
+                                             where patient.PatientID == id &&
                                              patient.IsActive == true
                                              orderby patient descending
                                              select new
                                              {
-                                                 patient.PatiendID,
-                                                 patient.Name,
+                                                 patient.PatientID,
+                                                 patient.NamePatient,
                                                  patient.DateofBirth,
                                                  patient.Gender,
                                                  patient.Address,
@@ -319,7 +321,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                  patient.Allergies,
                                                  patient.CreatedAt,
                                                  patient.UpdatedAt,
-                                                 InsuranceProviderName = insuranceProvider.Name  
+                                                 InsuranceProviderName = insuranceProvider.NamePatient,
                                              }).FirstOrDefaultAsync();
 
                 // Verificar si el paciente fue encontrado

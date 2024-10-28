@@ -10,8 +10,8 @@ namespace Medical.Domain.Entities.Confi.Users
     public sealed class Patient : BaseEntitie
     {
         [Key]
-        public int PatiendID { get; set; }
-        public string? Name { get; set; }
+        public int PatientID { get; set; }
+        public string NamePatient { get; set; }
         public DateTime DateofBirth { get; set; }
         public char Gender { get; set; }
         public string Address { get; set; }

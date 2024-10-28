@@ -84,7 +84,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
             // Validación de los IDs
-            if (entities.UserId <= 0 || entities.RoleId <= 0)
+            if (entities.RoleId <= 0)
             {
                 result.Sucess = false;
                 result.Message = "ID no puede ser negativo ni 0!";
@@ -215,6 +215,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                               user.UpdatedAt,
                                               RoleName = role.RoleName  // Nombre del rol del usuario
                                           }).FirstOrDefaultAsync();
+
+ 
+
 
                 // Verificación si el usuario no fue encontrado
                 if (userWithRole == null)

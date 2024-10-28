@@ -81,12 +81,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             }
 
-            if (entities.SentAt < DateTime.UtcNow)
-            {
-                result.Sucess = false;
-                result.Message = " No puedes ingresar valores antes de fecha! ";
-                return result;
-            }
+          
 
             if (string.IsNullOrEmpty(entities.Message))
             {

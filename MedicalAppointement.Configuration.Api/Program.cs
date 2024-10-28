@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. 
-builder.Services.AddDbContext<MedicalContext>(options =>
+ builder.Services.AddDbContext<MedicalContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalContext")));
 
 // agrego archivos de depencias

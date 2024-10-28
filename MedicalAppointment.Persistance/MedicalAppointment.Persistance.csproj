@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MedicalAppoiment.infraectucture\**" />
+    <EmbeddedResource Remove="MedicalAppoiment.infraectucture\**" />
+    <None Remove="MedicalAppoiment.infraectucture\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MedicalAppointment.Domain\Medical.Domain.csproj" />
   </ItemGroup>
 
