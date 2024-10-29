@@ -7,13 +7,13 @@ namespace MedicalAppointment.Domain.Entities.Insurance
 {
     [Table("NetworkType", Schema = "Insurance")]
 
-    public class NetworkType : BaseEntity , IBaseEntity
+    public class NetworkType : BaseEntity , IBaseEntityForTwo
     {
         [Key]
         public int NetworkTypeID { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public bool IsActive { get; set; }
+        
 
 
     }

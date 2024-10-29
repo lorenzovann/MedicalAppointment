@@ -24,113 +24,58 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         private readonly ILogger<AppointmentsRepository> logger;
 
         public AppointmentsRepository(MedicalAppointmentContext context,
-            ILogger<AppointmentsRepository> logger) : base(context) 
+               ILogger<AppointmentsRepository> logger) : base(context)
         {
-            context = _medicalAppoitmentContext;
+            _medicalAppoitmentContext = context;
             this.logger = logger;
-            
+
         }
 
 
-        public async override Task<OperationResult> Delete(Appointments entity)
-        {
-            OperationResult operationResult = new OperationResult();
+        //public async override Task<OperationResult> Delete(Appointments entity)
+        //{
+        //    OperationResult operationResult = new OperationResult();
 
-            if (entity == null) 
-            { 
-                operationResult.Success = false;
-                operationResult.Message = "La entidad es requerida";
-                return operationResult;
-            
-            }
+        //    if (entity == null) 
+        //    { 
+        //        operationResult.Success = false;
+        //        operationResult.Message = "La entidad es requerida";
+        //        return operationResult;
 
-            if (entity.AppointmentID <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "Se requiere el AppointmentID para realizar esta operacion";
-                return operationResult;
-            
-            }
+        //    }
 
-            try
-            {
-                Appointments? appoitmentsToRemove = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);   
-                appoitmentsToRemove.IsActived = false;   
-                appoitmentsToRemove.CreatedAt = entity.CreatedAt;
-                appoitmentsToRemove.UpdatedAt = entity.UpdatedAt;
+        //    if (entity.AppointmentID <= 0)
+        //    {
+        //        operationResult.Success = false;
+        //        operationResult.Message = "Se requiere el AppointmentID para realizar esta operacion";
+        //        return operationResult;
 
-                await base.Update(appoitmentsToRemove);
-            }
+        //    }
 
-            catch (Exception ex) 
-            {
-                operationResult.Success = false;
-                operationResult.Message = "Error desactivando Appointments";
-                logger.LogError(operationResult.Message, ex.ToString());
-            
-            }
+        //    try
+        //    {
+        //        Appointments? appoitmentsToRemove = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);   
+        //        appoitmentsToRemove.IsActived = false;   
+        //        appoitmentsToRemove.CreatedAt = entity.CreatedAt;
+        //        appoitmentsToRemove.UpdatedAt = entity.UpdatedAt;
 
-            return operationResult;
-        }
+        //        await base.Update(appoitmentsToRemove);
+        //    }
 
+        //    catch (Exception ex) 
+        //    {
+        //        operationResult.Success = false;
+        //        operationResult.Message = "Error desactivando Appointments";
+        //        logger.LogError(operationResult.Message, ex.ToString());
 
+        //    }
 
-        public async override  Task<OperationResult> Save(Appointments entity)
-        {
-            OperationResult operationResult = new OperationResult();
-            
-            if (entity == null) 
-            { 
-                operationResult.Success = false;
-                operationResult.Message = "La entidad es requerida.";
-                return operationResult;
-            }
-
-            if (entity.PatientID <= 0)
-            { 
-                operationResult.Success = false;
-                operationResult.Message = "El PatientID no puede ser menor a cero.";
-                return operationResult;
-            }
-
-            if (entity.DoctorID <= 0) 
-            { 
-                operationResult.Success = false;
-                operationResult.Message = "El DoctorID no puede ser menor a cero.";
-                return operationResult;
-            }
-
-            if (entity.StatusID <= 0)
-            { 
-                operationResult.Success = false;
-                operationResult.Message = "El StatusID no puede ser menir a cero.";
-                return operationResult;
-            }
-
-            if (await base.Exist(appointments => appointments.DoctorID == entity.DoctorID 
-                                             && appointments.StatusID == entity.StatusID)) 
-            { 
-                operationResult.Success = true;
-                operationResult.Message = "El status se encuentra registrado";
-                return operationResult;
-            
-            }
-
-            try
-            {
-                operationResult = await base.Save(entity);   
-            }
-            catch (Exception ex) 
-            { 
-                operationResult.Success = false;
-                operationResult.Message = "Error guardando Appointments";
-                logger.LogError(operationResult.Message, ex.ToString());
-            }
-            return operationResult;
-        }
+        //    return operationResult;
+        //}
 
 
-        public async override  Task<OperationResult> Update(Appointments entity)
+
+        public async override Task<OperationResult> Save(Appointments entity)
         {
             OperationResult operationResult = new OperationResult();
 
@@ -141,8 +86,63 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 return operationResult;
             }
 
-            if (entity.AppointmentID <= 0) 
-            { 
+            if (entity.PatientID <= 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "El PatientID no puede ser menor a cero.";
+                return operationResult;
+            }
+
+            if (entity.DoctorID <= 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "El DoctorID no puede ser menor a cero.";
+                return operationResult;
+            }
+
+            if (entity.StatusID <= 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "El StatusID no puede ser menir a cero.";
+                return operationResult;
+            }
+
+            if (await base.Exist(appointments => appointments.DoctorID == entity.DoctorID
+                                             && appointments.StatusID == entity.StatusID))
+            {
+                operationResult.Success = true;
+                operationResult.Message = "El status se encuentra registrado";
+                return operationResult;
+
+            }
+
+            try
+            {
+                operationResult = await base.Save(entity);
+            }
+            catch (Exception ex)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "Error guardando Appointments";
+                logger.LogError(operationResult.Message, ex.ToString());
+            }
+            return operationResult;
+        }
+
+
+        public async override Task<OperationResult> Update(Appointments entity)
+        {
+            OperationResult operationResult = new OperationResult();
+
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "La entidad es requerida.";
+                return operationResult;
+            }
+
+            if (entity.AppointmentID <= 0)
+            {
                 operationResult.Success = false;
                 operationResult.Message = "AppoitmentsID no puede ser menor a cero.";
                 return operationResult;
@@ -171,7 +171,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             }
 
             try
-            { 
+            {
                 Appointments? appoitnmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
 
                 appoitnmentsToUpdate.AppointmentDate = entity.AppointmentDate;
@@ -180,17 +180,17 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 appoitnmentsToUpdate.PatientID = entity.PatientID;
 
                 operationResult = await base.Update(appoitnmentsToUpdate);
-                
+
 
             }
 
             catch (Exception ex)
-            { 
+            {
                 operationResult.Success = false;
                 operationResult.Message = "Error actualizando Appointments";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
-            
+
             return operationResult;
 
         }
@@ -204,22 +204,23 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             {
                 var appointmentsWithDoctorAvailability = await (from appointments in _medicalAppoitmentContext.Appointments
                                                                 join availableAppointments in _medicalAppoitmentContext.DoctorAvailability on appointments.AppointmentID equals availableAppointments.AvailabilityID
-                                                                select new
+                                                                select new AppointmentsBaseModel
                                                                 {
-                                                                    appointments.AppointmentID,
-                                                                    appointments.PatientID,
-                                                                    appointments.DoctorID,
-                                                                    appointments.StatusID,
-                                                                    appointments.AppointmentDate,
-                                                                    appointments.CreatedAt,
-                                                                    appointments.UpdatedAt,
-                                                                    availableAppointments.AvailabilityID
+                                                                   AppointmentID = appointments.AppointmentID,
+                                                                   PatientID =appointments.PatientID,
+                                                                   DoctorID = appointments.DoctorID,
+                                                                   StatusID = appointments.StatusID,
+                                                                   AppointmentDate = appointments.AppointmentDate,
+                                                                   CreatedAt = appointments.CreatedAt,
+                                                                   UpdatedAt = appointments.UpdatedAt,
+                                                                   //availableAppointments.AvailabilityID
 
 
 
                                                                 }).ToListAsync();
 
                 return operationResult.Data = appointmentsWithDoctorAvailability;
+            
             }
 
             catch (Exception ex)
@@ -253,7 +254,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 var appointmentswithDoctorAvailability = await (from appointments in _medicalAppoitmentContext.Appointments
                                                                 join availableAppointments in _medicalAppoitmentContext.DoctorAvailability on appointments.AppointmentID equals availableAppointments.AvailabilityID
                                                                 where appointments.AppointmentID == id
-                                                                && appointments.IsActived == true
+                                                                && appointments.IsActive == true
                                                                 orderby appointments descending
                                                                 select new
                                                                 {
@@ -262,7 +263,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                                                                     appointments.PatientID,
                                                                     appointments.DoctorID,
                                                                     appointments.StatusID,
-                                                                    appointments.IsActived,
+                                                                    appointments.IsActive,
                                                                     appointments.AppointmentDate,
                                                                     appointments.CreatedAt,
                                                                     appointments.UpdatedAt,
@@ -277,27 +278,27 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                     operationResult.Success = false;
                     operationResult.Message = "Disponibilidad de doctor no encontrado.";
                     return operationResult;
-                }                                                                                  
+                }
                 operationResult.Data = appointmentswithDoctorAvailability;
             }
 
 
             catch (Exception ex)
-            { 
+            {
                 operationResult.Success = false;
                 operationResult.Message = "Appointments no encontrado.";
                 return operationResult;
-            
+
             }
             return operationResult;
         }
 
-        public List<OperationResult> GetAppointmentsByAppointmentId(int appointmentsId)
+        public Task<OperationResult> GetAppointmentsByAppointmentId(int appointmentsId)
         {
             throw new NotImplementedException();
         }
 
     }
 
-       
+
 }

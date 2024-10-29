@@ -6,7 +6,7 @@ namespace MedicalAppointment.Domain.Entities.Insurance
 {
     [Table("InsuranceProviders", Schema = "Insurance")]
 
-    public class InsuranceProviders : BaseEntity , IBaseEntity
+    public class InsuranceProviders : BaseEntity , IBaseEntityForTwo
     {
         [Key]
         public int InsuranceProviderID { get; set; }
@@ -26,9 +26,6 @@ namespace MedicalAppointment.Domain.Entities.Insurance
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegions { get; set; }
         public decimal? MaxCoverageAmount { get; set; }
-        public bool IsActive { get; set; }
-
-
-
+        
     }
 }

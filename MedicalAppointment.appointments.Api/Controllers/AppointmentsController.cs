@@ -6,13 +6,15 @@ using System.Numerics;
 
 namespace MedicalAppointment.Insurance.Api.Controllers
 {
+    [Route("Api/[Controller]")]
+    [ApiController]
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentsRepository _appointmentsRepository;
 
         public AppointmentsController(IAppointmentsRepository appointmentsRepository)
         {
-            appointmentsRepository = _appointmentsRepository;
+            _appointmentsRepository = appointmentsRepository;
 
         }
         // GET: api/<DoctorsController>
@@ -37,7 +39,7 @@ namespace MedicalAppointment.Insurance.Api.Controllers
 
         // POST api/<DoctorsController>
         [HttpPost("SaveAppointments")]
-        public async Task<IActionResult> Save([FromBody] Appointments appointments)
+        public async Task<IActionResult> Post([FromBody] Appointments appointments)
         {
             var result = await _appointmentsRepository.Save(appointments);
             if (!result.Success) return BadRequest(result);
@@ -48,7 +50,7 @@ namespace MedicalAppointment.Insurance.Api.Controllers
 
         // PUT api/<DoctorsController>/5
         [HttpPut("UpdateAppointments")]
-        public async Task<IActionResult> Update(int id, [FromBody] Appointments appointments)
+        public async Task<IActionResult> Put(int id, [FromBody] Appointments appointments)
         {
 
             var result = await _appointmentsRepository.Update(appointments);

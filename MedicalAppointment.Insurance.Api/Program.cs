@@ -9,10 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalAppointmentContext")));
 
-builder.Services.AddControllers();
 
 //Registro de cada una de las dependencias repositorios de appointments
-builder.Services.AddScoped<IAppointmentsRepository,AppointmentsRepository>();
+builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+
+
+builder.Services.AddControllers();
+
 
 
 

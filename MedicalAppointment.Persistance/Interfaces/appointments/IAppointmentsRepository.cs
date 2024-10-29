@@ -8,6 +8,7 @@ namespace MedicalAppointment.Persistance.Interfaces.appointments
 {
     public interface IAppointmentsRepository : IBaseRepository<Appointments>
     {
-        public List<OperationResult> GetAppointmentsByAppointmentId(int appointmentsId);
+        public Task<OperationResult> GetAppointmentsByAppointmentId(int appointmentsId);
+
     }
 }
