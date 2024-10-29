@@ -65,6 +65,16 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
 
         }
 
-    
+        [HttpPost("DisableUser")]
+        public async Task<IActionResult> DisableUser(User user)
+        {
+
+            var result = await _userepositorie.Delete(user);
+            if (!result.Sucess) return BadRequest(result);
+
+            return Ok(result);
+
+        }
+
     }
 }

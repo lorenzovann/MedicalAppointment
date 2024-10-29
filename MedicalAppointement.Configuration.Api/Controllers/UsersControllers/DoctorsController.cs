@@ -60,6 +60,17 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
             return Ok(result);  
         }
 
-    
+        [HttpPost("DisableDoctor")]
+        public async Task<IActionResult> DisableDoctor(Doctor doctor)
+        {
+            var result = await  _octorInterfaces.Delete(doctor);
+            if (!result.Sucess) return BadRequest(result);
+
+            return Ok(result);
+
+        }
+
+
+
     }
 }

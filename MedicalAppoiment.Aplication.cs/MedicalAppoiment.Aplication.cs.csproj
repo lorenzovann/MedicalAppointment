@@ -8,9 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
-    <Folder Include="Contratos\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj" />
   </ItemGroup>
 
 </Project>
