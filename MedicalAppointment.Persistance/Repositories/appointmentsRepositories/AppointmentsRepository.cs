@@ -4,14 +4,10 @@ using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
-using MedicalAppointment.Persistance.Models.appointments.AppointmentsCRUD;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
+
 
 
 namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
@@ -21,165 +17,110 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
 
         private readonly MedicalAppointmentContext _medicalAppoitmentContext;
-        private readonly ILogger<AppointmentsRepository> logger;
+        private readonly ILogger<AppointmentsRepository> _logger;
 
         public AppointmentsRepository(MedicalAppointmentContext context,
                ILogger<AppointmentsRepository> logger) : base(context)
         {
             _medicalAppoitmentContext = context;
-            this.logger = logger;
+            _logger = logger;
 
         }
 
 
-        //public async override Task<OperationResult> Delete(Appointments entity)
-        //{
-        //    OperationResult operationResult = new OperationResult();
-
-        //    if (entity == null) 
-        //    { 
-        //        operationResult.Success = false;
-        //        operationResult.Message = "La entidad es requerida";
-        //        return operationResult;
-
-        //    }
-
-        //    if (entity.AppointmentID <= 0)
-        //    {
-        //        operationResult.Success = false;
-        //        operationResult.Message = "Se requiere el AppointmentID para realizar esta operacion";
-        //        return operationResult;
-
-        //    }
-
-        //    try
-        //    {
-        //        Appointments? appoitmentsToRemove = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);   
-        //        appoitmentsToRemove.IsActived = false;   
-        //        appoitmentsToRemove.CreatedAt = entity.CreatedAt;
-        //        appoitmentsToRemove.UpdatedAt = entity.UpdatedAt;
-
-        //        await base.Update(appoitmentsToRemove);
-        //    }
-
-        //    catch (Exception ex) 
-        //    {
-        //        operationResult.Success = false;
-        //        operationResult.Message = "Error desactivando Appointments";
-        //        logger.LogError(operationResult.Message, ex.ToString());
-
-        //    }
-
-        //    return operationResult;
-        //}
-
-
-
-        public async override Task<OperationResult> Save(Appointments entity)
+        
+        public override async Task<OperationResult> Save(Appointments entity)
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity == null)
+           
+            if (entity.AppointmentID == 0 || entity.AppointmentDate == DateTime.MinValue)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es requerida.";
+                operationResult.Message = "AppointmentID y AppointmentDate son obligatorios.";
                 return operationResult;
             }
 
-            if (entity.PatientID <= 0)
+           
+            if (entity.DoctorID <= 0 || entity.PatientID <= 0 || entity.StatusID <= 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "El PatientID no puede ser menor a cero.";
+                operationResult.Message = "DoctorID, PatientID y StatusID deben ser positivos.";
                 return operationResult;
             }
 
-            if (entity.DoctorID <= 0)
+            if (entity.AppointmentDate < DateTime.Now)
             {
                 operationResult.Success = false;
-                operationResult.Message = "El DoctorID no puede ser menor a cero.";
+                operationResult.Message = "La fecha de la cita no puede ser en el pasado.";
                 return operationResult;
             }
 
-            if (entity.StatusID <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El StatusID no puede ser menir a cero.";
-                return operationResult;
-            }
-
-            if (await base.Exist(appointments => appointments.DoctorID == entity.DoctorID
-                                             && appointments.StatusID == entity.StatusID))
-            {
-                operationResult.Success = true;
-                operationResult.Message = "El status se encuentra registrado";
-                return operationResult;
-
-            }
+            
 
             try
             {
-                operationResult = await base.Save(entity);
+                
+                await base.Save(entity);
+                operationResult.Data = entity;
+                operationResult.Success = true;
+                operationResult.Message = "Appointment agregado exitosamente!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Error guardando Appointments";
-                logger.LogError(operationResult.Message, ex.ToString());
+                operationResult.Message = $"Error: {ex.Message} tratando de guardar Appointment!";
+                _logger.LogError(operationResult.Message, ex);
             }
+
             return operationResult;
         }
-
 
         public async override Task<OperationResult> Update(Appointments entity)
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity == null)
+
+            if (entity.AppointmentID == 0 || entity.AppointmentDate == DateTime.MinValue)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es requerida.";
+                operationResult.Message = "AppointmentID y AppointmentDate son obligatorios.";
                 return operationResult;
             }
 
-            if (entity.AppointmentID <= 0)
+            if (entity.DoctorID <= 0 || entity.PatientID <= 0 || entity.StatusID <= 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "AppoitmentsID no puede ser menor a cero.";
+                operationResult.Message = "DoctorID, PatientID y StatusID deben ser positivos.";
                 return operationResult;
             }
-
-
-            if (entity.PatientID <= 0)
+           
+            if (entity.AppointmentDate < DateTime.Now)
             {
                 operationResult.Success = false;
-                operationResult.Message = "El PatientID no puede ser menor a cero.";
+                operationResult.Message = "La fecha de la cita no puede ser en el pasado.";
                 return operationResult;
             }
-
-            if (entity.DoctorID <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El DoctorID no puede ser menor a cero.";
-                return operationResult;
-            }
-
-            if (entity.StatusID <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El StatusID no puede ser menir a cero.";
-                return operationResult;
-            }
-
             try
             {
-                Appointments? appoitnmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
+                Appointments? appoitnmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity);
 
+                if (appoitnmentsToUpdate == null)
+                { 
+                    operationResult.Success = false;
+                    operationResult.Message = "No se puede actualizar el registro";
+                    return operationResult;
+                
+                
+                }
                 appoitnmentsToUpdate.AppointmentDate = entity.AppointmentDate;
                 appoitnmentsToUpdate.StatusID = entity.StatusID;
                 appoitnmentsToUpdate.DoctorID = entity.DoctorID;
                 appoitnmentsToUpdate.PatientID = entity.PatientID;
 
                 operationResult = await base.Update(appoitnmentsToUpdate);
+                operationResult.Data = appoitnmentsToUpdate;
+                operationResult.Message = "Appointments actualizado exitosamente";
 
 
             }
@@ -188,7 +129,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             {
                 operationResult.Success = false;
                 operationResult.Message = "Error actualizando Appointments";
-                logger.LogError(operationResult.Message, ex.ToString());
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
@@ -203,32 +144,32 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             try
             {
                 var appointmentsWithDoctorAvailability = await (from appointments in _medicalAppoitmentContext.Appointments
-                                                                join availableAppointments in _medicalAppoitmentContext.DoctorAvailability on appointments.AppointmentID equals availableAppointments.AvailabilityID
-                                                                select new AppointmentsBaseModel
+                                                                join doctorAvailability in _medicalAppoitmentContext.DoctorAvailability
+                                                                on appointments.DoctorID equals doctorAvailability.DoctorID
+                                                                select new
                                                                 {
-                                                                   AppointmentID = appointments.AppointmentID,
-                                                                   PatientID =appointments.PatientID,
-                                                                   DoctorID = appointments.DoctorID,
-                                                                   StatusID = appointments.StatusID,
-                                                                   AppointmentDate = appointments.AppointmentDate,
-                                                                   CreatedAt = appointments.CreatedAt,
-                                                                   UpdatedAt = appointments.UpdatedAt,
-                                                                   //availableAppointments.AvailabilityID
-
-
-
+                                                                    appointments.AppointmentID,
+                                                                    appointments.PatientID,
+                                                                    appointments.DoctorID,
+                                                                    appointments.StatusID,
+                                                                    appointments.AppointmentDate,
+                                                                    appointments.CreatedAt,
+                                                                    appointments.UpdatedAt,
+                                                                    doctorAvailability.AvailableDate,
+                                                                    doctorAvailability.StartTime,
+                                                                    doctorAvailability.EndTime,
+                                                                    doctorAvailability.IsActive
                                                                 }).ToListAsync();
 
-                return operationResult.Data = appointmentsWithDoctorAvailability;
-            
+                operationResult.Data = appointmentsWithDoctorAvailability;
+                operationResult.Success = true;
+                operationResult.Message = "Appointments recuperadas con éxito.";
             }
-
             catch (Exception ex)
-
             {
                 operationResult.Success = false;
                 operationResult.Message = $"Error {ex.Message} tratando de obtener Appointments.";
-                logger.LogError(operationResult.Message, ex.ToString());
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
@@ -251,53 +192,45 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
-                var appointmentswithDoctorAvailability = await (from appointments in _medicalAppoitmentContext.Appointments
-                                                                join availableAppointments in _medicalAppoitmentContext.DoctorAvailability on appointments.AppointmentID equals availableAppointments.AvailabilityID
-                                                                where appointments.AppointmentID == id
-                                                                && appointments.IsActive == true
-                                                                orderby appointments descending
-                                                                select new
-                                                                {
-
-                                                                    appointments.AppointmentID,
-                                                                    appointments.PatientID,
-                                                                    appointments.DoctorID,
-                                                                    appointments.StatusID,
-                                                                    appointments.IsActive,
-                                                                    appointments.AppointmentDate,
-                                                                    appointments.CreatedAt,
-                                                                    appointments.UpdatedAt,
-                                                                    availableAppointments.AvailabilityID
-
+                var appointmentWithAvailability = await (from appointments in _medicalAppoitmentContext.Appointments
+                                                         join availableAppointments in _medicalAppoitmentContext.DoctorAvailability
+                                                         on appointments.DoctorID equals availableAppointments.DoctorID
+                                                         where appointments.AppointmentID == id && appointments.IsActive
+                                                         select new
+                                                         {
+                                                             appointments.AppointmentID,
+                                                             appointments.PatientID,
+                                                             appointments.DoctorID,
+                                                             appointments.StatusID,
+                                                             appointments.IsActive,
+                                                             appointments.AppointmentDate,
+                                                             appointments.CreatedAt,
+                                                             appointments.UpdatedAt,
+                                                             availableAppointments.AvailabilityID
+                                                         }).FirstOrDefaultAsync();
 
 
-                                                                }).FirstOrDefaultAsync();
-
-                if (appointmentswithDoctorAvailability == null)
+                if (appointmentWithAvailability == null)
                 {
                     operationResult.Success = false;
                     operationResult.Message = "Disponibilidad de doctor no encontrado.";
                     return operationResult;
                 }
-                operationResult.Data = appointmentswithDoctorAvailability;
+
+                operationResult.Success = true;
+                operationResult.Data = appointmentWithAvailability;
             }
-
-
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Appointments no encontrado.";
-                return operationResult;
-
+                operationResult.Message = $"Ocurrió un error: {ex.Message}";
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
+
             return operationResult;
         }
 
-        public Task<OperationResult> GetAppointmentsByAppointmentId(int appointmentsId)
-        {
-            throw new NotImplementedException();
-        }
-
+       
     }
 
 

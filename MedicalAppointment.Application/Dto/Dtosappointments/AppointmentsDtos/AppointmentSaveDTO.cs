@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Application.Dto.Dtosappointments.Appointments
 {
-    public class AppointmentSaveDTO
+    public class AppointmentSaveDto
     {
         public int PatientID { get; set; }
         public int DoctorID { get; set; }

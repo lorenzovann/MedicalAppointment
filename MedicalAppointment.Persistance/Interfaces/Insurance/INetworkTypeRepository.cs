@@ -6,6 +6,6 @@ namespace MedicalAppointment.Persistance.Interfaces.Insurance
 {
     public interface INetworkTypeRepository : IBaseRepository<NetworkType>
     {
-        List<OperationResult> GetNetworkTypeById(int netWorkTypeId);
+        
     }
 }

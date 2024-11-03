@@ -6,6 +6,6 @@ namespace MedicalAppointment.Persistance.Interfaces.Insurance
 {
     public interface IInsuranceProvidersRepository : IBaseRepository<InsuranceProviders>
     {
-        List<OperationResult> GetInsuranceProvidersById(int insuranceProvidersId);
+        
     }
 }
