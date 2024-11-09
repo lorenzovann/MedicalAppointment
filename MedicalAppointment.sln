@@ -13,13 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Infraest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Persistance", "MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj", "{C545269C-514B-4879-9936-7344645C16DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{52BF63AE-FE1C-454E-ADD3-A5E530AF760D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{52BF63AE-FE1C-454E-ADD3-A5E530AF760D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{26DB2932-2FCE-424A-A197-D5F46D4E2D0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.appointments.Api", "MedicalAppointment.appointments.Api\MedicalAppointment.appointments.Api.csproj", "{0E34A2DC-5F32-4C37-85BD-5E07010DC1A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.appointments.Api", "MedicalAppointment.appointments.Api\MedicalAppointment.appointments.Api.csproj", "{0E34A2DC-5F32-4C37-85BD-5E07010DC1A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Insurance.Api", "MedicalAppointment.Insurance.Api\MedicalAppointment.Insurance.Api.csproj", "{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Insurance.Api", "MedicalAppointment.Insurance.Api\MedicalAppointment.Insurance.Api.csproj", "{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.IOC", "MedicalAppointment.IOC\MedicalAppointment.IOC.csproj", "{9C68FBE4-48FE-4EA2-8D03-549CB3332935}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C68FBE4-48FE-4EA2-8D03-549CB3332935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C68FBE4-48FE-4EA2-8D03-549CB3332935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C68FBE4-48FE-4EA2-8D03-549CB3332935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C68FBE4-48FE-4EA2-8D03-549CB3332935}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{52BF63AE-FE1C-454E-ADD3-A5E530AF760D} = {F1BD7852-53FF-48BF-94C0-EA0B6C01834A}
 		{0E34A2DC-5F32-4C37-85BD-5E07010DC1A4} = {26DB2932-2FCE-424A-A197-D5F46D4E2D0B}
 		{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C} = {26DB2932-2FCE-424A-A197-D5F46D4E2D0B}
+		{9C68FBE4-48FE-4EA2-8D03-549CB3332935} = {F1BD7852-53FF-48BF-94C0-EA0B6C01834A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E64FB083-0990-4498-98E1-0340578795AE}

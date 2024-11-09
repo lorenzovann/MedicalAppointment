@@ -7,13 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\Dtosappointments\DoctorAvailabilityDtos\" />
-    <Folder Include="Dto\DtosInsurance\" />
-    <Folder Include="Services\InsuranceService\" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MedicalAppointment.Domain\MedicalAppointment.Domain.csproj" />
     <ProjectReference Include="..\MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj" />
   </ItemGroup>
 
