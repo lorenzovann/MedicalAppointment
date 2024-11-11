@@ -3,19 +3,21 @@ using MedicalAppointment.Persistance.Interfaces;
 using MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces;
 using MedicalAppointment.Persistance.Repositorie.Configuration;
 using Microsoft.EntityFrameworkCore;
+using MedicalCore.IOC.cs.Dependecy.Configurations; 
 using Microsoft.Extensions.Configuration;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. 
- builder.Services.AddDbContext<MedicalContext>(options =>
+  builder.Services.AddDbContext<MedicalContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("MedicalContext")));
 
 // agrego archivos de depencias
 
-builder.Services.AddScoped<UserInterfaces, UserRepositorie>();   
-builder.Services.AddScoped<IDoctorInterfaces, DoctorRepositorie>();
-builder.Services.AddScoped<IPatientInterfaces, PatientRepositorie>();
+builder.Services.AddConfigurationsDependecy(); 
+
+
 
 
 

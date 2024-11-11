@@ -37,7 +37,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
             // Validar si el SpecialtyID o YearofExperiences son inválidos
-            if (entities.SpecialtyID <= 0 || entities.YearsOfExperience < 0)
+            if (entities.SpecialtyID <= 0 || entities.YearsOfExperience <= 0)
             {
                 result.Sucess = false;
                 result.Message = "El ID de especialidad debe ser positivo y los años de experiencia no pueden ser negativos.";
@@ -89,7 +89,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 result.Sucess = false;
                 result.Message = $"Error tipo {ex.Message} tratando de guardar el doctor!";
-                _logger.LogError(result.Message, ToString()); // Registrar el error correctamente
+                _logger.LogError(result.Message, ex.ToString()); // Registrar el error correctamente
             }
 
             return result;
@@ -153,10 +153,14 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
                 if (doctorRemove != null)
                 {
-
-                    result.data = await base.Delete(doctorRemove);
+                    await base.Delete(doctorRemove);
+                    result.data = doctorRemove;
                     result.Message = $" Doctor {entities.DoctorID} Eliminado Exitosamente! ";
                     return result;
+                } else
+                {
+                    result.Sucess= false;
+                    result.Message = "Doctor no a sido enctrado! ";
                 }
 
             }
@@ -179,7 +183,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             OperationResult result = new OperationResult();
 
 
-            if (string.IsNullOrEmpty(entities.NameDoctor) || string.IsNullOrEmpty(entities.LicenseNumber) || string.IsNullOrEmpty(entities.Education))
+            if (string.IsNullOrEmpty(entities.NameDoctor) 
+                || string.IsNullOrEmpty(entities.LicenseNumber) 
+                || string.IsNullOrEmpty(entities.Education))
             {
                 result.Sucess = false;
                 result.Message = "El nombre, número de licencia y la educación son campos obligatorios.";
@@ -187,10 +193,10 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
             // Validar si el SpecialtyID o YearofExperiences son inválidos
-            if (entities.SpecialtyID <= 0 || entities.YearsOfExperience < 0)
+            if (entities.SpecialtyID <= 0  || entities.YearsOfExperience < 0)
             {
                 result.Sucess = false;
-                result.Message = "El ID de especialidad debe ser positivo y los años de experiencia no pueden ser negativos.";
+                result.Message = " los años de experiencia no pueden ser negativos.";
                 return result;
             }
 
@@ -211,7 +217,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
 
             // Validar la dirección de la clínica si está presente
-            if (!string.IsNullOrEmpty(entities.ClinicAddress) && entities.ClinicAddress.Length < 5)
+            if (!string.IsNullOrEmpty(entities.ClinicAddress)  && entities.ClinicAddress.Length < 5)
             {
                 result.Sucess = false;
                 result.Message = "La dirección de la clínica es demasiado corta.";
@@ -226,12 +232,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 return result;
             }
 
-            if (entities.CreatedAt > DateTime.Now)
-            {
-                result.Sucess = false;
-                result.Message = " error al registrar registro no puede crear usuario mas alla de fecha actual! ";
-                return result;
-            }
+        
 
             try
             {
@@ -256,6 +257,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 doctorUpdate.LicenseExpirationDate = entities.LicenseExpirationDate;
                 doctorUpdate.AvailabilityModeId = entities.AvailabilityModeId;
                 doctorUpdate.CreatedAt = entities.CreatedAt;
+                doctorUpdate.PhoneNumber = entities.PhoneNumber;
                 doctorUpdate.UpdatedAt = entities.UpdatedAt;
                 doctorUpdate.Bio = entities.Bio;
                 doctorUpdate.Education = entities.Education;
@@ -302,6 +304,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                   doctor.ClinicAddress,
                                                   doctor.AvailabilityModeId,
                                                   doctor.LicenseExpirationDate,
+                                                  doctor.PhoneNumber,
                                                   SystemRole.RoleName   // Nombre del rol del doctor
                                               }).ToListAsync();
 
@@ -341,7 +344,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                             join SystemRole in _dbContext.Roles on doctor.DoctorID equals SystemRole.RoleID
                                             where doctor.DoctorID == id
                                             && doctor.IsActive == true
-                                            orderby doctor descending
+                                            orderby doctor.CreatedAt descending
                                             select new
                                             {
                                                 doctor.DoctorID,
@@ -357,6 +360,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                 doctor.IsActive,
                                                 doctor.UpdatedAt,
                                                 doctor.CreatedAt,
+                                                doctor.PhoneNumber,
                                                 doctor.LicenseExpirationDate,
                                                 DoctorRole = SystemRole.RoleName   // Nombre del rol del doctor
                                             }).FirstOrDefaultAsync();

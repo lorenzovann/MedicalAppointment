@@ -130,6 +130,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 var Listar = await (from Notifications in _context.Notifications
                                     join Users in _context.Users on Notifications.UserID equals Users.UserId
+                                    orderby Notifications.SentAt descending
                                     select new
                                     {
                                         NotificationID = Notifications.NotificationId,

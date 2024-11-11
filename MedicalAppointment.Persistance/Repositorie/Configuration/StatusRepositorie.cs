@@ -43,7 +43,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                result.data = await base.Add(entities);
+                await base.Add(entities);
+                result.data = entities;
                 result.Message = " Status agendado! ";
             }
             catch (Exception ex)
@@ -76,6 +77,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 StatusUpdate.StatusID = entities.StatusID; 
                 StatusUpdate.StatusName = entities.StatusName;
                 
+                
                 result.data = await base.Update(StatusUpdate);
                 result.Message = "Status Modicado exitosamente! ";
             }
@@ -101,6 +103,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                         {
                                             StatusName = Status.StatusName,
                                             StatuId = Status.StatusID,
+                                            CreateAt = Status.CreateAt, // para verificar cuando se creo este status
+
                                         }).ToListAsync();  
 
                 result.data = ListValues;
@@ -133,6 +137,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                      {
                                        StatusName = Status.StatusName,
                                        StatusId = Status.StatusID,
+                                       StatusCreateAt = Status.CreateAt,    
                                      }).FirstOrDefaultAsync();
             }
             catch (Exception ex)

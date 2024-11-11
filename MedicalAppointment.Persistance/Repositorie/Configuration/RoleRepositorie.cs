@@ -33,13 +33,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             // exepciones 
 
-            if(entities.RoleID <= 0)
-            {
-                result.Sucess = false;
-                result.Message = "No puedes generar id menores e iguales a 0";
-                return result; 
-
-            }
+        
 
             if (string.IsNullOrEmpty(entities.RoleName))
             {
@@ -80,13 +74,6 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
-            if (entities.RoleID <= 0)
-            {
-                result.Sucess = false;
-                result.Message = "No puedes generar id menores e iguales a 0";
-                return result;
-
-            }
 
             if (string.IsNullOrEmpty(entities.RoleName))
             {
@@ -220,7 +207,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                        Role.RoleID == id
                                        &&
                                        Role.IsActive == true
-                                       orderby Role descending
+                                       orderby Role.CreatedAt descending
                                        select new
                                        {
                                            Roleid = Role.RoleID,

@@ -11,7 +11,7 @@ namespace Medical.Domain.Entities.Confi.Users
     {
 
         [Key]
-        public int DoctorID { get; set; }
+        public int DoctorID { get; set; } 
         public string? NameDoctor { get; set; }
         public int SpecialtyID { get; set; }
         public string PhoneNumber { get; set; }

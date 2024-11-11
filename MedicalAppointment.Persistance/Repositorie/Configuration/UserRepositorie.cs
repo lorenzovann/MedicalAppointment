@@ -32,6 +32,13 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
         {
             OperationResult result = new OperationResult();
 
+            if(entities.RoleId <= 0)
+            {
+                result.Sucess = false;
+                result.Message = "No puedes generar id igual a 0";
+                return result; 
+            }
+
             // Validar campos obligatorios
             if (string.IsNullOrWhiteSpace(entities.FirstName) ||
                 string.IsNullOrWhiteSpace(entities.LastName) ||
@@ -42,9 +49,6 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 result.Message = "No puede dejar valores vacíos!";
                 return result;
             }
-
-            // Validar UserId y RoleId si no son generados automáticamente
-          
 
             // Verificar si el usuario ya existe
             if (await base.Exist(user => user.UserId == entities.UserId && user.RoleId == entities.RoleId))
@@ -58,14 +62,14 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 await base.Add(entities); 
                 result.data = entities;
-                result.Message = "Usuario agregado correctamente!";
+                result.Message = " Usuario agregado correctamente! ";
 
             }
             catch (Exception ex)
             {
                 result.Sucess = false;
                 result.Message = $"Error tratando de agregar usuario: {ex.Message}. Detalles internos: {ex.InnerException?.Message}";
-                _logger.LogError(result.Message, ToString());
+               _logger.LogError(result.Message, ToString());
             }
 
             return result;
@@ -83,13 +87,8 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 return result;
             }
 
-            // Validación de los IDs
-            if (entities.RoleId <= 0)
-            {
-                result.Sucess = false;
-                result.Message = "ID no puede ser negativo ni 0!";
-                return result;
-            }
+          
+         
 
             // Verificación si el usuario ya existe
             if (await base.Exist(user => user.UserId == entities.UserId && user.RoleId == entities.RoleId))
@@ -203,7 +202,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                           on user.RoleId equals role.RoleID
                                           where user.UserId == id
                                           && user.IsActive == true
-                                          orderby user descending
+                                          orderby user.CreatedAt descending
                                           select new
                                           {
                                               user.UserId,
@@ -230,7 +229,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 // Usuario encontrado
 
                 result.data = userWithRole;
-                result.Message = "Usuario encontrado exitosamente.";
+                result.Message = " Usuario encontrado exitosamente.";
             }
             catch (Exception ex)
             {
