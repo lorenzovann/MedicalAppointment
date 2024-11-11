@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MedicalCore.IOC.cs\MedicalCore.IOC.cs.csproj" />
+    <ProjectReference Include="..\MedicalIOC.cs\MedicalIOC.cs.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using Medical.Domain.Entities.Confi.Systems;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
+using MedicalCoreAplications.cs.Contracts.systems;
+using MedicalCoreAplications.cs.Dtos.Systems.NotificationsDtos.cs;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,19 +13,19 @@ namespace MedicalAppoiment.systems.Api.Controllers
     public class Notifcations : ControllerBase
     {
 
-        private readonly INotificationsinterfaces _notificationrepositorie;
-
-        public Notifcations(INotificationsinterfaces notificationrepositorie)
+        private readonly INotificationsServices _notificationsServices;
+                          // inyeccion de mi servicio 
+        public Notifcations(INotificationsServices notificationsServices)
         {
-           _notificationrepositorie = notificationrepositorie;
-
+           
+            _notificationsServices = notificationsServices;
         }
 
         [HttpGet("GetNotifications")] // mis endpoint
          public async Task<IActionResult> Get()
         {
-            var result = await _notificationrepositorie.Getall();
-            if(!result.Sucess) return BadRequest(result);  
+            var result = await _notificationsServices.getall();
+            if(!result.success) return BadRequest(result);  
 
             return Ok(result);
         }
@@ -32,8 +34,8 @@ namespace MedicalAppoiment.systems.Api.Controllers
         [HttpGet("GetNotificationsById")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _notificationrepositorie.GetEntitiebyId(id);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _notificationsServices.GetById(id);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);  
 
@@ -41,19 +43,19 @@ namespace MedicalAppoiment.systems.Api.Controllers
 
         // POST api/<NotificationsControlles>
         [HttpPost("SaveNotifications")]
-        public async Task<IActionResult> Post([FromBody] Notifications value)
+        public async Task<IActionResult> Post([FromBody] SaveNotifications value)
         {
-                var result = await _notificationrepositorie.Add(value);
-                if (!result.Sucess) return BadRequest(result);
+                var result = await _notificationsServices.SaveAsync(value);  
+                if (!result.success) return BadRequest(result);
 
                 return Ok(result);
       }
 
         [HttpPut("UpdateNotifiacations")]
-        public async Task<IActionResult> Put([FromBody] Notifications value)
+        public async Task<IActionResult> Put([FromBody] UpdateNotifications value)
         {
-            var result = await _notificationrepositorie.Update(value);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _notificationsServices.UpdateAsync(value);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);
 

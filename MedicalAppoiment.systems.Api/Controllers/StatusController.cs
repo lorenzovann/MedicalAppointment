@@ -1,5 +1,7 @@
 ﻿using Medical.Domain.Entities.Confi.Systems;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
+using MedicalCoreAplications.cs.Contracts.systems;
+using MedicalCoreAplications.cs.Dtos.Systems.StatusDtos.cs;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,18 +14,18 @@ namespace MedicalAppoiment.systems.Api.Controllers
     {
         // GET: api/<StatusControllers>
 
-        private readonly IStatusInterfaces _statusrepositorie;
+        private readonly IStatusServices _statusservices; 
 
-        public StatusController(IStatusInterfaces statusrepositorie)
+        public StatusController(IStatusServices Statusservices)
         {
-            _statusrepositorie = statusrepositorie;
+            _statusservices = Statusservices; 
         }
 
             [HttpGet("GetStatus")]
         public  async Task<IActionResult> Get()
         {
-          var result = await _statusrepositorie.Getall();
-          if (!result.Sucess) return BadRequest(result); 
+          var result = await _statusservices.getall();
+          if (!result.success) return BadRequest(result); 
 
           return Ok(result);
         }
@@ -32,28 +34,28 @@ namespace MedicalAppoiment.systems.Api.Controllers
         [HttpGet("GetStatusByID")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _statusrepositorie.GetEntitiebyId(id);
-            if (!result.Sucess) return BadRequest(result); 
+            var result = await _statusservices.GetById(id);
+            if (!result.success) return BadRequest(result); 
 
             return Ok(result);
         }
 
         // POST api/<StatusControllers>
         [HttpPost("SaveStatus")]
-        public async Task<IActionResult> Post([FromBody]  Status value)
+        public async Task<IActionResult> Post([FromBody]  SaveStatusDtos value)
         {
-            var result = await _statusrepositorie.Add(value);
-            if(!result.Sucess) return BadRequest(result);
+            var result = await _statusservices.SaveAsync(value);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);
         }
 
         // PUT api/<StatusControllers>/5
         [HttpPut("UpdateStatus")]
-        public async Task<IActionResult> Put([FromBody] Status value)
+        public async Task<IActionResult> Put([FromBody] UpdateStatusDtos value)
         {
-            var result = await _statusrepositorie.Update(value);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _statusservices.UpdateAsync(value);  
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);
         }

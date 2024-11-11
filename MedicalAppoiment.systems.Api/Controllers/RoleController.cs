@@ -1,5 +1,7 @@
 ﻿using Medical.Domain.Entities.Confi.Systems;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
+using MedicalCoreAplications.cs.Contracts.systems;
+using MedicalCoreAplications.cs.Dtos.Systems.RolesDtos.cs;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,29 +12,30 @@ namespace MedicalAppoiment.systems.Api.Controllers
     [ApiController]
     public class RoleController : ControllerBase 
     {
-        private readonly IRoleInterfaces _rolerepositorie;
+        private readonly IRoleServices _roleservices; 
 
-        public RoleController(IRoleInterfaces rolerepositorie)
+        public RoleController(IRoleServices roleservices)
         {
-            _rolerepositorie = rolerepositorie;
+            _roleservices = roleservices; 
+
+
         }
 
-
-            // GET: api/<RoleController>
+        
         [HttpGet("GetRoles")]
         public async Task<IActionResult>  Get()
         { 
-            var result = await _rolerepositorie.Getall();
-            if(!result.Sucess) return BadRequest(result);
+            var result = await _roleservices.getall();
+            if(!result.success) return BadRequest(result);
             return Ok(result);
         }
 
-        // GET api/<RoleController>/5
+
         [HttpGet("GetEntitieByID")]
         public async Task<IActionResult> Get(int id)
         {
-           var result = await _rolerepositorie.GetEntitiebyId(id);
-            if (!result.Sucess) return BadRequest(result);
+           var result = await _roleservices.GetById(id);
+            if (!result.success) return BadRequest(result);
 
 
          return Ok(result); 
@@ -40,23 +43,22 @@ namespace MedicalAppoiment.systems.Api.Controllers
 
         }
 
-        // POST api/<RoleController>
+     
         [HttpPost("SaveRoles")]
-        public async Task<ActionResult> Post([FromBody] Role value)
+        public async Task<ActionResult> Post([FromBody] SaveRolesDtos value)
         {
 
-            var result = await _rolerepositorie.Add(value);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _roleservices.SaveAsync(value);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);  
         }
 
-        // PUT api/<RoleController>/5
         [HttpPut("UpdateRoles")]
-        public async Task<IActionResult> Put([FromBody] Role value)
-        { 
-            var result = await _rolerepositorie.Update(value);
-            if (!result.Sucess) return BadRequest(result); 
+        public async Task<IActionResult> Put([FromBody] RolesUpdateDtos value)
+        {
+            var result = await _roleservices.UpdateAsync(value);
+            if (!result.success) return BadRequest(result); 
 
             return Ok(result);
        

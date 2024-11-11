@@ -248,6 +248,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 }
 
                 doctorUpdate.NameDoctor = entities.NameDoctor;
+            
                 doctorUpdate.DoctorID = entities.DoctorID;
                 doctorUpdate.YearsOfExperience = entities.YearsOfExperience;
                 doctorUpdate.SpecialtyID = entities.SpecialtyID;
@@ -288,6 +289,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 // Consulta para obtener los doctores con sus roles
                 var doctorsWithRoles = await (from doctor in _dbContext.Doctors
                                               join SystemRole in _dbContext.Roles on doctor.DoctorID equals SystemRole.RoleID
+                                              orderby doctor.CreatedAt descending
                                               select new
                                               {
                                                   doctor.DoctorID,
@@ -305,7 +307,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                   doctor.AvailabilityModeId,
                                                   doctor.LicenseExpirationDate,
                                                   doctor.PhoneNumber,
-                                                  SystemRole.RoleName   // Nombre del rol del doctor
+                                                  SystemRole.RoleID,// Nombre del rol del doctor
                                               }).ToListAsync();
 
                 result.data = doctorsWithRoles; // Almacenamos la lista de doctores con sus roles en result.data
@@ -362,7 +364,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                                 doctor.CreatedAt,
                                                 doctor.PhoneNumber,
                                                 doctor.LicenseExpirationDate,
-                                                DoctorRole = SystemRole.RoleName   // Nombre del rol del doctor
+                                                DoctorRole = SystemRole.RoleID,   // Nombre del rol del doctor
                                             }).FirstOrDefaultAsync();
 
                 if (doctorWithRole == null)

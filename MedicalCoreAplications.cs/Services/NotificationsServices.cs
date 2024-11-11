@@ -33,21 +33,23 @@ namespace MedicalCoreAplications.cs.Services
 
             try
             {
-                var result = await _notificationsRepositories.Getall();
+                    var result = await _notificationsRepositories.Getall();
 
-                List<GetNotifications> notifications = ((List<Notifications>)result.data!)
-                    .Select(notificatiosn =>
-                    new GetNotifications
-                    {
-                        NotificationId = notificatiosn.NotificationId,  
-                        Message = notificatiosn.Message,    
-                        SentAt = notificatiosn.SentAt,
-                        UserID = notificatiosn.UserID,  
+                    List<GetNotifications> notifications = ((List<Notifications>)result.data!)
+                        .Select(notificatiosn =>
+                        new GetNotifications
+                        {
+                            NotificationId = notificatiosn.NotificationId,  
+                            Message = notificatiosn.Message,    
+                            SentAt = notificatiosn.SentAt,
+                            UserID = notificatiosn.UserID,  
 
-                    }).ToList();
+                        }).ToList();
 
-                response.model = notifications;
+                response.model = result.data;
+                response.Menssaje = result.Message;
 
+                    
             }
             catch (Exception ex)
             {
@@ -70,14 +72,14 @@ namespace MedicalCoreAplications.cs.Services
             {
                 var result = await _notificationsRepositories.GetEntitiebyId(id);
                 
-                if(result.Sucess)
+                if(result.Sucess && result.data != null)
                 {
-                    Notifications notifications = (Notifications)result.data!;
+                    Notifications notifications = (Notifications)result.data;
 
                     GetNotifications getNotifications = new GetNotifications()
                     {
-                        NotificationId=id,
-                        Message = notifications.Message, 
+                        NotificationId = notifications.NotificationId,
+                        Message = notifications.Message,
                         SentAt = notifications.SentAt,
                         UserID = notifications.UserID,
                     };

@@ -24,5 +24,7 @@ namespace Medical.Domain.Entities.Confi.Users
         public int? AvailabilityModeId { get; set; }
         public DateTime LicenseExpirationDate { get; set; }
 
+    
+
     }
 }

@@ -2,11 +2,7 @@ using Medical.Percistances.cs.Context;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
 using MedicalAppointment.Persistance.Repositorie.Configuration;
 using MedicalCoreAplications.cs.Contracts.systems;
-using MedicalCore.IOC.cs.Dependecy.Configurations;
-
-
-
-
+using MedicalIOC.cs.Dependecy.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -17,11 +13,7 @@ builder.Services.AddDbContext<MedicalContext>(options => options.UseSqlServer
 
 // aqui agrego las inyecciones de depencia 
 
-
-builder.Services.AddSystemsDependecy(); 
-
-
- 
+builder.Services.AddSystemDependecy(); 
 
 
 

@@ -38,7 +38,7 @@ namespace Medical.Percistances.cs.Base
             // Guardar los cambios en la base de datos
             await _context.SaveChangesAsync();
 
-           result.Message = "Cambios guardado exitosamente!";
+           result.Message = " Cambios guardado exitosamente!";
            
         }
         catch (Exception ex)
