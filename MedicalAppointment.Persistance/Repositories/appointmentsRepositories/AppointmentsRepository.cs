@@ -28,12 +28,12 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         }
 
 
-        
+
         public override async Task<OperationResult> Save(Appointments entity)
         {
             OperationResult operationResult = new OperationResult();
 
-           
+
             if (entity.AppointmentID == 0 || entity.AppointmentDate == DateTime.MinValue)
             {
                 operationResult.Success = false;
@@ -41,7 +41,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 return operationResult;
             }
 
-           
+
             if (entity.DoctorID <= 0 || entity.PatientID <= 0 || entity.StatusID <= 0)
             {
                 operationResult.Success = false;
@@ -56,12 +56,12 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 return operationResult;
             }
 
-            
 
             try
             {
-                
+
                 await base.Save(entity);
+
                 operationResult.Data = entity;
                 operationResult.Success = true;
                 operationResult.Message = "Appointment agregado exitosamente!";
@@ -70,7 +70,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             {
                 operationResult.Success = false;
                 operationResult.Message = $"Error: {ex.Message} tratando de guardar Appointment!";
-                _logger.LogError(operationResult.Message, ex);
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
@@ -94,42 +94,39 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 operationResult.Message = "DoctorID, PatientID y StatusID deben ser positivos.";
                 return operationResult;
             }
-           
+
             if (entity.AppointmentDate < DateTime.Now)
             {
                 operationResult.Success = false;
                 operationResult.Message = "La fecha de la cita no puede ser en el pasado.";
                 return operationResult;
             }
+
             try
             {
-                Appointments? appoitnmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity);
+                Appointments? appointmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
 
-                if (appoitnmentsToUpdate == null)
-                { 
+                if (appointmentsToUpdate == null)
+                {
                     operationResult.Success = false;
-                    operationResult.Message = "No se puede actualizar el registro";
+                    operationResult.Message = "No se puede actualizar el registro.";
                     return operationResult;
-                
-                
                 }
-                appoitnmentsToUpdate.AppointmentDate = entity.AppointmentDate;
-                appoitnmentsToUpdate.StatusID = entity.StatusID;
-                appoitnmentsToUpdate.DoctorID = entity.DoctorID;
-                appoitnmentsToUpdate.PatientID = entity.PatientID;
+                appointmentsToUpdate.AppointmentDate = entity.AppointmentDate;
+                appointmentsToUpdate.StatusID = entity.StatusID;
+                appointmentsToUpdate.DoctorID = entity.DoctorID;
+                appointmentsToUpdate.PatientID = entity.PatientID;
 
-                operationResult = await base.Update(appoitnmentsToUpdate);
-                operationResult.Data = appoitnmentsToUpdate;
-                operationResult.Message = "Appointments actualizado exitosamente";
-
-
+                operationResult = await base.Update(appointmentsToUpdate);
+                operationResult.Data = appointmentsToUpdate;
+                operationResult.Message = "Appointments actualizado exitosamente.";
             }
 
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Error actualizando Appointments";
-                _logger.LogError(operationResult.Message, ex.ToString());
+                operationResult.Message = "Error actualizando Appointments.";
+                _logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;
@@ -163,8 +160,9 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
                 operationResult.Data = appointmentsWithDoctorAvailability;
                 operationResult.Success = true;
-                operationResult.Message = "Appointments recuperadas con éxito.";
+                operationResult.Message = "Appointments recuperados con éxito.";
             }
+
             catch (Exception ex)
             {
                 operationResult.Success = false;
@@ -217,9 +215,12 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                     return operationResult;
                 }
 
-                operationResult.Success = true;
                 operationResult.Data = appointmentWithAvailability;
+                operationResult.Success = true;
+                operationResult.Message = "Appointments recuperado exitosamente.";
+
             }
+
             catch (Exception ex)
             {
                 operationResult.Success = false;
@@ -227,10 +228,11 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 _logger.LogError(operationResult.Message, ex.ToString());
             }
 
+
             return operationResult;
         }
 
-       
+
     }
 
 

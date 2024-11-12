@@ -11,7 +11,7 @@ namespace MedicalAppointment.Persistance.Models.appointments.AppointmentsCRUD
         public int StatusID { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
         public int AvailabilityID { get; set; }
 
     }

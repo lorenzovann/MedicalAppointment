@@ -1,5 +1,6 @@
 ﻿
 
+using MedicalAppointment.Application.Contracts.appointmentsContracts;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Repositories.appointmentsRepositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,7 @@ namespace MedicalAppointment.IOC.appointmentsDependency
 
             service.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();   
 
-            //service.AddTransient<IAppointmentsService,  .>();
+            service.AddTransient<IAppointmentsService,IAppointmentsService>();
         }
     }
 }

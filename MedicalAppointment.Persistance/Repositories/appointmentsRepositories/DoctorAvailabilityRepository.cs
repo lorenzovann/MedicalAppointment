@@ -25,11 +25,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             _logger = logger;
         }
 
-        public override Task<OperationResult> Delete(DoctorAvailability entity)
-        {
-            return base.Delete(entity);
-        }
-
+        
         public async override Task<OperationResult> Save(DoctorAvailability entity)
         {
             OperationResult operationResult = new OperationResult();
@@ -68,7 +64,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = $"Error: {ex.Message} guardando DoctorAvailability ";
+                operationResult.Message = $"Error: {ex.Message} guardando DoctorAvailability.";
                 _logger.LogError(operationResult.Message, ex);
 
             }
@@ -121,7 +117,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
                 operationResult = await base.Update(doctorAvailabilityToUpdate);
                 operationResult.Data = doctorAvailabilityToUpdate;
-                operationResult.Message = "DoctorAAvaailability actualizado exitosamente";
+                operationResult.Message = "DoctorAAvaailability actualizado exitosamente.";
 
 
             }
@@ -129,16 +125,36 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Error actualizando DoctorAvailability";
+                operationResult.Message = "Error actualizando DoctorAvailability.";
                 _logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
         }
 
-        public override Task<OperationResult> GetAll()
+        public async override Task<OperationResult> GetAll()
         {
-            return base.GetAll();
+            OperationResult operationResult = new OperationResult();
+
+            try
+            {
+                var doctorAvailability = await _medicalAppointmentContext.DoctorAvailability.ToListAsync();
+
+                operationResult.Data = doctorAvailability;
+                operationResult.Success = true;
+                operationResult.Message = "DoctorAvailability recuperadas con exito.";
+
+            }
+
+            catch (Exception ex)
+            {
+                operationResult.Success = false;
+                operationResult.Message = $"Error {ex.Message} tratando de recuperar DoctorAvailability.";
+                _logger.LogError(operationResult.Message, ex.ToString());
+
+            }
+            return operationResult;
+
         }
 
         public async override Task<OperationResult> GetEntityBy(int id)
@@ -162,13 +178,17 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                                               da.DoctorID,
                                               da.AvailableDate,
                                               da.StartTime,
-                                              da.EndTime
+                                              da.EndTime,
+                                              da.IsActive,
+                                              da.CreatedAt,
+                                              da.UpdatedAt,
+
                                           }).FirstOrDefaultAsync();
 
                 if (availability == null)
                 {
                     operationResult.Success = false;
-                    operationResult.Message = "Disponibilidad no encontrada.";
+                    operationResult.Message = "DoctorAvailability no encontrado.";
                     return operationResult;
                 }
 
@@ -178,7 +198,9 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = $"Ocurrió un error: {ex.Message}";
+                operationResult.Message = $"Ocurrió un error: {ex.Message}.";
+                _logger.LogError(operationResult.Message, ex.ToString());
+
             }
 
             return operationResult;

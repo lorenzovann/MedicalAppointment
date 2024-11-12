@@ -33,31 +33,37 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             try
             {
                 var result = await _appointmentsRepository.GetAll();
-                
-                List<AppoinmentsGetDto> appoinments = ((List<Appointments>)result.Data)
-                                                        .Select(appoinments => new AppoinmentsGetDto
-                                                        {
-                                                            AppointmentID = appoinments.AppointmentID,
-                                                            PatientID = appoinments.PatientID,
-                                                            DoctorID = appoinments.DoctorID,
-                                                            AppointmentDate = appoinments.AppointmentDate,
-                                                            StatusID = appoinments.StatusID
 
-                                                        }).ToList();
+                if (result.Data != null)
+                {
+                    List<AppoinmentsGetDto> appoinments = ((List<Appointments>)result.Data)
+                                                            .Select(appointment => new AppoinmentsGetDto
+                                                            {
+                                                                AppointmentID = appointment.AppointmentID,
+                                                                PatientID = appointment.PatientID,
+                                                                DoctorID = appointment.DoctorID,
+                                                                AppointmentDate = appointment.AppointmentDate,
+                                                                StatusID = appointment.StatusID
+                                                            }).ToList();
 
-                appointmentsResponse.IsSuccess = result.Data;
-                appointmentsResponse.Message = result.Message;
-
+                    appointmentsResponse.Data = appoinments;
+                    appointmentsResponse.IsSuccess = true;
+                    appointmentsResponse.Message = "Listado de Appointments obtenido con éxito.";
+                }
+                else
+                {
+                    appointmentsResponse.IsSuccess = false;
+                    appointmentsResponse.Message = "No se encontraron Appointments.";
+                }
             }
-
             catch (Exception ex)
             {
                 appointmentsResponse.IsSuccess = false;
-                appointmentsResponse.Message = $"Error tipo {ex.Message} tratando de listar Appointments.";
-
+                appointmentsResponse.Message = $"Error {ex.Message} tratando de listar Appointments.";
+                _logger.LogError(appointmentsResponse.Message, ex.ToString());
             }
-            return appointmentsResponse;
 
+            return appointmentsResponse;
         }
 
         public async Task<AppointmentsResponse> GetById(int id)
@@ -66,12 +72,12 @@ namespace MedicalAppointment.Application.Services.appointmentsService
 
             try
             {
-                var result = await _appointmentsRepository.GetEntityBy(id); 
+                var result = await _appointmentsRepository.GetEntityBy(id);
                 if (result.Data != null)
                 {
                     Appointments appointments = (Appointments)result.Data;
 
-                    AppoinmentsGetDto getDto = new AppoinmentsGetDto()
+                    AppoinmentsGetDto getDto = new AppoinmentsGetDto
                     {
                         AppointmentID = appointments.AppointmentID,
                         PatientID = appointments.PatientID,
@@ -81,7 +87,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                     };
 
                     appointmentsResponse.Data = getDto;
-                    appointmentsResponse.IsSuccess = true;  // Asignar el estado de éxito.
+                    appointmentsResponse.IsSuccess = true;
                     appointmentsResponse.Message = "Appointments encontrado con éxito.";
                 }
                 else
@@ -94,12 +100,11 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
                 appointmentsResponse.IsSuccess = false;
                 appointmentsResponse.Message = $"Error {ex.Message} al obtener Appointments por su Id {id}.";
-                _logger.LogError(appointmentsResponse.Message, ex);
+                _logger.LogError(appointmentsResponse.Message, ex.ToString());
             }
 
             return appointmentsResponse;
         }
-
 
         public async Task<AppointmentsResponse> SaveAsync(AppointmentSaveDto dto)
         {
@@ -107,31 +112,45 @@ namespace MedicalAppointment.Application.Services.appointmentsService
 
             try
             {
-                Appointments appointments = new Appointments();
+                Appointments appointments = new Appointments
+                {
+                    PatientID = dto.PatientID,
+                    DoctorID = dto.DoctorID,
+                    AppointmentDate = dto.AppointmentDate,
+                    StatusID = dto.StatusID
+                };
 
-                appointments.PatientID = dto.PatientID;
-                appointments.DoctorID = dto.DoctorID;
-                appointments.AppointmentDate = dto.AppointmentDate;
-                appointments.StatusID = dto.StatusID;
+                var saveResult = await _appointmentsRepository.Save(appointments);
 
+                if (saveResult.Success)
+                {
+                    AppoinmentsGetDto getDto = new AppoinmentsGetDto
+                    {
+                        AppointmentID = appointments.AppointmentID,
+                        PatientID = appointments.PatientID,
+                        DoctorID = appointments.DoctorID,
+                        AppointmentDate = appointments.AppointmentDate,
+                        StatusID = appointments.StatusID
+                    };
 
-                appointmentsResponse.Data = await _appointmentsRepository.Save(appointments);
-                appointmentsResponse.Message = "Appointments guardado exitosamente.";
-
-
-
+                    appointmentsResponse.Data = getDto;
+                    appointmentsResponse.IsSuccess = true;
+                    appointmentsResponse.Message = "Appointments guardado exitosamente.";
+                }
+                else
+                {
+                    appointmentsResponse.IsSuccess = false;
+                    appointmentsResponse.Message = saveResult.Message;
+                }
             }
-
-            catch (Exception ex) 
-            { 
-               
+            catch (Exception ex)
+            {
                 appointmentsResponse.IsSuccess = false;
                 appointmentsResponse.Message = $"Error {ex.Message} tratando de guardar Appointments.";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
-                               
             }
+
             return appointmentsResponse;
-            
         }
 
         public async Task<AppointmentsResponse> UpdateAsync(AppointmentUpdateDto dto)
@@ -142,29 +161,42 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
                 var result = await _appointmentsRepository.GetEntityBy(dto.AppointmentID);
 
-                if (result.Data != null) 
-                { 
+                if (result.Data != null)
+                {
                     Appointments appointments = (Appointments)result.Data;
 
-                    appointments.AppointmentID = dto.AppointmentID;
                     appointments.AppointmentDate = dto.AppointmentDate;
-                    appointments.StatusID= dto.StatusID;
-                    appointments.IsActive = dto.IsActive ?? false;
+                    appointments.StatusID = dto.StatusID;
+                    appointments.IsActive = dto.IsActive ?? appointments.IsActive;
 
                     var updateResult = await _appointmentsRepository.Update(appointments);
-                    appointmentsResponse= updateResult.Data;
-                    appointmentsResponse.Message = "Appointments actualizado exitosamente.";
 
-                                   
+                    if (updateResult.Success)
+                    {
+                        AppoinmentsGetDto getDto = new AppoinmentsGetDto
+                        {
+                            AppointmentID = appointments.AppointmentID,
+                            PatientID = appointments.PatientID,
+                            DoctorID = appointments.DoctorID,
+                            AppointmentDate = appointments.AppointmentDate,
+                            StatusID = appointments.StatusID
+                        };
+
+                        appointmentsResponse.Data = getDto;
+                        appointmentsResponse.IsSuccess = true;
+                        appointmentsResponse.Message = "Appointments actualizado exitosamente.";
+                    }
+                    else
+                    {
+                        appointmentsResponse.IsSuccess = false;
+                        appointmentsResponse.Message = updateResult.Message;
+                    }
                 }
-
                 else
                 {
-                    appointmentsResponse.IsSuccess=false;
+                    appointmentsResponse.IsSuccess = false;
                     appointmentsResponse.Message = "Appointments no encontrado.";
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -172,8 +204,9 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                 appointmentsResponse.Message = $"Error {ex.Message} tratando de actualizar Appointments.";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
             }
-            return appointmentsResponse;
 
+            return appointmentsResponse;
         }
+
     }
 }

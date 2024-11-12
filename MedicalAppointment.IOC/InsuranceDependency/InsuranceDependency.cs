@@ -11,12 +11,12 @@ namespace MedicalAppointment.IOC.InsuranceDependency
     {
         public static void AddInsuranceDependency(this IServiceCollection service)
         {
-            
-            //service.AddScoped<IInsuranceProvidersRepository, InsuranceProvidersRepository>();
-            
-            //service.AddScoped<INetworkTypeRepository, NetworkTypeRepository>();
 
-            
+            service.AddScoped<IInsuranceProvidersRepository, InsuranceProvidersRepository>();
+
+            service.AddScoped<INetworkTypeRepository, NetworkTypeRepository>();
+
+
 
         }
     }

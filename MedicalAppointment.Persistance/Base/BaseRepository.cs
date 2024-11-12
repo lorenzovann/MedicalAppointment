@@ -24,33 +24,33 @@ namespace MedicalAppointment.Persistance.Base
 
         virtual public async Task<OperationResult> GetAll()
         {
-            
+
             OperationResult result = new OperationResult();
 
             try
             {
                 var datos = await this._entities.ToListAsync();
-                result.Data = datos;    
+                result.Data = datos;
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message =  $"Ocurrio un error {ex.Message} obteniendo los datos";
+                result.Message = $"Ocurrio un error {ex.Message} obteniendo los datos";
 
             }
-            
+
             return result;
 
         }
 
         virtual public async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
-        { 
-            
+        {
+
             OperationResult result = new OperationResult();
 
             try
             {
-                var datos = await this._entities.Where(filter).ToListAsync(); 
+                var datos = await this._entities.Where(filter).ToListAsync();
                 result.Data = datos;
             }
 
@@ -60,12 +60,12 @@ namespace MedicalAppointment.Persistance.Base
                 result.Message = $"Ocurrio un error {ex.Message} obteniendo los datos";
             }
             return result;
-        
+
         }
 
-        virtual public async  Task<OperationResult> GetEntityBy(int id)
+        virtual public async Task<OperationResult> GetEntityBy(int id)
         {
-            
+
             OperationResult result = new OperationResult();
 
             try
@@ -75,68 +75,68 @@ namespace MedicalAppointment.Persistance.Base
 
             }
 
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 result.Success = false;
                 result.Message = $"Ocurrio un error {ex.Message} obteniendo la entidad";
-            
+
             }
             return result;
         }
 
         virtual public async Task<OperationResult> Delete(TEntity entity)
         {
-          
+
             OperationResult result = new OperationResult();
 
-            try 
-            { 
+            try
+            {
                 _entities.Remove(entity);
-                await _MedicalAppointmentContext.SaveChangesAsync();    
+                await _MedicalAppointmentContext.SaveChangesAsync();
             }
 
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 result.Success = false;
                 result.Message = $"Ocurrio un error {ex.Message} tratando de eliminar los cambios";
-            
+
             }
-            return result;  
+            return result;
         }
-         virtual public async Task<OperationResult> Save(TEntity entity)
+        virtual public async Task<OperationResult> Save(TEntity entity)
         {
             OperationResult result = new OperationResult();
 
-            try 
-            { 
+            try
+            {
                 _entities.Add(entity);
                 await _MedicalAppointmentContext.SaveChangesAsync();
-                   
+
             }
 
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 result.Success = false;
                 result.Message = $"Ocurrio un error {ex.Message} tratando de guardar los cambios";
-            
+
             }
-            return result;  
+            return result;
         }
 
-         virtual public async Task<OperationResult> Update(TEntity entity)
+        virtual public async Task<OperationResult> Update(TEntity entity)
         {
-            OperationResult result = new OperationResult() ;
+            OperationResult result = new OperationResult();
 
             try
             {
                 _entities.Update(entity);
                 await _MedicalAppointmentContext.SaveChangesAsync();
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 result.Success = false;
                 result.Message = $"Ocurrio un error {ex.Message} tratando de actualizar los cambios";
-            
+
             }
             return result;
 
