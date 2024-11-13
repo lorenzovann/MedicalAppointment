@@ -10,7 +10,7 @@ namespace MedicalAppointment.Domain.Entities.Insurance
     public class NetworkType : BaseEntity , IBaseEntityForTwo
     {
         [Key]
-        public int NetworkTypeID { get; set; }
+        public int NetworkTypeId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         

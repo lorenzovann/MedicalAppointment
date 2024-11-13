@@ -4,7 +4,7 @@ namespace MedicalAppointment.Persistance.Models.Insurance.NetworkTypeCRUD
 {
     public class NetworkTypeModel
     {
-        public int NetworkTypeID { get; set; }
+        public int NetworkTypeId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public DateTime CreatedDate { get; set; }

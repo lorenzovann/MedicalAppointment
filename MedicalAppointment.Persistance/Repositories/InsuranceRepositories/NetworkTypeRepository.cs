@@ -29,7 +29,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity.NetworkTypeID == 0 || string.IsNullOrEmpty(entity.Name))
+            if (entity.NetworkTypeId == 0 || string.IsNullOrEmpty(entity.Name))
             {
                 operationResult.Success = false;
                 operationResult.Message = "Estos campos son obligatorios.";
@@ -37,7 +37,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
 
             }
 
-            if (entity.NetworkTypeID == 0)
+            if (entity.NetworkTypeId == 0)
             {
                 operationResult.Success = false;
                 operationResult.Message = "NetworkTypeID no puede ser menor a cero.";
@@ -69,7 +69,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
             OperationResult operationResult = new OperationResult();
 
 
-            if (entity.NetworkTypeID == 0 || string.IsNullOrEmpty(entity.Name))
+            if (entity.NetworkTypeId == 0 || string.IsNullOrEmpty(entity.Name))
             {
                 operationResult.Success = false;
                 operationResult.Message = "NetworkTypeID y Name son campos obligatorios.";
@@ -88,7 +88,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
                     return operationResult;
                 }
 
-                networkTypeToUpdate.NetworkTypeID = entity.NetworkTypeID;
+                networkTypeToUpdate.NetworkTypeId = entity.NetworkTypeId;
                 networkTypeToUpdate.Name = entity.Name;
                 networkTypeToUpdate.Description = entity.Description;
                 networkTypeToUpdate.UpdatedAt = entity.UpdatedAt;
@@ -149,10 +149,10 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
             try
             {
                 var networkType = await (from nt in _medicalAppointmentContext.NetworkType
-                                         where nt.NetworkTypeID == id && nt.IsActive == true
+                                         where nt.NetworkTypeId == id && nt.IsActive == true
                                          select new
                                          {
-                                             nt.NetworkTypeID,
+                                             nt.NetworkTypeId,
                                              nt.Name,
                                              nt.Description,
                                              nt.CreatedAt,
