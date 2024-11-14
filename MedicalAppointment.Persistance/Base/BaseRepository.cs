@@ -10,7 +10,8 @@ namespace MedicalAppointment.Persistance.Base
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         private readonly MedicalAppointmentContext _MedicalAppointmentContext;
-        private DbSet<TEntity> _entities;
+        private readonly DbSet<TEntity> _entities;
+        
         public BaseRepository(MedicalAppointmentContext medicalAppointmentContext)
         {
             _MedicalAppointmentContext = medicalAppointmentContext;

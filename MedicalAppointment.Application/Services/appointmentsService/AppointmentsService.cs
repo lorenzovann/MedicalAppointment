@@ -110,6 +110,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
                 Appointments appointments = new Appointments
                 {
+                    AppointmentID = dto.AppointmentID,
                     PatientID = dto.PatientID,
                     DoctorID = dto.DoctorID,
                     AppointmentDate = dto.AppointmentDate,
@@ -175,11 +176,11 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                     AppointmentDate = dto.AppointmentDate,
                     StatusID = dto.StatusID,
                     CreatedAt = DateTime.Now,  
-                    UpdatedAt = DateTime.Now,  
-                    IsActive = dto.IsActive   
+                    UpdatedAt = DateTime.Now,  // Usualmente se maneja desde el repositorio
+                    IsActive = dto.IsActive   // Si es necesario
                 };
 
-                
+                // Llamar al repositorio para actualizar la cita
                 var result = await _appointmentsRepository.Update(appointments);
 
                 appointmentsResponse.IsSuccess = result.Success;

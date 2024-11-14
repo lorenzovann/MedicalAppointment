@@ -80,11 +80,11 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         {
             OperationResult operationResult = new OperationResult();
 
-
+            // Validaciones
             if (entity.AppointmentDate == DateTime.MinValue)
             {
                 operationResult.Success = false;
-                operationResult.Message = "AppointmentID y AppointmentDate son obligatorios.";
+                operationResult.Message = "AppointmentDate es obligatorios.";
                 return operationResult;
             }
 
@@ -104,6 +104,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
+                
                 Appointments? appointmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
 
                 if (appointmentsToUpdate == null)
@@ -112,26 +113,38 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                     operationResult.Message = "No se puede actualizar el registro.";
                     return operationResult;
                 }
+
+                appointmentsToUpdate.AppointmentID = entity.AppointmentID;
                 appointmentsToUpdate.AppointmentDate = entity.AppointmentDate;
                 appointmentsToUpdate.StatusID = entity.StatusID;
                 appointmentsToUpdate.DoctorID = entity.DoctorID;
                 appointmentsToUpdate.PatientID = entity.PatientID;
 
-                operationResult = await base.Update(appointmentsToUpdate);
-                operationResult.Data = appointmentsToUpdate;
-                operationResult.Message = "Appointments actualizado exitosamente.";
-            }
+                
+                OperationResult updateResult = await base.Update(appointmentsToUpdate);
 
+                if (updateResult.Success)
+                {
+                    operationResult.Success = true;
+                    operationResult.Data = appointmentsToUpdate;
+                    operationResult.Message = "Appointments actualizado exitosamente.";
+                }
+                else
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = updateResult.Message ?? "Error en la actualización del Appointments.";
+                }
+            }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "Error actualizando Appointments.";
-                _logger.LogError(operationResult.Message, ex);
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
-
         }
+
 
 
         public async override Task<OperationResult> GetAll()

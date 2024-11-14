@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.appointm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Insurance.Api", "MedicalAppointment.Insurance.Api\MedicalAppointment.Insurance.Api.csproj", "{50101D13-9B7E-4E8C-92B4-CD8A621A6F6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.IOC", "MedicalAppointment.IOC\MedicalAppointment.IOC.csproj", "{9C68FBE4-48FE-4EA2-8D03-549CB3332935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.IOC", "MedicalAppointment.IOC\MedicalAppointment.IOC.csproj", "{9C68FBE4-48FE-4EA2-8D03-549CB3332935}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
