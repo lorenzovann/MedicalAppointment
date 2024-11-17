@@ -1,8 +1,7 @@
 ﻿
-
 namespace MedicalCoreAplications.cs.Dtos.Systems.StatusDtos.cs
 {
-    public class SaveStatusDtos : StatusBaseDtos
+    public sealed class SaveStatusDtos : BaseStatusDtos
     {
     }
 }

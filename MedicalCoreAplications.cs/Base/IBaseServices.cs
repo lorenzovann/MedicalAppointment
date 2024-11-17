@@ -2,7 +2,7 @@
 
 namespace MedicalCoreAplications.cs.Base
 {
-    public interface IBaseServices<TResponse,  TSaveDto, TUpdateDto>
+    public interface IBaseServices<TResponse,  TSaveDto, TUpdateDto, TGetDto>
     {
 
         Task<TResponse> getall();

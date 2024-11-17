@@ -7,6 +7,8 @@ using Medical.Percistances.cs.Context;
 using MedicalAppointment.Domain.IBaseRepositorie;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Interfaces;
+using MedicalAppointment.Persistance.Interfaces.Configurations;
+using MedicalAppointment.Persistance.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -14,7 +16,7 @@ using System.Xml.XPath;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public sealed class UserRepositorie : BaseRepositorie<User>, UserInterfaces
+    public sealed class UserRepositorie : BaseRepositorie<User>, IUserRepository
     {
 
         private readonly MedicalContext _context;
@@ -144,23 +146,26 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                // consulta con base de datos 
-                var usersWithRoles = await (from user in _context.Users
-                                            join role in _context.Roles on user.RoleId equals role.RoleID
-                                            select new
-                                            {
-                                                Usuarioid = user.UserId,
-                                                NombreUsuario = user.FirstName,
-                                                ApellidoUsuario = user.LastName,
-                                                CorreoUsuario = user.Email,
-                                                FechaCreacion = user.CreatedAt,
-                                                Update = user.UpdatedAt,
-                                                user.IsActive,
-                                                PasswordUser = user.Password,
-                                                RoleUser = role.RoleName,
-                                            }).ToListAsync(); 
 
-                result.data = usersWithRoles;
+                result.data = await (from User in _context.Users
+                                     join Role in _context.Roles on User.RoleId equals Role.RoleID
+                                     select new UserModel
+                                     {
+                                         UserId = User.UserId,
+                                         RoleId = User.RoleId,    
+                                         FirstName = User.FirstName,
+                                         LastName = User.LastName,  
+                                         Password = User.Password,
+                                         Email = User.Email,
+                                         UpdatedAt = User.UpdatedAt,
+                                         CreatedAt = User.CreatedAt,
+                                         IsActive = User.IsActive,
+
+                                     }).AsNoTracking()
+                                     .ToListAsync();
+
+
+                 
 
             }
             catch (Exception ex)
@@ -197,27 +202,27 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 // Consulta para obtener el usuario y su rol
-                var userWithRole = await (from user in _context.Users
-                                          join role in _context.Roles
-                                          on user.RoleId equals role.RoleID
-                                          where user.UserId == id
-                                          && user.IsActive == true
-                                          orderby user.CreatedAt descending
-                                          select new
-                                          {
-                                              user.UserId,
-                                              user.FirstName,
-                                              user.LastName,
-                                              user.Email,
-                                              user.Password,
-                                              user.CreatedAt,
-                                              user.UpdatedAt,
-                                              RoleName = role.RoleName  // Nombre del rol del usuario
-                                          }).FirstOrDefaultAsync();
+                     var userWithRole = await (from User in _context.Users 
+                                               join Role in _context.Roles  on User.RoleId equals Role.RoleID
+                                               where User.UserId == id 
+                                               && User.IsActive == true 
+                                               select new UserModel
+                                               {
+                                                   UserId = id,
+                                                   FirstName = User.FirstName,
+                                                   LastName = User.LastName,
+                                                   Password = User.Password,
+                                                   Email = User.Email,
+                                                   RoleId = User.RoleId,
+                                                   UpdatedAt = User.UpdatedAt,
+                                                   CreatedAt = User.CreatedAt,
+                                                   IsActive = User.IsActive,
+                                
+                                               }).FirstOrDefaultAsync();
 
- 
-
-
+                    
+  
+                 
                 // Verificación si el usuario no fue encontrado
                 if (userWithRole == null)
                 {

@@ -1,7 +1,6 @@
 using Medical.Percistances.cs.Context;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
 using MedicalAppointment.Persistance.Repositorie.Configuration;
-using MedicalCoreAplications.cs.Contracts.systems;
 using MedicalIOC.cs.Dependecy.Configurations;
 using Microsoft.EntityFrameworkCore;
 

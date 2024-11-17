@@ -2,7 +2,8 @@
 using Medical.Percistances.cs.Base;
 using Medical.Percistances.cs.Context;
 using MedicalAppointment.Domain.Result;
-using MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces;
+using MedicalAppointment.Persistance.Interfaces.Configurations;
+using MedicalAppointment.Persistance.Model.Systems;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Json;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public class PatientRepositorie : BaseRepositorie<Patient>, IPatientInterfaces
+    public class PatientRepositorie : BaseRepositorie<Patient>, IPatientRepository
     {
 
         private readonly MedicalContext _dbcontext;
@@ -23,7 +24,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                                  ILogger<PatientRepositorie> logger) : base(context)
         {
             _dbcontext = context;
-             _logger = logger;
+            _logger = logger;
         }
 
         public override async Task<OperationResult> Add(Patient entities)
@@ -75,7 +76,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                await base.Add(entities); 
+                await base.Add(entities);
                 result.data = entities;
 
                 result.Message = "Paciente agregado exitosamente! ";
@@ -97,12 +98,12 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
 
             if (string.IsNullOrEmpty(entities.NamePatient) || string.IsNullOrEmpty(entities.Allergies) ||
-               string.IsNullOrEmpty(entities.Address) || string.IsNullOrEmpty(entities.EmergencyContactName)||
+               string.IsNullOrEmpty(entities.Address) || string.IsNullOrEmpty(entities.EmergencyContactName) ||
                string.IsNullOrEmpty(entities.EmergencyContactPhone))
             {
                 result.Sucess = false;
                 result.Message = "No puedes dejar campos vacios! ";
-                return result; 
+                return result;
 
             }
 
@@ -137,7 +138,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 {
                     result.Message = " No puedes dejar valor vasio ";
                     result.Sucess = false;
-                    return result; 
+                    return result;
 
                 }
 
@@ -149,11 +150,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 result.Sucess = false;
                 result.Message = $"Error tipo {ex.Message} al remover paciente del registro! ";
-                _logger.LogError(result.Message, ToString()); 
+                _logger.LogError(result.Message, ToString());
 
             }
 
-            return result; 
+            return result;
 
         }
 
@@ -187,7 +188,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             }
 
-            if (entities.PatientID <= 0  && entities.InsuranceProviderID <= 0)
+            if (entities.PatientID <= 0 && entities.InsuranceProviderID <= 0)
             {
                 result.Sucess = false;
                 result.Message = "No puedes ingresar valores menores e iguales a 0 ";
@@ -199,74 +200,76 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 Patient? patientUpdate = await _dbcontext.Patients.FindAsync(entities);
 
-                 if (patientUpdate == null)
-                 {
+                if (patientUpdate == null)
+                {
                     result.Sucess = false;
                     result.Message = "No puedes dejar el campo vasio! ";
-                    return result; 
+                    return result;
 
-                 }
-         
-                    patientUpdate.PatientID = patientUpdate.PatientID;
-                    patientUpdate.NamePatient = entities.NamePatient;
-                    patientUpdate.Allergies = entities.Allergies;
-                    patientUpdate.BloodType = entities.BloodType;
-                    patientUpdate.DateofBirth = entities.DateofBirth;
-                    patientUpdate.InsuranceProviderID = entities.InsuranceProviderID;
-                    patientUpdate.EmergencyContactName = entities.EmergencyContactName;
-                    patientUpdate.EmergencyContactPhone = entities.EmergencyContactPhone;
-                    patientUpdate.Gender = entities.Gender;
-                    patientUpdate.CreatedAt = entities.CreatedAt;
-                    patientUpdate.IsActive = entities.IsActive;
-                    patientUpdate.Address = entities.Address;  
-                    
+                }
 
-                    result.data = await base.Update(patientUpdate);
-                    result.Message = " Paciente Actulizado correctamente! ";
-               
-                
+                patientUpdate.PatientID = patientUpdate.PatientID;
+                patientUpdate.NamePatient = entities.NamePatient;
+                patientUpdate.Allergies = entities.Allergies;
+                patientUpdate.BloodType = entities.BloodType;
+                patientUpdate.DateofBirth = entities.DateofBirth;
+                patientUpdate.InsuranceProviderID = entities.InsuranceProviderID;
+                patientUpdate.EmergencyContactName = entities.EmergencyContactName;
+                patientUpdate.EmergencyContactPhone = entities.EmergencyContactPhone;
+                patientUpdate.Gender = entities.Gender;
+                patientUpdate.CreatedAt = entities.CreatedAt;
+                patientUpdate.IsActive = entities.IsActive;
+                patientUpdate.Address = entities.Address;
+
+
+                result.data = await base.Update(patientUpdate);
+                result.Message = " Paciente Actulizado correctamente! ";
+
+
             }
             catch (Exception ex)
             {
                 result.Sucess = false;
                 result.Message = $"Error tipo {ex.Message} actualizando Paciente ";
-               _logger.LogError(result.Message, ToString());
+                _logger.LogError(result.Message, ToString());
 
             }
 
-            return result; 
+            return result;
 
         }
 
+
+
         public override async Task<OperationResult> Getall()
-        {  
+        {
 
             OperationResult result = new OperationResult();
-         
+
             try
             {
                 var patientsWithInsurance = await (from patient in _dbcontext.Patients
                                                    join insuranceProvider in _dbcontext.Patients
                                                    on patient.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
-                                                   select new
+                                                   select new PatientModel
                                                    {
-                                                       patient.PatientID,
-                                                       patient.NamePatient,
-                                                       patient.DateofBirth,
-                                                       patient.Gender,
-                                                       patient.Address,
-                                                       patient.EmergencyContactName,
-                                                       patient.EmergencyContactPhone,
-                                                       patient.BloodType,
-                                                       patient.Allergies,
-                                                       patient.InsuranceProviderID,
-                                                       patient.CreatedAt,
-                                                       patient.UpdatedAt,
-                                                       patient.IsActive,
-                                                       InsuranceProviderName = insuranceProvider.NamePatient // Nombre del proveedor de seguro
-                                                   }).ToListAsync();
 
-              
+                                                       PatientID = patient.PatientID,
+                                                       NamePatient = patient.NamePatient,
+                                                       EmergencyContactName = patient.EmergencyContactName,
+                                                       Address = patient.Address,
+                                                       Allergies = patient.Allergies,
+                                                       BloodType = patient.BloodType,
+                                                       DateofBirth = patient.DateofBirth,
+                                                       EmergencyContactPhone = patient.EmergencyContactPhone,
+                                                       Gender = patient.Gender,
+                                                       InsuranceProviderID = patient.InsuranceProviderID,
+
+
+                                                   }).AsNoTracking()
+                                                   .ToListAsync();
+
+
                 result.data = patientsWithInsurance;
 
             }
@@ -274,75 +277,64 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
                 result.Sucess = false;
                 result.Message = $"Error tipo {ex.Message} tratando de listar pacientes ";
-                _logger.LogError(result.Message , ToString());
+                _logger.LogError(result.Message, ToString());
             }
 
-            return result; 
+            return result;
 
 
         }
-        public async Task<OperationResult> FindPatientById(int id)
-        {
-            OperationResult result = new OperationResult();
 
-            // Validar que el ID sea mayor que 0
+
+
+        public async override Task<OperationResult> GetEntitiebyId(int id)
+        {
+            OperationResult result = new OperationResult(); 
+
             if (id <= 0)
             {
                 result.Sucess = false;
-                result.Message = "No puedes ingresar números negativos o iguales a 0!";
-                return result;
+                result.Message = " No puedes ingresar id menor o igual a  0! ";
             }
 
             try
             {
-                // Buscar paciente por ID y unir con proveedor de seguro
-                var FindPatientById = await (from patient in _dbcontext.Patients
-                                             join insuranceProvider in _dbcontext.Patients
-                                             on patient.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
-                                             where patient.PatientID == id &&
-                                             patient.IsActive == true
-                                             orderby patient descending
-                                             select new
-                                             {
-                                                 patient.PatientID,
-                                                 patient.NamePatient,
-                                                 patient.DateofBirth,
-                                                 patient.Gender,
-                                                 patient.Address,
-                                                 patient.EmergencyContactName,
-                                                 patient.EmergencyContactPhone,
-                                                 patient.BloodType,
-                                                 patient.Allergies,
-                                                 patient.CreatedAt,
-                                                 patient.UpdatedAt,
-                                                 InsuranceProviderName = insuranceProvider.NamePatient,
-                                             }).FirstOrDefaultAsync();
+                var patientsWithInsurance = await (from patient in _dbcontext.Patients
+                                                   join insuranceProvider in _dbcontext.Patients
+                                                   on patient.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
+                                                   select new PatientModel
+                                                   {
 
-                // Verificar si el paciente fue encontrado
-                if (FindPatientById != null)
-                {
-                    result.data = FindPatientById;  // Almacenar la información del paciente en el resultado
-                }
-                else
-                {
-                    result.Sucess = false;
-                    result.Message = "Paciente no encontrado con el ID proporcionado.";
-                }
+                                                       PatientID = patient.PatientID,
+                                                       NamePatient = patient.NamePatient,
+                                                       EmergencyContactName = patient.EmergencyContactName,
+                                                       Address = patient.Address,
+                                                       Allergies = patient.Allergies,
+                                                       BloodType = patient.BloodType,
+                                                       DateofBirth = patient.DateofBirth,
+                                                       EmergencyContactPhone = patient.EmergencyContactPhone,
+                                                       Gender = patient.Gender,
+                                                       InsuranceProviderID = patient.InsuranceProviderID,
+
+
+                                                   }).FirstOrDefaultAsync();
+
+                result.data = patientsWithInsurance;
+
+
             }
             catch (Exception ex)
             {
-                // Manejo de excepción
                 result.Sucess = false;
-                result.Message = $"Error tipo: {ex.Message} encontrando el paciente con ID {id}";
-               _logger.LogError(result.Message, ex);
+                result.Message = $"Error tipo {ex.Message} tratando de encontrar pacientes ";
+                _logger.LogError(result.Message, ToString());
             }
 
             return result;
+
         }
 
-
-
-
+  
     }
 }
         

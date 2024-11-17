@@ -1,5 +1,7 @@
 ﻿using Medical.Domain.Entities.Confi.Users;
-using MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces;
+using MedicalAppointment.Persistance.Interfaces.Configurations;
+using MedicalCoreAplications.cs.Contracts.Configurations;
+using MedicalCoreAplications.cs.Dtos.Configurations.PatientDtos;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,18 +13,19 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
     public class PatientsController : ControllerBase
     {
 
-        private readonly IPatientInterfaces _patientrepositories;
+        private readonly IPatientServices _patientservicers;
 
-        public PatientsController(IPatientInterfaces patientrepositories)
+
+        public PatientsController(IPatientServices patientrepositories)
         {
-            _patientrepositories = patientrepositories;
+            _patientservicers = patientrepositories;
         }
         // GET: api/<PatientsController>
         [HttpGet("GetPatients")]
         public  async Task<IActionResult> Get()
         {
-           var result = await _patientrepositories.Getall();
-           if (!result.Sucess) return BadRequest(result); 
+           var result = await _patientservicers.getall();
+           if (!result.success) return BadRequest(result); 
 
            return Ok(result);  
         }
@@ -32,18 +35,18 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
         public async Task<IActionResult> Get(int id)
         { 
 
-            var result = await _patientrepositories.GetEntitiebyId(id);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _patientservicers.GetById(id);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);
         }
 
         // POST api/<PatientsController>
         [HttpPost("SavePatients")]
-        public async Task<IActionResult> Post([FromBody] Patient patient)
-        { 
-         var result = await _patientrepositories.Add(patient);
-        if (!result.Sucess) return BadRequest(result);
+        public async Task<IActionResult> Post([FromBody] SavePatientsDtos patient)
+        {
+            var result = await _patientservicers.SaveAsync(patient); 
+        if (!result.success) return BadRequest(result);
 
         return Ok(result);  
       
@@ -51,23 +54,14 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
 
         // PUT api/<PatientsController>/5
         [HttpPut("UpdatePatient")]
-        public async Task<IActionResult> Put([FromBody] Patient patient)
+        public async Task<IActionResult> Put([FromBody] UpdatePatientsDtos patient)
         {
-            var result = await _patientrepositories.Update(patient);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _patientservicers.UpdateAsync(patient);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);
         }
 
-        [HttpPost("DisablePatient")]
-        public async Task<IActionResult> Disable([FromBody] Patient patient)
-        {
-            var result = await _patientrepositories.Delete(patient);
-            if (!result.Sucess) return BadRequest(result);
-
-            return Ok(result);
-
-        }
 
     }
 }

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Medical.Domain.Entities.Confi.Systems
 {
     [Table("Notifications", Schema = "system")]
-    public sealed class Notifications 
+    public class Notifications 
     {
 
         [Key]

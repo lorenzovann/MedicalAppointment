@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public class StatusRepositorie : BaseRepositorie<Status>, IStatusInterfaces
+    public class StatusRepositorie : BaseRepositorie<Status>, IStatusRepository
     {
 
         private readonly MedicalContext _context;
@@ -76,10 +76,12 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
                 StatusUpdate.StatusID = entities.StatusID; 
                 StatusUpdate.StatusName = entities.StatusName;
+                StatusUpdate.CreateAt = entities.CreateAt;  
+
                 
                 
                 result.data = await base.Update(StatusUpdate);
-                result.Message = "Status Modicado exitosamente! ";
+                result.Message = "Status Modificado exitosamente! ";
             }
             catch (Exception ex)
             {
@@ -98,16 +100,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                var ListValues = await (from Status in _context.Status
-                                        select new
-                                        {
-                                            StatusName = Status.StatusName,
-                                            StatuId = Status.StatusID,
-                                            CreateAt = Status.CreateAt, // para verificar cuando se creo este status
+                // Reemplaza la consulta anónima con una que devuelva una lista de Status.
+                var ListValues = await _context.Status.ToListAsync();  
+                  
 
-                                        }).ToListAsync();  
-
-                result.data = ListValues;
+                result.data = ListValues; 
             }
             catch (Exception ex)
             {
@@ -130,15 +127,11 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             }
             try
             {
-                result.data = await (from Status in _context.Status
-                                     where
-                                     Status.StatusID == id
-                                     select new
-                                     {
-                                       StatusName = Status.StatusName,
-                                       StatusId = Status.StatusID,
-                                       StatusCreateAt = Status.CreateAt,    
-                                     }).FirstOrDefaultAsync();
+                
+                     result.data = await _context.Status
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(status => status.StatusID == id); 
+
             }
             catch (Exception ex)
             {

@@ -5,13 +5,14 @@ using Medical.Percistances.cs.Base;
 using Medical.Percistances.cs.Context;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
+using MedicalAppointment.Persistance.Model.Systems;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Xml.XPath;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public class NotificationsRepositories : BaseRepositorie<Notifications>, INotificationsinterfaces
+    public class NotificationsRepositories : BaseRepositorie<Notifications>, INotificationsRepository
     {
 
         private readonly MedicalContext _context; 
@@ -101,7 +102,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                     return result;
                 }
 
-                notificationsUpdate.NotificationId = entities.NotificationId;
+                notificationsUpdate.NotificationId = entities.NotificationId; 
                 notificationsUpdate.UserID = entities.UserID;
                 notificationsUpdate.Message = entities.Message;
                 notificationsUpdate.SentAt = entities.SentAt;
@@ -128,21 +129,13 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                var Listar = await (from Notifications in _context.Notifications
-                                    join Users in _context.Users on Notifications.UserID equals Users.UserId
-                                    orderby Notifications.SentAt descending
-                                    select new
-                                    {
-                                        NotificationID = Notifications.NotificationId,
-                                        NotificationMessage = Notifications.Message,
-                                        NotificationSentAt = Notifications.SentAt,
-                                        UserID = Users.UserId,
-                                        UserName = Users.FirstName,
-                                        UserEmail = Users.Email,
-                                        UserPassword = Users.Password
-                                    }).ToListAsync();
-                result.data = Listar;  
+             
+                       result.data = await _context.Notifications
+                       .AsNoTracking()
+                       .OrderByDescending(noti => noti.SentAt)
+                       .ToListAsync();
 
+              
             }
             catch (Exception ex)
             {
@@ -169,34 +162,13 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                var ValueFind = await (from Notifications in _context.Notifications
-                                       join Users in _context.Users on Notifications.UserID equals Users.UserId
-                                       where Notifications.NotificationId == id
-                                       && Users.IsActive == true
-                                       orderby Notifications descending 
-                                       select new
-                                       {
-                                           NotificationID = Notifications.NotificationId,
-                                           NotificationMessage = Notifications.Message,
-                                           NotificationSentat = Notifications.SentAt, 
-                                           UsersIDUser = Users.UserId,
-                                           UserName = Users.FirstName,
-                                           UserslastName = Users.LastName,
-                                           UsersPassword = Users.Password,
-                                           UserEmail = Users.Email
-                                       }).FirstOrDefaultAsync(); 
 
-                if(ValueFind == null)
-                {
-                    result.Sucess = false;
-                    result.Message = "Notificacion no encontrada! ";
-                    return result;
+                result.data = await _context.Notifications
+               .AsNoTracking()
+               .Where(noti => noti.NotificationId == id)
+               .OrderByDescending(noti => noti.SentAt) // Ordena de forma descendente por SentAt
+               .FirstOrDefaultAsync();
 
-                }
-
-                result.data = ValueFind;
-                result.Message = " Lista de notificaciones ejecutadas exitosamente! ";
-             
             }
             catch (Exception ex)
             {

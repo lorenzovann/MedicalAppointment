@@ -1,10 +1,11 @@
 ﻿using Medical.Domain.Entities.Confi.Systems;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
-using MedicalCoreAplications.cs.Contracts.systems;
+
+using MedicalCoreAplications.cs.Contracts.Systems;
 using MedicalCoreAplications.cs.Dtos.Systems.StatusDtos.cs;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace MedicalAppoiment.systems.Api.Controllers
 {
@@ -12,7 +13,7 @@ namespace MedicalAppoiment.systems.Api.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-        // GET: api/<StatusControllers>
+        
 
         private readonly IStatusServices _statusservices; 
 

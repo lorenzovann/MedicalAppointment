@@ -1,10 +1,10 @@
 ﻿
 
 using MedicalAppointment.Persistance.Interfaces;
-using MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces;
+using MedicalAppointment.Persistance.Interfaces.Configurations;
 using MedicalAppointment.Persistance.Repositorie.Configuration;
 using MedicalCoreAplications.cs.Contracts.Configurations;
-using MedicalCoreAplications.cs.Services;
+using MedicalCoreAplications.cs.Services.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicalIOC.cs.Dependecy.Configurations
@@ -14,13 +14,14 @@ namespace MedicalIOC.cs.Dependecy.Configurations
 
         public static void AddConfigurationDependecy(this IServiceCollection services)
         {
-            services.AddScoped<UserInterfaces, UserRepositorie>(); 
-            services.AddScoped<IDoctorInterfaces, DoctorRepositorie>();
-            services.AddScoped<IPatientInterfaces, PatientRepositorie>();
+           
+            services.AddScoped<IDoctorRepository, DoctorRepositorie>();
+            services.AddScoped<IPatientRepository,  PatientRepositorie>();
+            services.AddScoped<IUserRepository, UserRepositorie>();
 
             services.AddTransient<IUserServices, UserServices>();
-            services.AddTransient<IDoctorServices, Doctorservices>();
-            services.AddTransient<IPatientsServices, PatientServices>();
+            services.AddTransient<IDoctorServices, DoctorServices>();
+            services.AddTransient<IPatientServices, PatientServices>();
         }
     }
 }

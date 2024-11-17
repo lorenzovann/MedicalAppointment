@@ -1,6 +1,9 @@
 ﻿using Medical.Domain.Entities.Confi.Users;
 using MedicalAppointment.Persistance.Interfaces;
 using MedicalAppointment.Persistance.Repositorie.Configuration;
+using MedicalCoreAplications.cs.Contracts.Configurations;
+using MedicalCoreAplications.cs.Dtos.Configurations.UserDtos.cs;
+using MedicalCoreAplications.cs.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
@@ -10,21 +13,21 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
     public class UsersController : ControllerBase
     {
 
-        private readonly UserInterfaces _userepositorie;
+        private readonly IUserServices _userservices; 
 
 
-        public UsersController(UserInterfaces userepositorie) { 
-        
-            _userepositorie = userepositorie;
+        public UsersController(IUserServices userservices)
+        {
+            this._userservices = userservices;
+        }   
 
-        }    
 
 
         [HttpGet("GetUsers")]
         public  async Task<IActionResult> Get()
-        { 
-            var result = await _userepositorie.Getall();
-            if (!result.Sucess) return BadRequest(result); 
+        {
+            var result = await _userservices.getall();
+            if (!result.success) return BadRequest(result); 
 
 
             return Ok(result);
@@ -35,8 +38,8 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
         public async Task<IActionResult> Get(int id)
         { 
 
-            var result = await _userepositorie.GetEntitiebyId(id);
-            if (!result.Sucess) return BadRequest(result); 
+            var result = await _userservices.GetById(id);
+            if (!result.success) return BadRequest(result); 
 
             return Ok(result); 
 
@@ -44,11 +47,11 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
 
         // POST api/<UsersController>
         [HttpPost("SaveUsers")]
-        public async Task<IActionResult> Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] SaveUserDtos user)
         { 
 
-            var result = await _userepositorie.Add(user);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _userservices.SaveAsync(user);
+            if (!result.success) return BadRequest(result);
 
             return Ok(result);
 
@@ -56,25 +59,15 @@ namespace MedicalAppointement.Users.Api.Controllers.UsersControllers
 
         // PUT api/<UsersController>/5
         [HttpPut("UpdateUsers")]
-        public async Task<IActionResult> Put(int id, [FromBody] User value)
+        public async Task<IActionResult> Put([FromBody]  UpdateUserDtos  value)
         {
-            var result = await _userepositorie.Update(value);
-            if (!result.Sucess) return BadRequest(result);
+            var result = await _userservices.UpdateAsync(value);
+            if (!result.success) return BadRequest(result);
 
             return Ok(value);
 
         }
 
-        [HttpPost("DisableUser")]
-        public async Task<IActionResult> DisableUser(User user)
-        {
-
-            var result = await _userepositorie.Delete(user);
-            if (!result.Sucess) return BadRequest(result);
-
-            return Ok(result);
-
-        }
-
+     
     }
 }

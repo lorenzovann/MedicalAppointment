@@ -1,6 +1,7 @@
 ﻿using Medical.Domain.Entities.Confi.Systems;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
-using MedicalCoreAplications.cs.Contracts.systems;
+
+using MedicalCoreAplications.cs.Contracts.Systems;
 using MedicalCoreAplications.cs.Dtos.Systems.RolesDtos.cs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,7 +56,7 @@ namespace MedicalAppoiment.systems.Api.Controllers
         }
 
         [HttpPut("UpdateRoles")]
-        public async Task<IActionResult> Put([FromBody] RolesUpdateDtos value)
+        public async Task<IActionResult> Put([FromBody] UpdateRolesDtos value)
         {
             var result = await _roleservices.UpdateAsync(value);
             if (!result.success) return BadRequest(result); 

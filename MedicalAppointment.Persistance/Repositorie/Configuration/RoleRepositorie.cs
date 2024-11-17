@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public class RoleRepositorie : BaseRepositorie<Role>, IRoleInterfaces
+    public class RoleRepositorie : BaseRepositorie<Role>, IRoleRepository
     {
 
         private readonly MedicalContext _context; 
@@ -163,17 +163,12 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
             try
             {
-                var RoleList = await (from Role in _context.Roles
-                                      select new
-                                      {
-                                          roleid = Role.RoleID,
-                                          rolename = Role.RoleName,
-                                          roleCreateAt = Role.CreatedAt,
-                                          roleUpdateAt = Role.UpdatedAt,
-                                          roleActive = Role.IsActive
-                                      }).ToListAsync();
 
-                result.data = RoleList;
+
+                result.data = await _context.Roles
+               .AsNoTracking()
+               .OrderByDescending(rol => rol.CreatedAt)
+               .ToListAsync();
 
             }
             catch (Exception ex)
@@ -202,19 +197,12 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 // manejo con la  base de datos
-                var FindValue = await (from Role in _context.Roles
-                                       where
-                                       Role.RoleID == id
-                                       &&
-                                       Role.IsActive == true
-                                       orderby Role.CreatedAt descending
-                                       select new
-                                       {
-                                           Roleid = Role.RoleID,
-                                           rolename = Role.RoleName,
-                                           roleCreateAt = Role.CreatedAt,
-                                           roleUpdateAt = Role.UpdatedAt,
-                                       }).FirstOrDefaultAsync(); 
+                     var FindValue = await _context.Roles
+                    .AsNoTracking()
+                    .Where(role => role.RoleID == id && role.IsActive)
+                    .OrderByDescending(rol => rol.CreatedAt)
+                    .FirstOrDefaultAsync();
+                  
 
                 result.data = FindValue;
 

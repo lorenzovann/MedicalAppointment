@@ -1,6 +1,6 @@
 ﻿using Medical.Domain.Entities.Confi.Systems;
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
-using MedicalCoreAplications.cs.Contracts.systems;
+using MedicalCoreAplications.cs.Contracts.Systems;
 using MedicalCoreAplications.cs.Dtos.Systems.NotificationsDtos.cs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +13,12 @@ namespace MedicalAppoiment.systems.Api.Controllers
     public class Notifcations : ControllerBase
     {
 
-        private readonly INotificationsServices _notificationsServices;
+        private readonly INotificationServices _notificationsServices;
                           // inyeccion de mi servicio 
-        public Notifcations(INotificationsServices notificationsServices)
+        public Notifcations(INotificationServices notificationsServices)
         {
            
-            _notificationsServices = notificationsServices;
+            this._notificationsServices = notificationsServices;
         }
 
         [HttpGet("GetNotifications")] // mis endpoint
@@ -43,7 +43,7 @@ namespace MedicalAppoiment.systems.Api.Controllers
 
         // POST api/<NotificationsControlles>
         [HttpPost("SaveNotifications")]
-        public async Task<IActionResult> Post([FromBody] SaveNotifications value)
+        public async Task<IActionResult> Post([FromBody] SaveNotificationsDto value)
         {
                 var result = await _notificationsServices.SaveAsync(value);  
                 if (!result.success) return BadRequest(result);
@@ -52,7 +52,7 @@ namespace MedicalAppoiment.systems.Api.Controllers
       }
 
         [HttpPut("UpdateNotifiacations")]
-        public async Task<IActionResult> Put([FromBody] UpdateNotifications value)
+        public async Task<IActionResult> Put([FromBody] UpdateNotificationsDtos value)
         {
             var result = await _notificationsServices.UpdateAsync(value);
             if (!result.success) return BadRequest(result);

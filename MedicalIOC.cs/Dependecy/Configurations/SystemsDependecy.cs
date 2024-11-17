@@ -2,8 +2,9 @@
 
 using MedicalAppointment.Persistance.Interfaces.Configuration.SystemIntefaces;
 using MedicalAppointment.Persistance.Repositorie.Configuration;
-using MedicalCoreAplications.cs.Contracts.systems;
+using MedicalCoreAplications.cs.Contracts.Systems;
 using MedicalCoreAplications.cs.Services;
+using MedicalCoreAplications.cs.Services.systems;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicalIOC.cs.Dependecy.Configurations
@@ -12,14 +13,14 @@ namespace MedicalIOC.cs.Dependecy.Configurations
     { 
         public static void AddSystemDependecy(this IServiceCollection services)
         {
-           services.AddScoped<INotificationsinterfaces, NotificationsRepositories>();
-           services.AddScoped<IStatusInterfaces, StatusRepositorie>(); 
-           services.AddScoped<IRoleInterfaces, RoleRepositorie>();
+           services.AddScoped<INotificationsRepository, NotificationsRepositories>();
+           services.AddScoped<IStatusRepository, StatusRepositorie>(); 
+           services.AddScoped<IRoleRepository, RoleRepositorie>();
 
-
-            services.AddTransient<INotificationsServices, NotificationsServices>();
+            services.AddTransient<IStatusServices, StatusServices>();   
+            services.AddTransient<INotificationServices, NotificationsServices>();
             services.AddTransient<IRoleServices, RoleServices>();
-            services.AddTransient<IStatusServices, StatusServices>(); 
+           
         }
     }
 }

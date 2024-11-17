@@ -5,13 +5,14 @@ using Medical.Domain.Entities.Confi.Users;
 using Medical.Percistances.cs.Base;
 using Medical.Percistances.cs.Context;
 using MedicalAppointment.Domain.Result;
-using MedicalAppointment.Persistance.Interfaces.Configuration.UsersInterfaces;
+
+using MedicalAppointment.Persistance.Interfaces.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointment.Persistance.Repositorie.Configuration
 {
-    public sealed class DoctorRepositorie : BaseRepositorie<Doctor>, IDoctorInterfaces
+    public sealed class DoctorRepositorie : BaseRepositorie<Doctor>, IDoctorRepository
     {
 
         private readonly MedicalContext _dbContext;
@@ -287,30 +288,9 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 // Consulta para obtener los doctores con sus roles
-                var doctorsWithRoles = await (from doctor in _dbContext.Doctors
-                                              join SystemRole in _dbContext.Roles on doctor.DoctorID equals SystemRole.RoleID
-                                              orderby doctor.CreatedAt descending
-                                              select new
-                                              {
-                                                  doctor.DoctorID,
-                                                  doctor.NameDoctor,
-                                                  doctor.SpecialtyID,
-                                                  doctor.LicenseNumber,
-                                                  doctor.YearsOfExperience,
-                                                  doctor.Education,
-                                                  doctor.Bio,
-                                                  doctor.ConsultationFee,
-                                                  doctor.CreatedAt,
-                                                  doctor.UpdatedAt,
-                                                  doctor.IsActive,
-                                                  doctor.ClinicAddress,
-                                                  doctor.AvailabilityModeId,
-                                                  doctor.LicenseExpirationDate,
-                                                  doctor.PhoneNumber,
-                                                  SystemRole.RoleID,// Nombre del rol del doctor
-                                              }).ToListAsync();
+                var doctor =  await _dbContext.Doctors.ToListAsync();
 
-                result.data = doctorsWithRoles; // Almacenamos la lista de doctores con sus roles en result.data
+                result.data = doctor;
 
             }
             catch (Exception ex)
