@@ -1,83 +1,66 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MedicalAppointment.Domain.Entities.appointments;
+using MedicalAppointment.Persistance.Interfaces.appointments;
+using MedicalAppointment.Persistance.Repositories.appointmentsRepositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointment.appointments.Api.Controllers
 {
+    [Route("Api/[Controller]")]
+    [ApiController]
     public class DoctorAvailabilityController : Controller
     {
-        // GET: DoctorAvailability
-        public ActionResult Index()
+        private readonly IDoctorAvailabilityRepository _doctorAvailabilityRepository;
+
+        public DoctorAvailabilityController(IDoctorAvailabilityRepository doctorAvailabilityRepository)
         {
-            return View();
+            _doctorAvailabilityRepository = doctorAvailabilityRepository;
         }
 
-        // GET: DoctorAvailability/Details/5
-        public ActionResult Details(int id)
+
+
+        [HttpGet("GetAppointments")]
+        public async Task<IActionResult> Get()
         {
-            return View();
+            var result = await _doctorAvailabilityRepository.GetAll();
+            if (!result.Success) return BadRequest(result);
+
+            return Ok(result);
         }
 
-        // GET: DoctorAvailability/Create
-        public ActionResult Create()
+        [HttpGet("GetAppointmentsById")]
+        public async Task<IActionResult> Get(int id)
         {
-            return View();
+            var result = await _doctorAvailabilityRepository.GetEntityBy(id);
+            if (!result.Success) return BadRequest(result);
+
+            return Ok(result);
         }
 
-        // POST: DoctorAvailability/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpPost("DoctorAvailabilitySave")]
+        public async Task<IActionResult> Post([FromBody] DoctorAvailability entity)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+
+            var result = await _doctorAvailabilityRepository.Save(entity);
+            if (!result.Success) return BadRequest(result);
+
+
+            return Ok(result);
         }
 
-        // GET: DoctorAvailability/Edit/5
-        public ActionResult Edit(int id)
+
+        [HttpPut("DoctorAvailabilityUpdate")]
+        public async Task<IActionResult> put(int id, [FromBody] DoctorAvailability entity)
         {
-            return View();
+            var result = await _doctorAvailabilityRepository.Update(entity);
+            if (!result.Success) return BadRequest(result);
+
+            return Ok(result);
         }
 
-        // POST: DoctorAvailability/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: DoctorAvailability/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: DoctorAvailability/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
+
     }
 }

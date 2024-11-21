@@ -159,42 +159,39 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                 
                 var resultGetId = await _appointmentsRepository.GetEntityBy(dto.AppointmentID);
 
-               
                 if (!resultGetId.Success)
                 {
-                    appointmentsResponse.IsSuccess = resultGetId.Success;
+                    appointmentsResponse.IsSuccess = false;
                     appointmentsResponse.Message = resultGetId.Message;
                     return appointmentsResponse;
                 }
 
+           
+                Appointments appointments = (Appointments)resultGetId.Data!;
                 
-                Appointments appointments = new Appointments
-                {
-                    AppointmentID = dto.AppointmentID,
-                    PatientID = dto.PatientID,
-                    DoctorID = dto.DoctorID,
-                    AppointmentDate = dto.AppointmentDate,
-                    StatusID = dto.StatusID,
-                    CreatedAt = DateTime.Now,  
-                    UpdatedAt = DateTime.Now,  // Usualmente se maneja desde el repositorio
-                    IsActive = dto.IsActive   // Si es necesario
-                };
+                appointments.PatientID = dto.PatientID;
+                appointments.DoctorID = dto.DoctorID;
+                appointments.AppointmentDate = dto.AppointmentDate;
+                appointments.StatusID = dto.StatusID;
 
-                // Llamar al repositorio para actualizar la cita
+            
                 var result = await _appointmentsRepository.Update(appointments);
 
                 appointmentsResponse.IsSuccess = result.Success;
-                appointmentsResponse.Message = result.Success ? "Cita actualizada exitosamente." : result.Message;
+                appointmentsResponse.Data = result.Success ? appointments : null;
+                appointmentsResponse.Message = result.Success ? "Appointments actualizado exitosamente." : result.Message;
             }
             catch (Exception ex)
             {
                 appointmentsResponse.IsSuccess = false;
-                appointmentsResponse.Message = $"Error {ex.Message} actualizando la cita.";
-                _logger.LogError(appointmentsResponse.Message, ex);
+                appointmentsResponse.Message = $"Error actualizando la Appointments: {ex.Message}";
+                _logger.LogError(appointmentsResponse.Message, ex.ToString());
             }
 
             return appointmentsResponse;
         }
+
+
 
 
     }

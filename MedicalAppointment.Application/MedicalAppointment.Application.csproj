@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\InsuranceService\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MedicalAppointment.Domain\MedicalAppointment.Domain.csproj" />
     <ProjectReference Include="..\MedicalAppointment.Persistance\MedicalAppointment.Persistance.csproj" />
   </ItemGroup>

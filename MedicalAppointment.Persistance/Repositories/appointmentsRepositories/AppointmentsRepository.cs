@@ -1,5 +1,4 @@
 ﻿using MedicalAppointment.Domain.Entities.appointments;
-using MedicalAppointment.Domain.Repositories;
 using MedicalAppointment.Domain.Result;
 using MedicalAppointment.Persistance.Base;
 using MedicalAppointment.Persistance.Context;
@@ -104,7 +103,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
-                
+
                 Appointments? appointmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
 
                 if (appointmentsToUpdate == null)
@@ -115,12 +114,12 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 }
 
                 appointmentsToUpdate.AppointmentID = entity.AppointmentID;
+                appointmentsToUpdate.PatientID = entity.PatientID;
+                appointmentsToUpdate.DoctorID = entity.DoctorID;
                 appointmentsToUpdate.AppointmentDate = entity.AppointmentDate;
                 appointmentsToUpdate.StatusID = entity.StatusID;
-                appointmentsToUpdate.DoctorID = entity.DoctorID;
-                appointmentsToUpdate.PatientID = entity.PatientID;
 
-                
+
                 OperationResult updateResult = await base.Update(appointmentsToUpdate);
 
                 if (updateResult.Success)
@@ -189,21 +188,9 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
-                var appointments = await (from a in _medicalAppoitmentContext.Appointments
-                                          where a.AppointmentID == id && a.IsActive == true
-                                          select new
-                                          {
-                                              a.AppointmentID,
-                                              a.PatientID,
-                                              a.DoctorID,
-                                              a.AppointmentDate,
-                                              a.StatusID,
-                                              a.CreatedAt,
-                                              a.UpdatedAt,
-                                              a.IsActive,
 
-                                          }).FirstOrDefaultAsync();
-
+                var appointments = await _medicalAppoitmentContext.Appointments
+                .AsNoTracking().Where(Appointment => Appointment.AppointmentID == id).ToListAsync();
                 if (appointments == null)
                 {
                     operationResult.Success = false;
@@ -212,20 +199,17 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 }
 
                 operationResult.Success = true;
-                operationResult.Data = appointments;
+                operationResult.Data = appointments; 
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = $"Ocurrió un error: {ex.Message}.";
                 _logger.LogError(operationResult.Message, ex.ToString());
-
             }
 
             return operationResult;
         }
-
-
 
 
     }

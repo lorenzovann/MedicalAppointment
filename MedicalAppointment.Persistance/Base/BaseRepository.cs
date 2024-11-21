@@ -18,12 +18,12 @@ namespace MedicalAppointment.Persistance.Base
             this._entities = medicalAppointmentContext.Set<TEntity>();
         }
 
-        virtual public async Task<bool> Exist(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<bool> Exist(Expression<Func<TEntity, bool>> filter)
         {
             return await this._entities.AnyAsync(filter);
         }
 
-        virtual public async Task<OperationResult> GetAll()
+        public virtual async Task<OperationResult> GetAll()
         {
 
             OperationResult result = new OperationResult();
@@ -44,7 +44,7 @@ namespace MedicalAppointment.Persistance.Base
 
         }
 
-        virtual public async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
         {
 
             OperationResult result = new OperationResult();
@@ -64,7 +64,7 @@ namespace MedicalAppointment.Persistance.Base
 
         }
 
-        virtual public async Task<OperationResult> GetEntityBy(int id)
+        public virtual async Task<OperationResult> GetEntityBy(int id)
         {
 
             OperationResult result = new OperationResult();
@@ -85,7 +85,7 @@ namespace MedicalAppointment.Persistance.Base
             return result;
         }
 
-        virtual public async Task<OperationResult> Delete(TEntity entity)
+        public virtual async Task<OperationResult> Delete(TEntity entity)
         {
 
             OperationResult result = new OperationResult();
@@ -104,7 +104,7 @@ namespace MedicalAppointment.Persistance.Base
             }
             return result;
         }
-        virtual public async Task<OperationResult> Save(TEntity entity)
+        public virtual async Task<OperationResult> Save(TEntity entity)
         {
             OperationResult result = new OperationResult();
 
@@ -124,7 +124,7 @@ namespace MedicalAppointment.Persistance.Base
             return result;
         }
 
-        virtual public async Task<OperationResult> Update(TEntity entity)
+        public virtual async Task<OperationResult> Update(TEntity entity)
         {
             OperationResult result = new OperationResult();
 

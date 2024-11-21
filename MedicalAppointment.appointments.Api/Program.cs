@@ -16,7 +16,8 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseS
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
 
-builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
+//Registro de cada una de las dependencias servicios de appointments
+builder.Services.AddTransient<IAppointmentsService, AppointmentsService>();
 
 
 

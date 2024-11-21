@@ -18,15 +18,15 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<DoctorAvailabilityRepository> _logger;
 
-        public DoctorAvailabilityRepository(MedicalAppointmentContext context
-            , ILogger<DoctorAvailabilityRepository> logger) : base(context)
+        public DoctorAvailabilityRepository(MedicalAppointmentContext context,
+               ILogger<DoctorAvailabilityRepository> logger) : base(context)
         {
             _medicalAppointmentContext = context;
             _logger = logger;
         }
 
-        
-        public async override Task<OperationResult> Save(DoctorAvailability entity)
+
+        public override async Task<OperationResult> Save(DoctorAvailability entity)
         {
             OperationResult operationResult = new OperationResult();
 
@@ -37,7 +37,6 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 return operationResult;
             }
 
-
             if (entity.DoctorID <= 0)
             {
                 operationResult.Success = false;
@@ -45,57 +44,45 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 return operationResult;
             }
 
-            if (entity.StartTime < DateTime.Now.TimeOfDay || entity.EndTime < DateTime.Now.TimeOfDay)
+            if (entity.StartTime >= entity.EndTime)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La hora de inicio y finalizacion no puede ser en el pasado.";
+                operationResult.Message = "La hora de inicio debe ser menor a la hora de finalización.";
+                return operationResult;
+            }
+
+            if (entity.AvailableDate.Date < DateTime.Today)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "La fecha de disponibilidad no puede ser en el pasado.";
                 return operationResult;
             }
 
             try
             {
+                // Llamada al método base para guardar
                 await base.Save(entity);
+
                 operationResult.Data = entity;
                 operationResult.Success = true;
                 operationResult.Message = "DoctorAvailability guardado exitosamente.";
-
             }
-
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = $"Error: {ex.Message} guardando DoctorAvailability.";
-                _logger.LogError(operationResult.Message, ex);
-
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
+
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(DoctorAvailability entity)
+
+        public override async Task<OperationResult> Update(DoctorAvailability entity)
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity.AvailabilityID == 0 || entity.AvailableDate == DateTime.MinValue)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "AvailabilityID y AvailableDate son obligatorios.";
-                return operationResult;
-            }
-
-
-            if (entity.DoctorID <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "DoctorID debe ser positivo.";
-                return operationResult;
-            }
-
-            if (entity.StartTime < DateTime.Now.TimeOfDay || entity.EndTime < DateTime.Now.TimeOfDay)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "La hora de inicio y finalizacion no puede ser en el pasado.";
-                return operationResult;
-            }
+            
 
             try
             {
@@ -132,7 +119,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
             return operationResult;
         }
 
-        public async override Task<OperationResult> GetAll()
+        public override async Task<OperationResult> GetAll()
         {
             OperationResult operationResult = new OperationResult();
 
