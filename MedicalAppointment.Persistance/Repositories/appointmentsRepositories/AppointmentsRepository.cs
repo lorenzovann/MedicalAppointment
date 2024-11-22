@@ -79,70 +79,54 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         {
             OperationResult operationResult = new OperationResult();
 
-            // Validaciones
+            // Validaciones de entrada
             if (entity.AppointmentDate == DateTime.MinValue)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "AppointmentDate es obligatorios.";
-                return operationResult;
-            }
+                return new OperationResult { Success = false, Message = "AppointmentDate es obligatorio." };
 
             if (entity.DoctorID <= 0 || entity.PatientID <= 0 || entity.StatusID <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "DoctorID, PatientID y StatusID deben ser positivos.";
-                return operationResult;
-            }
+                return new OperationResult { Success = false, Message = "DoctorID, PatientID y StatusID deben ser positivos." };
 
             if (entity.AppointmentDate < DateTime.Now)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "La fecha de la cita no puede ser en el pasado.";
-                return operationResult;
-            }
+                return new OperationResult { Success = false, Message = "La fecha de la cita no puede ser en el pasado." };
 
             try
             {
+                // Verificar si el registro existe
+                var appointmentToUpdate = await _medicalAppoitmentContext.Appointments
+                    .FirstOrDefaultAsync(a => a.AppointmentID == entity.AppointmentID);
 
-                Appointments? appointmentsToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
+                if (appointmentToUpdate == null)
+                    return new OperationResult { Success = false, Message = "No se encontró el registro a actualizar." };
 
-                if (appointmentsToUpdate == null)
+                // Actualizamos las propiedades necesarias
+                appointmentToUpdate.PatientID = entity.PatientID;
+                appointmentToUpdate.DoctorID = entity.DoctorID;
+                appointmentToUpdate.AppointmentDate = entity.AppointmentDate;
+                appointmentToUpdate.StatusID = entity.StatusID;
+
+                _medicalAppoitmentContext.Appointments.Update(appointmentToUpdate);
+                await _medicalAppoitmentContext.SaveChangesAsync();
+
+                return new OperationResult
                 {
-                    operationResult.Success = false;
-                    operationResult.Message = "No se puede actualizar el registro.";
-                    return operationResult;
-                }
-
-                appointmentsToUpdate.AppointmentID = entity.AppointmentID;
-                appointmentsToUpdate.PatientID = entity.PatientID;
-                appointmentsToUpdate.DoctorID = entity.DoctorID;
-                appointmentsToUpdate.AppointmentDate = entity.AppointmentDate;
-                appointmentsToUpdate.StatusID = entity.StatusID;
-
-
-                OperationResult updateResult = await base.Update(appointmentsToUpdate);
-
-                if (updateResult.Success)
-                {
-                    operationResult.Success = true;
-                    operationResult.Data = appointmentsToUpdate;
-                    operationResult.Message = "Appointments actualizado exitosamente.";
-                }
-                else
-                {
-                    operationResult.Success = false;
-                    operationResult.Message = updateResult.Message ?? "Error en la actualización del Appointments.";
-                }
+                    Success = true,
+                    Message = "Cita actualizada exitosamente.",
+                    Data = appointmentToUpdate
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError("Error actualizando la cita: {Error}", ex.Message);
+                return new OperationResult { Success = false, Message = "Error al actualizar el registro en la base de datos." };
             }
             catch (Exception ex)
             {
-                operationResult.Success = false;
-                operationResult.Message = "Error actualizando Appointments.";
-                _logger.LogError(operationResult.Message, ex.ToString());
+                _logger.LogError("Error inesperado: {Error}", ex.Message);
+                return new OperationResult { Success = false, Message = "Ocurrió un error inesperado." };
             }
-
-            return operationResult;
         }
+
+
 
 
 
@@ -177,39 +161,34 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
-
-            if (id <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "ID no puede ser negativo ni 0!";
-                return operationResult;
-            }
+            var operationResult = new OperationResult();
 
             try
             {
+                var appointment = await _medicalAppoitmentContext.Appointments
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(a => a.AppointmentID == id);
 
-                var appointments = await _medicalAppoitmentContext.Appointments
-                .AsNoTracking().Where(Appointment => Appointment.AppointmentID == id).ToListAsync();
-                if (appointments == null)
+                if (appointment == null)
                 {
                     operationResult.Success = false;
-                    operationResult.Message = "Appointments no encontrado.";
+                    operationResult.Message = "Appointment no encontrado.";
                     return operationResult;
                 }
 
                 operationResult.Success = true;
-                operationResult.Data = appointments; 
+                operationResult.Data = appointment;
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = $"Ocurrió un error: {ex.Message}.";
-                _logger.LogError(operationResult.Message, ex.ToString());
+                operationResult.Message = "Error al obtener el Appointment.";
+                _logger.LogError(ex, operationResult.Message);
             }
 
             return operationResult;
         }
+
 
 
     }

@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Application.Dto.DtosInsurance.InsuranceProvidersDtos
 {
-    public class InsuranceProvidersUpdateDto : BaseDto
+    public class InsuranceProvidersUpdateDto : BaseDto , IBaseDtoForTwo
     {
         public int InsuranceProviderID { get; set; }
         public string Name { get; set; }

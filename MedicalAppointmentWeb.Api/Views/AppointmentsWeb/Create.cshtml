@@ -1,4 +1,4 @@
-﻿@model MedicalAppointment.Application.Dto.Dtosappointments.Appointments.AppointmentsSaveDto
+﻿@model MedicalAppointment.Application.Dto.Dtosappointments.AppointmentsDtos.AppoinmentsGetDto
 
 @{
     ViewData["Title"] = "Create";
@@ -36,6 +36,21 @@
                 <label asp-for="StatusID" class="control-label"></label>
                 <input asp-for="StatusID" class="form-control" />
                 <span asp-validation-for="StatusID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateAt" class="control-label"></label>
+                <input asp-for="CreateAt" class="form-control" />
+                <span asp-validation-for="CreateAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateAt" class="control-label"></label>
+                <input asp-for="UpdateAt" class="form-control" />
+                <span asp-validation-for="UpdateAt" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

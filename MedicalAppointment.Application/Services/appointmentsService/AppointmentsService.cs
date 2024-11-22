@@ -65,13 +65,13 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             return appointmentsResponse;
         }
 
-        public async Task<AppointmentsResponse> GetById(int Id)
+        public async Task<AppointmentsResponse> GetById(int id)
         {
             AppointmentsResponse appointmentsResponse = new AppointmentsResponse();
 
             try
             {
-                var result = await _appointmentsRepository.GetEntityBy(Id);
+                var result = await _appointmentsRepository.GetEntityBy(id);
 
                 if (!result.Success)
                 {
@@ -87,7 +87,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
 
                 appointmentsResponse.IsSuccess = false;
-                appointmentsResponse.Message = "Error obteniendo los autobuses";
+                appointmentsResponse.Message = "Error obteniendo Appointments";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
 
             }
@@ -169,6 +169,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
            
                 Appointments appointments = (Appointments)resultGetId.Data!;
                 
+                appointments.AppointmentID = dto.AppointmentID;
                 appointments.PatientID = dto.PatientID;
                 appointments.DoctorID = dto.DoctorID;
                 appointments.AppointmentDate = dto.AppointmentDate;
@@ -184,7 +185,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             catch (Exception ex)
             {
                 appointmentsResponse.IsSuccess = false;
-                appointmentsResponse.Message = $"Error actualizando la Appointments: {ex.Message}";
+                appointmentsResponse.Message = $"Error actualizando Appointments: {ex.Message}";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
             }
 

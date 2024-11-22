@@ -60,7 +60,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
-                // Llamada al método base para guardar
+              
                 await base.Save(entity);
 
                 operationResult.Data = entity;
@@ -82,18 +82,18 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         {
             OperationResult operationResult = new OperationResult();
 
-            
-
             try
             {
-                DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity);
+               
+                DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability
+                    .Where(da => da.AvailabilityID == entity.AvailabilityID && da.IsActive == true)
+                    .FirstOrDefaultAsync();
 
                 if (doctorAvailabilityToUpdate == null)
                 {
                     operationResult.Success = false;
-                    operationResult.Message = "No se puede actualizar el registro.";
+                    operationResult.Message = "No se puede actualizar el registro, no se encontró la disponibilidad.";
                     return operationResult;
-
                 }
 
                 doctorAvailabilityToUpdate.AvailabilityID = entity.AvailabilityID;
@@ -102,13 +102,19 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                 doctorAvailabilityToUpdate.StartTime = entity.StartTime;
                 doctorAvailabilityToUpdate.EndTime = entity.EndTime;
 
+                
                 operationResult = await base.Update(doctorAvailabilityToUpdate);
-                operationResult.Data = doctorAvailabilityToUpdate;
-                operationResult.Message = "DoctorAAvaailability actualizado exitosamente.";
 
-
+                if (operationResult.Success)
+                {
+                    operationResult.Data = doctorAvailabilityToUpdate;
+                    operationResult.Message = "DoctorAvailability actualizado exitosamente.";
+                }
+                else
+                {
+                    operationResult.Message = "Error al actualizar DoctorAvailability.";
+                }
             }
-
             catch (Exception ex)
             {
                 operationResult.Success = false;
@@ -118,6 +124,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             return operationResult;
         }
+
 
         public override async Task<OperationResult> GetAll()
         {

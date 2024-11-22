@@ -18,6 +18,7 @@ builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepo
 
 //Registro de cada una de las dependencias servicios de appointments
 builder.Services.AddTransient<IAppointmentsService, AppointmentsService>();
+builder.Services.AddTransient<IDoctorAvailabilityService, DoctorAvailabilityService>();
 
 
 

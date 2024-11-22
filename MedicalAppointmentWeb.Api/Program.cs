@@ -11,9 +11,10 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseS
 
 // Agregando dependencias de los repositorios
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
-
+builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
 // Agregando dependencias de los servicios 
 builder.Services.AddTransient<IAppointmentsService, AppointmentsService>();
+builder.Services.AddTransient<IDoctorAvailabilityService, DoctorAvailabilityService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

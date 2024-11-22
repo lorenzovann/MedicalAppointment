@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MedicalAppointment.Application.Dto.Dtosappointments.AppointmentsDtos.AppoinmentsGetDto>
+﻿@model IEnumerable<MedicalAppointment.Application.Dto.Dtosappointments.DoctorAvailabilityDtos.DoctorAvailabilityGetDto>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Appointments List</h1>
+<h1>DoctorAvailability List</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AppointmentID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PatientID)
+                @Html.DisplayNameFor(model => model.AvailabilityID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DoctorID)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AppointmentDate)
+                @Html.DisplayNameFor(model => model.AvailableDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StatusID)
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreateAt)
@@ -43,19 +43,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.AppointmentID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PatientID)
+                @Html.DisplayFor(modelItem => item.AvailabilityID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DoctorID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppointmentDate)
+                @Html.DisplayFor(modelItem => item.AvailableDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StatusID)
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreateAt)
@@ -67,9 +67,9 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.AppointmentID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.AppointmentID}) |
-                
+                @Html.ActionLink("Edit", "Edit", new { id=item.AvailabilityID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.AvailabilityID }) |
+             
             </td>
         </tr>
 }

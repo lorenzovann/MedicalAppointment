@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Application.Dto.DtosInsurance.NetworkTypeDtos
 {
-    public class NetworkTypeBaseDto
+    public class NetworkTypeBaseDto : BaseDto , IBaseDtoForTwo
     {
         public int NetworkTypeId { get; set; }
         public string Name { get; set; }

@@ -10,130 +10,119 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MedicalAppointmentWeb.Api.Controllers
 {
 
-    public class AppointmentsWebController : Controller
-    { 
-        private readonly IAppointmentsService _appointmentsService;
-
-        public AppointmentsWebController (IAppointmentsService appointmentsService)
+    namespace MedicalAppointmentWeb.Api.Controllers
+    {
+        namespace MedicalAppointmentWeb.Api.Controllers
         {
-            _appointmentsService = appointmentsService;
-        }
-
-        [Route("Appointments")]
-        public async Task<IActionResult> Index()
-        {
-            var result = await _appointmentsService.GetAll();
-
-            if(result.IsSuccess)
+            public class AppointmentsWebController : Controller
             {
-                List<AppoinmentsGetDto> dto =(List<AppoinmentsGetDto>)result.Data!;
-                return View(dto);
-            }
-            return View();
-        }
+                private readonly IAppointmentsService _appointmentsService;
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var result = await _appointmentsService.GetById(id);
-
-            if (result.IsSuccess && result.Data is List<Appointments> appointments)
-            {
-                var ap = appointments.FirstOrDefault(a => a.AppointmentID == id);
-                if (ap != null)
+                public AppointmentsWebController(IAppointmentsService appointmentsService)
                 {
-                    return View(ap);
+                    _appointmentsService = appointmentsService;
                 }
-            }
 
-            return View(); 
-        }
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AppointmentsSaveDto appointmentsSave)
-        {
-
-            try
-            {
-
-                
-                var result = await _appointmentsService.SaveAsync(appointmentsSave);
-
-                if (result.IsSuccess)
+                [Route("Appointments")]
+                public async Task<IActionResult> Index()
                 {
-                    return RedirectToAction(nameof(Index));
+                    var result = await _appointmentsService.GetAll();
 
+                    if (result.IsSuccess && result.Data is List<AppoinmentsGetDto> dto)
+                    {
+                        return View(dto);
+                    }
+
+                    ViewBag.Message = result.Message;
+                    return View(new List<AppoinmentsGetDto>());
                 }
-                else 
-                { 
+
+                public async Task<IActionResult> Details(int id)
+                {
+                    var result = await _appointmentsService.GetById(id);
+
+                    if (result.IsSuccess && result.Data is Appointments appointment)
+                    {
+                        return View(appointment);
+                    }
+
                     ViewBag.Message = result.Message;
                     return View();
-                
                 }
 
-
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-        public async Task<IActionResult>  Edit(int id)
-        {
-            var result = await _appointmentsService.GetById(id);
-
-            if (result.IsSuccess && result.Data is List<Appointments> appointments)
-            {
-                var ap = appointments.FirstOrDefault(a => a.AppointmentID == id);
-                if (ap != null)
+                public IActionResult Create()
                 {
-                    return View(ap);
+                    return View();
                 }
-            }
 
-            return View();
-        }
-
-       
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, AppointmentsUpdateDto appointmentsUpdate)
-        {
-            try
-            {
-
-
-                var result = await _appointmentsService.UpdateAsync(appointmentsUpdate);
-
-                if (result.IsSuccess)
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> Create(AppointmentsSaveDto appointmentsSave)
                 {
-                    return RedirectToAction(nameof(Index));
+                    if (!ModelState.IsValid)
+                    {
+                        ViewBag.Message = "Datos inválidos.";
+                        return View();
+                    }
 
-                }
-                else
-                {
+                    var result = await _appointmentsService.SaveAsync(appointmentsSave);
+
+                    if (result.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     ViewBag.Message = result.Message;
                     return View();
+                }
 
+                public async Task<IActionResult> Edit(int id)
+                {
+                    var result = await _appointmentsService.GetById(id);
+
+                    if (result.IsSuccess && result.Data is Appointments appointment)
+                    {
+                        var dto = new AppointmentsUpdateDto
+                        {
+                            AppointmentID = appointment.AppointmentID,
+                            PatientID = appointment.PatientID,
+                            DoctorID = appointment.DoctorID,
+                            AppointmentDate = appointment.AppointmentDate,
+                            StatusID = appointment.StatusID
+                        };
+
+                        return View(dto);  
+                    }
+
+                    ViewBag.Message = result.Message;
+                    return RedirectToAction(nameof(Index));
                 }
 
 
-            }
-            catch
-            {
-                return View();
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> Edit(int id, AppointmentsUpdateDto appointmentsUpdate)
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        ViewBag.Message = "Datos inválidos.";
+                        return View(appointmentsUpdate);  
+                    }
+
+                    var result = await _appointmentsService.UpdateAsync(appointmentsUpdate);
+
+                    if (result.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    ViewBag.Message = result.Message;
+                    return View(appointmentsUpdate);  
+                }
+
             }
         }
 
-        
     }
+
 }

@@ -4,7 +4,7 @@ namespace MedicalAppointment.Application.Dto.Dtosappointments.DoctorAvailability
 {
     public class DoctorAvailabilityBaseDto : BaseDto
     {
-        public int AvAvailabilityID { get; set; }
+        public int AvailabilityID { get; set; }
         public int DoctorID { get; set; }
         public DateTime AvailableDate { get; set; }
         public TimeSpan StartTime { get; set; }
