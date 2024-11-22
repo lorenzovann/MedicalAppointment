@@ -1,51 +1,29 @@
-﻿using MedicalAppointmentWeb.Api.Models.AppointmentsM;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointmentWeb.Api.Controllers
 {
-    public class AppointmentsAdmController : Controller
+    public class DoctorAvailabilityAdmController : Controller
     {
-        // GET: AppointmentsAdmController
-        public async Task<IActionResult> Index()
+        // GET: DoctorAvailabilityAdmController
+        public ActionResult Index()
         {
-            String url = "http://localhost:5031/Api";
-
-            AppointmentsGetAllModel appointmentsGetAllModel = new AppointmentsGetAllModel();
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(url);
-                var responseTask = await client.GetAsync("Appointments/GetAppointments");
-
-                if (responseTask.IsSuccessStatusCode)
-                {
-                    string response = await responseTask.Content.ReadAsStringAsync();
-
-                }
-                else 
-                { 
-                    ViewBag.Mesagge = "";
-                
-                }
-            }
             return View();
-
         }
 
-        // GET: AppointmentsAdmController/Details/5
+        // GET: DoctorAvailabilityAdmController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: AppointmentsAdmController/Create
+        // GET: DoctorAvailabilityAdmController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: AppointmentsAdmController/Create
+        // POST: DoctorAvailabilityAdmController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -60,13 +38,13 @@ namespace MedicalAppointmentWeb.Api.Controllers
             }
         }
 
-        // GET: AppointmentsAdmController/Edit/5
+        // GET: DoctorAvailabilityAdmController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: AppointmentsAdmController/Edit/5
+        // POST: DoctorAvailabilityAdmController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -81,13 +59,13 @@ namespace MedicalAppointmentWeb.Api.Controllers
             }
         }
 
-        // GET: AppointmentsAdmController/Delete/5
+        // GET: DoctorAvailabilityAdmController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: AppointmentsAdmController/Delete/5
+        // POST: DoctorAvailabilityAdmController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
