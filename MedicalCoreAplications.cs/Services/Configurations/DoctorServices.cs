@@ -30,31 +30,21 @@ namespace MedicalCoreAplications.cs.Services.Configurations
 
             try
             {
-                 var result = await _doctorrepository.Getall();
+                
+                var result = await _doctorrepository.Getall();
 
-                 List<GetDoctorDtos> doctor = ((List<Doctor>)result.data!)
-                     .Select(doctor => new GetDoctorDtos
-                 {
+                if(!result.Sucess)
+                {
+                    response.model = result.data;
+                    response.success = result.Sucess; 
+                    return response;    
 
-                     DoctorID = doctor.DoctorID,
-                     NameDoctor = doctor.NameDoctor,
-                     LicenseNumber = doctor.LicenseNumber,
-                     SpecialtyID = doctor.SpecialtyID,
-                     ClinicAddress = doctor.ClinicAddress,
-                     CreatedAt = doctor.CreatedAt,
-                     Education = doctor.Education, 
-                     YearsOfExperience = doctor.YearsOfExperience,
-                     IsActive = doctor.IsActive,
-                     PhoneNumber = doctor.PhoneNumber,
-                     UpdatedAt = doctor.UpdatedAt,
-                     
+                }
 
-                 }).ToList();
+                response.model = result.data;
+                response.Menssaje = "Doctor List succefully! ";
 
-
-                result.Sucess = result.Sucess;
-                response.model = doctor;
-
+      
             }
             catch (Exception ex)
             {
@@ -78,26 +68,8 @@ namespace MedicalCoreAplications.cs.Services.Configurations
 
                 if(result.Sucess)
                 {
-                    Doctor doctor = (Doctor)result.data!;
-
-                    GetDoctorDtos getdoctorid = new GetDoctorDtos()
-                    {
-                        DoctorID = doctor.DoctorID,
-                        NameDoctor = doctor.NameDoctor,
-                        SpecialtyID = doctor.SpecialtyID,
-                        ClinicAddress = doctor.ClinicAddress,
-                        CreatedAt = doctor.CreatedAt,
-                        Education = doctor.Education,
-                        IsActive = doctor.IsActive,
-                        LicenseNumber = doctor.LicenseNumber,
-                        PhoneNumber = doctor.PhoneNumber,
-                        UpdatedAt = doctor.UpdatedAt,
-                        YearsOfExperience = doctor.YearsOfExperience,
-                     
-                    };
-
-                    response.success = result.Sucess;
-                    response.model = getdoctorid;
+                    response.model = result.data; 
+                    response.success = result.Sucess;  
                     response.Menssaje = "Doctor has been found it succefully! ";
                 }
                 else

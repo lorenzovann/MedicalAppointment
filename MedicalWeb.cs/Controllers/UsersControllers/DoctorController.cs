@@ -1,47 +1,48 @@
-﻿using MedicalCoreAplications.cs.Contracts.Systems;
-using MedicalCoreAplications.cs.Dtos.Systems.RolesDtos.cs;
+﻿using MedicalCoreAplications.cs.Contracts.Configurations;
+using MedicalCoreAplications.cs.Dtos.Configurations.DoctorDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MedicalWeb.cs.Controllers.SystemControllers
+namespace MedicalWeb.cs.Controllers.UsersControllers
 {
-    public class RoleController1 : Controller
+    public class DoctorController : Controller
     {
-        private readonly IRoleServices _roleservices;
+       
 
-        public RoleController1(IRoleServices roleservices)
+        private readonly IDoctorServices  _services; 
+
+        public DoctorController(IDoctorServices services)
         {
-            _roleservices = roleservices;
+            _services = services; 
 
         }
-        [Route("Roles")]
         public async Task<IActionResult> Index()
         {
-            var result = await _roleservices.getall();
 
-            if (result.success)
+            var result = await _services.getall();
+            if(result.success)
             {
-                List<GetRolesDtos> roles = (List<GetRolesDtos>)result.model!;
+                List<GetDoctorDtos> doctores = ((List<GetDoctorDtos>)result.model!);
+                return View(doctores);
+            } 
 
-                return View(roles);
 
-            }
             return View();
         }
 
-        // GET: RoleController1/Details/5
+        // GET: DoctorController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: RoleController1/Create
+        // GET: DoctorController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: RoleController1/Create
+        // POST: DoctorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -56,13 +57,13 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
             }
         }
 
-        // GET: RoleController1/Edit/5
+        // GET: DoctorController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: RoleController1/Edit/5
+        // POST: DoctorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -77,13 +78,13 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
             }
         }
 
-        // GET: RoleController1/Delete/5
+        // GET: DoctorController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: RoleController1/Delete/5
+        // POST: DoctorController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

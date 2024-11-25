@@ -33,7 +33,7 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
         public async Task<IActionResult> Details(int id)
         {
             var result = await _statusservices.GetById(id);
-            if(result.success)
+            if (result.success)
             {
                 GetStatusDtos status = (GetStatusDtos)result.model!;
                 return View(status);
@@ -51,11 +51,24 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
         // POST: StatusController1/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> create(SaveStatusDtos status)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                status.CreateAt = DateTime.Now;
+                var result = await _statusservices.SaveAsync(status);
+                if (result.success)
+                {
+                    return RedirectToAction(nameof(Index));
+
+                }
+                else
+                {
+                    ViewBag.Menssage = " ";
+                    return View();
+
+
+                }
             }
             catch
             {
@@ -66,10 +79,10 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
         // GET: StatusController1/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var result = await _statusservices.GetById(id); 
-            if(result.success)
+            var result = await _statusservices.GetById(id);
+            if (result.success)
             {
-               GetStatusDtos status = (GetStatusDtos)result.model!;
+                GetStatusDtos status = (GetStatusDtos)result.model!;
                 return View(status);
             }
             return View();
@@ -90,25 +103,5 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
             }
         }
 
-        // GET: StatusController1/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: StatusController1/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

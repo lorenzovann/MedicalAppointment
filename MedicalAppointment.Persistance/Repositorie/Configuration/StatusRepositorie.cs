@@ -101,7 +101,10 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 // Reemplaza la consulta anónima con una que devuelva una lista de Status.
-                var ListValues = await _context.Status.ToListAsync();  
+                var ListValues = await _context.Status.AsNoTracking()
+                     .OrderByDescending(x => x.CreateAt)
+                     .ToListAsync();
+
                   
 
                 result.data = ListValues; 

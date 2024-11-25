@@ -4,7 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1><strong>Users List</strong></h1>
+<h1>Index Users </h1>    
+
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -73,8 +74,9 @@
                 @Html.DisplayFor(modelItem => item.RoleId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.UserId }) |
-                @Html.ActionLink("Details", "Details", new {  id=item.UserId }) |
+                @Html.ActionLink("Edit", "Edit", new { id=item.UserId}) |
+                @Html.ActionLink("Details", "Details", new { id=item.UserId })|
+
             </td>
         </tr>
 }

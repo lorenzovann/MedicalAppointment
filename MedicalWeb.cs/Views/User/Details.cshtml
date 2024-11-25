@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Find User</h1>
+<h1>Details</h1>
 
 <div>
     <h4>UserModel</h4>
@@ -67,6 +67,7 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new {  id = Model.UserId  }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+
     <a asp-action="Index">Back to List</a>
 </div>

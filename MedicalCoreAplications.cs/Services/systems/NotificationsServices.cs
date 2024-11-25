@@ -71,7 +71,7 @@ namespace MedicalCoreAplications.cs.Services.systems
             return notificationsResponse;
         }
 
-        public async Task<NotificationsResponse> GetById(int id)
+        public async Task<NotificationsResponse>GetById(int id)
         {
             NotificationsResponse response = new NotificationsResponse();
 
@@ -81,11 +81,25 @@ namespace MedicalCoreAplications.cs.Services.systems
 
                 if (result.Sucess)
                 {
-                    response.success = result.Sucess;
-                    response.model = result.data;
+
+                    Notifications notifications = (Notifications)result.data!;
+
+                    GetNotificationsDtos notificationsDtos = new GetNotificationsDtos()
+                    {
+                        Message = notifications.Message,  
+                        NotificationId  = notifications.NotificationId,
+                        UserID = notifications.UserID,  
+                        SentAt  = notifications.SentAt, 
+
+                    };
+
+
+                    response.model = notificationsDtos;
+                    response.success = result.Sucess; 
+
                 
                 } else
-                {
+                {    
                     response.success = false;
                     response.Menssaje = "Notifications has not been found it! ";
                 }
@@ -115,6 +129,7 @@ namespace MedicalCoreAplications.cs.Services.systems
 
 
                 var result = await _notificationsRepository.Add(notifications);
+           
                 response.model = result;
                 response.Menssaje = "Notifications has been register in the system! ";
 
@@ -137,8 +152,16 @@ namespace MedicalCoreAplications.cs.Services.systems
             {
                 var result = await _notificationsRepository.GetEntitiebyId(dto.NotificationId);
 
+                if(!result.Sucess)
+                {
+                    response.success = false;
+                    response.Menssaje = result.Message;
+                    return response; 
 
-                Notifications notifications = (Notifications)result.data!; 
+                }
+
+
+                Notifications notifications = new Notifications();
 
                 notifications.NotificationId = dto.NotificationId;
                 notifications.Message = dto.Message;
@@ -146,8 +169,9 @@ namespace MedicalCoreAplications.cs.Services.systems
                 notifications.UserID = dto.UserID;
 
 
-                response.success = result.Sucess;
-                response.model = await _notificationsRepository.Update(notifications);
+               var datos = await _notificationsRepository.Update(notifications);
+               response.success = datos.Sucess;
+               response.model = datos.data;
 
 
 

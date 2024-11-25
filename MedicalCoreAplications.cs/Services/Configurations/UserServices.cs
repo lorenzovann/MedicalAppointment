@@ -36,8 +36,6 @@ namespace MedicalCoreAplications.cs.Services.Configurations
             try
             {
                 var result = await _userrepository.Getall(); 
-
-
                     
                
                 if(result.Sucess)

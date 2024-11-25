@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1><strong>Notifications List</strong></h1>
+<h1>List Notifications</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.SentAt)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.NotificationId }) |
-                @Html.ActionLink("Details", "Details", new { id=item.NotificationId }) |
-        
+                @Html.ActionLink("Edit", "Edit", new {  id=item.NotificationId }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.NotificationId }) |
+                
             </td>
         </tr>
 }

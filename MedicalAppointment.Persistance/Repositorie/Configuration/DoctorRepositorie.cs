@@ -7,6 +7,8 @@ using Medical.Percistances.cs.Context;
 using MedicalAppointment.Domain.Result;
 
 using MedicalAppointment.Persistance.Interfaces.Configurations;
+using MedicalAppointment.Persistance.Model;
+using MedicalAppointment.Persistance.Model.DoctorModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -288,7 +290,28 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             try
             {
                 // Consulta para obtener los doctores con sus roles
-                var doctor =  await _dbContext.Doctors.ToListAsync();
+                var doctor = await (from Doctor in _dbContext.Doctors
+                                    join SpecialtyID in _dbContext.Doctors
+                                    on Doctor.SpecialtyID equals SpecialtyID.SpecialtyID
+                                    orderby Doctor.CreatedAt descending 
+                                    select new DoctorModel
+                                    {
+                                      DoctorID = Doctor.DoctorID,
+                                      NameDoctor = Doctor.NameDoctor,
+                                      ClinicAddress = Doctor.ClinicAddress, 
+                                      LicenseNumber = Doctor.LicenseNumber,
+                                      AvailabilityModeId = Doctor.AvailabilityModeId,
+                                      Bio = Doctor.Bio,
+                                      ConsultationFee = Doctor.ConsultationFee,
+                                      Education = Doctor.Education, 
+                                      LicenseExpirationDate = Doctor.LicenseExpirationDate, 
+                                      PhoneNumber = Doctor.PhoneNumber, 
+                                      SpecialtyID  = Doctor.SpecialtyID,
+                                      YearsOfExperience = Doctor.YearsOfExperience,
+                                     
+
+                                    }).AsNoTracking()
+                                    .ToListAsync();
 
                 result.data = doctor;
 
@@ -322,30 +345,27 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
             {
 
                 // Consulta para obtener el doctor por ID, junto con su rol
-                var doctorWithRole = await (from doctor in _dbContext.Doctors
-                                            join SystemRole in _dbContext.Roles on doctor.DoctorID equals SystemRole.RoleID
-                                            where doctor.DoctorID == id
-                                            && doctor.IsActive == true
-                                            orderby doctor.CreatedAt descending
-                                            select new
+                var doctorWithRole = await (from doctor in _dbContext.Doctors 
+                                            join SpecialtyID in _dbContext.Doctors
+                                            on doctor.SpecialtyID equals SpecialtyID.SpecialtyID
+                                            select new DoctorModel
                                             {
-                                                doctor.DoctorID,
-                                                doctor.NameDoctor,
-                                                doctor.SpecialtyID,
-                                                doctor.LicenseNumber,
-                                                doctor.YearsOfExperience,
-                                                doctor.Education,
-                                                doctor.Bio,
-                                                doctor.ConsultationFee,
-                                                doctor.ClinicAddress,
-                                                doctor.AvailabilityModeId,
-                                                doctor.IsActive,
-                                                doctor.UpdatedAt,
-                                                doctor.CreatedAt,
-                                                doctor.PhoneNumber,
-                                                doctor.LicenseExpirationDate,
-                                                DoctorRole = SystemRole.RoleID,   // Nombre del rol del doctor
-                                            }).FirstOrDefaultAsync();
+                                                DoctorID = doctor.DoctorID, 
+                                                NameDoctor  = doctor.NameDoctor,    
+                                                LicenseNumber = doctor.LicenseNumber,   
+                                                SpecialtyID = doctor.SpecialtyID,   
+                                                LicenseExpirationDate  = doctor.LicenseExpirationDate,  
+                                                AvailabilityModeId = doctor.AvailabilityModeId,
+                                                Bio = doctor.Bio,   
+                                                ClinicAddress = doctor.ClinicAddress,   
+                                                ConsultationFee = doctor.ConsultationFee,
+                                                Education = doctor.Education,   
+                                                PhoneNumber = doctor.PhoneNumber,   
+                                                YearsOfExperience = doctor.YearsOfExperience,   
+                                               
+                                            }).FirstOrDefaultAsync();   
+           
+
 
                 if (doctorWithRole == null)
                 {

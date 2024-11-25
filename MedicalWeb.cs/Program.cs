@@ -9,32 +9,26 @@ using MedicalCoreAplications.cs.Services.Configurations;
 using MedicalCoreAplications.cs.Services.systems;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args); 
-
-
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MedicalContext>(options => options.UseSqlServer
 (builder.Configuration.GetConnectionString("MedicalContext")));
 
-builder.Services.AddScoped<IStatusRepository, StatusRepositorie>();
-builder.Services.AddTransient<IStatusServices, StatusServices>();
-// aqui agrego las inyecciones de depencia 
 
-builder.Services.AddScoped<INotificationsRepository, NotificationsRepositories>();
+builder.Services.AddScoped<IUserRepository, UserRepositorie>(); 
+builder.Services.AddTransient<IUserServices, UserServices>();   
+
+builder.Services.AddScoped<INotificationsRepository,  NotificationsRepositories>();
 builder.Services.AddTransient<INotificationServices, NotificationsServices>();
 
 builder.Services.AddScoped<IRoleRepository, RoleRepositorie>();
-builder.Services.AddTransient<IRoleServices, RoleServices>(); 
+builder.Services.AddTransient<IRoleServices, RoleServices>();
 
-
-builder.Services.AddScoped<IUserRepository, UserRepositorie>();
-builder.Services.AddTransient<IUserServices, UserServices>(); 
-
+builder.Services.AddScoped<IStatusRepository, StatusRepositorie>();
+builder.Services.AddTransient<IStatusServices, StatusServices>();
 
 builder.Services.AddScoped<IDoctorRepository, DoctorRepositorie>();
-builder.Services.AddTransient<IDoctorServices, DoctorServices>();   
-
-        
+builder.Services.AddTransient<IDoctorServices, DoctorServices>();    
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

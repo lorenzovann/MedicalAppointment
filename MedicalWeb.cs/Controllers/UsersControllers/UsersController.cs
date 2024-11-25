@@ -1,5 +1,4 @@
 ﻿
-
 using MedicalAppointment.Persistance.Model;
 using MedicalCoreAplications.cs.Contracts.Configurations;
 using MedicalCoreAplications.cs.Dtos.Configurations.UserDtos.cs;
@@ -19,13 +18,13 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
         }
         [Route("Users")]
         public async Task<IActionResult> Index()
-        { 
+        {
 
             var result = await _userservices.getall();
-            if(result.success)
+            if (result.success)
             {
                 List<UserModel> users = (List<UserModel>)result.model!;
-                return View(users); 
+                return View(users);
 
             }
             return View();
@@ -34,9 +33,9 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
         // GET: UserController/Details/5
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int id)
-        {  
-            var result = await _userservices.GetById(id);   
-            if(result.success)
+        {
+            var result = await _userservices.GetById(id);
+            if (result.success)
             {
                 UserModel userfind = (UserModel)result.model!;
 
@@ -57,16 +56,17 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
         public async Task<IActionResult> Create(SaveUserDtos user)
         {
             try
-            {   
+            {
                 user.UpdatedAt = DateTime.Now;
-                 
+
                 var result = await _userservices.SaveAsync(user);
                 if (result.success)
                 {
 
                     return RedirectToAction(nameof(Index));
 
-                } else
+                }
+                else
                 {
                     ViewBag.Menssage = result.Menssaje;
                     return View();
@@ -83,10 +83,10 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
         public async Task<IActionResult> Edit(int id)
         {
             var result = await _userservices.GetById(id);
-            if(result.success)
+            if (result.success)
             {
-                UserModel user = (UserModel)result.model!;  
-                return View(user); 
+                UserModel user = (UserModel)result.model!;
+                return View(user);
 
 
             }
@@ -96,13 +96,13 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UpdateUserDtos  user)
+        public async Task<IActionResult> Edit(UpdateUserDtos user)
         {
             try
             {
-               
+
                 user.UpdatedAt = DateTime.Now;
-                user.UserId = 1; 
+                user.UserId = 1;
 
 
                 var result = await _userservices.UpdateAsync(user);
@@ -110,13 +110,14 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
                 if (result.success)
                 {
                     return RedirectToAction(nameof(Index));
-                } else
+                }
+                else
                 {
-                    ViewBag.Menssage = result.Menssaje; 
+                    ViewBag.Menssage = result.Menssaje;
                     return View();
 
                 }
-               
+
             }
             catch
             {
@@ -124,7 +125,7 @@ namespace MedicalWeb.cs.Controllers.UsersCotrollers
             }
         }
 
-       
-     
+
+
     }
 }

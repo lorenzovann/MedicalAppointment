@@ -166,7 +166,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
                 result.data = await _context.Notifications
                .AsNoTracking()
                .Where(noti => noti.NotificationId == id)
-               .OrderByDescending(noti => noti.SentAt) // Ordena de forma descendente por SentAt
+               .OrderByDescending(noti => noti.SentAt) // Ordena de forma descendente por la fecha de envio 
                .FirstOrDefaultAsync();
 
             }

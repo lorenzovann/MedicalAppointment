@@ -149,6 +149,7 @@ namespace MedicalAppointment.Persistance.Repositorie.Configuration
 
                 result.data = await (from User in _context.Users
                                      join Role in _context.Roles on User.RoleId equals Role.RoleID
+                                     orderby User.CreatedAt descending 
                                      select new UserModel
                                      {
                                          UserId = User.UserId,

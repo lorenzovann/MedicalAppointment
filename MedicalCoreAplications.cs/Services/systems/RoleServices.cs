@@ -69,28 +69,13 @@ namespace MedicalCoreAplications.cs.Services
 
                 if (result.Sucess)
                 {
-
-                    Role role = (Role)result.data!;
-
-
-                    GetRolesDtos getRolesDtos = new GetRolesDtos()
-                    {
-                        RoleID = role.RoleID,
-                        RoleName = role.RoleName,
-                        CreatedAt = role.CreatedAt,
-                        IsActive = role.IsActive,
-                        UpdatedAt = role.UpdatedAt,
-
-                    };
-
-                    response.success = result.Sucess; 
-                    response.model = getRolesDtos;
-                    response.Menssaje = " Role found it succefully! ";
+                    response.success = result.Sucess;
+                    response.model = result.data; 
                 }
                 else
                 {
                     response.success = false;
-                    response.Menssaje = "Role has not been found it on the register! ";
+                    response.Menssaje = " Role has not been found it on the register! ";
                 }
 
             }

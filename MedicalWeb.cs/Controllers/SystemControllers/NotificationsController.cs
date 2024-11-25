@@ -38,7 +38,7 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
             var result = await _notificationServices.GetById(id);
             if (result.success)
             {
-                Notifications notifications = (Notifications)result.model!;
+                GetNotificationsDtos notifications = (GetNotificationsDtos)result.model!;
 
                 return View(notifications);
 
@@ -47,22 +47,13 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
         }
 
         // GET: NotificationsController1/Create
-       
-        public IActionResult Create(Collection noti)
+
+        public IActionResult Create()
         {
-            try
-            {
+
+            return View();
 
 
-                return RedirectToAction(nameof(Index));
-
-
-            }
-
-            catch
-            {
-                return View();
-            }
         }
 
 
@@ -71,15 +62,17 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SaveNotificationsDto noti)
         {
-            try 
-            {  
-              noti.SentAt = DateTime.Now;   
-              var result = await _notificationServices.SaveAsync(noti);
+            try
+            {
+                noti.SentAt = DateTime.Now;
+                var result = await _notificationServices.SaveAsync(noti);
                 if (result.success)
                 {
                     return RedirectToAction(nameof(Index));
-                } else
+                }
+                else
                 {
+                    ViewBag.Menssage = result.Menssaje; 
                     return View();
 
                 }
@@ -92,15 +85,15 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
 
         // GET: NotificationsController1/Edit/5
         public async Task<IActionResult> Edit(int id)
-        {   
-            var result =  await  _notificationServices.GetById(id);
+        {
+            var result = await _notificationServices.GetById(id);
             if (result.success)
             {
                 GetNotificationsDtos noti = (GetNotificationsDtos)result.model!;
 
-                 return View(noti);
+                return View(noti);
             }
-             
+
             return View();
         }
 
@@ -121,7 +114,7 @@ namespace MedicalWeb.cs.Controllers.SystemControllers
 
         // GET: NotificationsController1/Delete/5
         public ActionResult Delete(int id)
-        {  
+        {
             return View();
         }
 
