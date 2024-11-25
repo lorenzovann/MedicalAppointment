@@ -23,13 +23,13 @@ namespace MedicalAppointmentWeb.Api.Controllers
         {
             var result = await _doctorAvailabilityService.GetAll();
 
-            if (result.IsSuccess && result.Data is List<DoctorAvailabilityGetDto> dto)
+            if (result.IsSuccess && result.Data is List<DoctorAvailability> doctorAvailability)
             {
-                return View(dto);
+                return View(doctorAvailability);
             }
 
             ViewBag.Message = result.Message;
-            return View(new List<DoctorAvailabilityGetDto>());
+            return View(new List<DoctorAvailability>());
         }
 
 

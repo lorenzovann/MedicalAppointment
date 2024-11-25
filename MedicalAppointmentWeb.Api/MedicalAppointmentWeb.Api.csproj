@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Views\DoctorAvailabilityWeb\" />
   </ItemGroup>
 
 </Project>

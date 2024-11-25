@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MedicalAppointment.Domain.Entities.appointments.Appointments>
+﻿@model IEnumerable<MedicalAppointment.Domain.Entities.Insurance.NetworkType>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Appointments List</h1>
+<h1>NetworkType List</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,19 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AppointmentID)
+                @Html.DisplayNameFor(model => model.NetworkTypeId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PatientID)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DoctorID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AppointmentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusID)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
@@ -43,19 +37,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.AppointmentID)
+                @Html.DisplayFor(modelItem => item.NetworkTypeId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PatientID)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DoctorID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AppointmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusID)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -67,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.AppointmentID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.AppointmentID }) 
-                
+                @Html.ActionLink("Edit", "Edit", new { id=item.NetworkTypeId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.NetworkTypeId }) 
+           
             </td>
         </tr>
 }

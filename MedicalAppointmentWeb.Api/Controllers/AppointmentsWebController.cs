@@ -28,9 +28,9 @@ namespace MedicalAppointmentWeb.Api.Controllers
                 {
                     var result = await _appointmentsService.GetAll();
 
-                    if (result.IsSuccess && result.Data is List<Appointments> dto)
+                    if (result.IsSuccess && result.Data is List<Appointments> appointment)
                     {
-                        return View(dto);
+                        return View(appointment);
                     }
 
                     ViewBag.Message = result.Message;
