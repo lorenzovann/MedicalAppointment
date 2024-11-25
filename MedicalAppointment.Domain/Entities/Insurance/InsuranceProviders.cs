@@ -22,7 +22,7 @@ namespace MedicalAppointment.Domain.Entities.Insurance
         public string CoverageDetails { get; set; }
         public string? LogoUrl { get; set; }
         public bool IsPreferred { get; set; }
-        public int NetworkTypeID { get; set; }
+        public int NetworkTypeId { get; set; }
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegions { get; set; }
         public decimal? MaxCoverageAmount { get; set; }

@@ -14,7 +14,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
         private readonly IAppointmentsRepository _appointmentsRepository;
         private readonly ILogger<AppointmentsService> _logger;
 
-        public AppointmentsService(IAppointmentsRepository appointmentsRepository, 
+        public AppointmentsService(IAppointmentsRepository appointmentsRepository,
                                    ILogger<AppointmentsService> logger)
         {
             if (appointmentsRepository is null)
@@ -29,7 +29,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
 
         public async Task<AppointmentsResponse> GetAll()
         {
-            var appointmentsResponse = new AppointmentsResponse();
+            AppointmentsResponse appointmentsResponse = new AppointmentsResponse();
 
             try
             {
@@ -38,7 +38,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                 if (result.Data is List<Appointments> appointmentsList)
                 {
                     appointmentsResponse.Data = appointmentsList
-                                                .Select(appointment => new AppoinmentsGetDto
+                                                .Select(appointment => new Appointments
                                                 {
                                                     AppointmentID = appointment.AppointmentID,
                                                     PatientID = appointment.PatientID,
@@ -75,8 +75,8 @@ namespace MedicalAppointment.Application.Services.appointmentsService
 
                 if (!result.Success)
                 {
-                    appointmentsResponse.Message = result.Message;
                     appointmentsResponse.IsSuccess = result.Success;
+                    appointmentsResponse.Message = result.Message;
                     return appointmentsResponse;
                 }
 
@@ -87,7 +87,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
 
                 appointmentsResponse.IsSuccess = false;
-                appointmentsResponse.Message = "Error obteniendo Appointments";
+                appointmentsResponse.Message = $"Error {ex.Message} obteniendo Appointments";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
 
             }
@@ -110,27 +110,28 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
                 Appointments appointments = new Appointments
                 {
-                    AppointmentID = dto.AppointmentID,
+
                     PatientID = dto.PatientID,
                     DoctorID = dto.DoctorID,
                     AppointmentDate = dto.AppointmentDate,
                     StatusID = dto.StatusID
                 };
 
+
                 var saveResult = await _appointmentsRepository.Save(appointments);
 
                 if (saveResult.Success)
                 {
-                    AppoinmentsGetDto getDto = new AppoinmentsGetDto
+                    AppointmentsSaveDto saveDto = new AppointmentsSaveDto
                     {
-                        AppointmentID = appointments.AppointmentID,
+
                         PatientID = appointments.PatientID,
                         DoctorID = appointments.DoctorID,
                         AppointmentDate = appointments.AppointmentDate,
                         StatusID = appointments.StatusID
                     };
 
-                    appointmentsResponse.Data = getDto;
+                    appointmentsResponse.Data = saveDto;
                     appointmentsResponse.IsSuccess = true;
                     appointmentsResponse.Message = "Appointments guardado exitosamente.";
                 }
@@ -146,7 +147,6 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                 appointmentsResponse.Message = $"Error {ex.Message} tratando de guardar Appointments.";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
             }
-
             return appointmentsResponse;
         }
 
@@ -156,46 +156,43 @@ namespace MedicalAppointment.Application.Services.appointmentsService
 
             try
             {
-                
-                var resultGetId = await _appointmentsRepository.GetEntityBy(dto.AppointmentID);
+                var resultGetById = await _appointmentsRepository.GetEntityBy(dto.AppointmentID);
 
-                if (!resultGetId.Success)
+                if (!resultGetById.Success)
                 {
-                    appointmentsResponse.IsSuccess = false;
-                    appointmentsResponse.Message = resultGetId.Message;
+                    appointmentsResponse.IsSuccess = resultGetById.Success;
+                    appointmentsResponse.Message = resultGetById.Message;
+
                     return appointmentsResponse;
                 }
 
-           
-                Appointments appointments = (Appointments)resultGetId.Data!;
-                
-                appointments.AppointmentID = dto.AppointmentID;
-                appointments.PatientID = dto.PatientID;
-                appointments.DoctorID = dto.DoctorID;
-                appointments.AppointmentDate = dto.AppointmentDate;
-                appointments.StatusID = dto.StatusID;
+                Appointments? appointment = new Appointments();
 
-            
-                var result = await _appointmentsRepository.Update(appointments);
+                appointment.AppointmentID = dto.AppointmentID;
+                appointment.PatientID = dto.PatientID;
+                appointment.DoctorID = dto.DoctorID;
+                appointment.AppointmentDate = dto.AppointmentDate;
+                appointment.StatusID = dto.StatusID;
+                appointment.UpdatedAt = dto.UpdatedAt;
 
-                appointmentsResponse.IsSuccess = result.Success;
-                appointmentsResponse.Data = result.Success ? appointments : null;
-                appointmentsResponse.Message = result.Success ? "Appointments actualizado exitosamente." : result.Message;
+                var result = await _appointmentsRepository.Update(appointment);
+
             }
             catch (Exception ex)
             {
                 appointmentsResponse.IsSuccess = false;
-                appointmentsResponse.Message = $"Error actualizando Appointments: {ex.Message}";
+                appointmentsResponse.Message = "Error al actualizar el appointment";
                 _logger.LogError(appointmentsResponse.Message, ex.ToString());
-            }
 
+            }
             return appointmentsResponse;
+
+
+
+
+
         }
 
-
-
-
     }
-
 }
 

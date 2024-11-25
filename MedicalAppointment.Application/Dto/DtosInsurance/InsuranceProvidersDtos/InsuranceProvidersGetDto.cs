@@ -2,6 +2,6 @@
 {
     public class InsuranceProvidersGetDto : InsuranceProvidersBaseDto
     {
-
+        public int InsuranceProviderID { get; set; }
     }
 }

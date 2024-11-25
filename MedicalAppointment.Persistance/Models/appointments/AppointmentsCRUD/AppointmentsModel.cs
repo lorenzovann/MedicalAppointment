@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Persistance.Models.appointments.AppointmentsCRUD
 {
-    public class AppointmentsBaseModel
+    public class AppointmentsModel
     {
         public int AppointmentID { get; set; }
         public int PatientID { get; set; }

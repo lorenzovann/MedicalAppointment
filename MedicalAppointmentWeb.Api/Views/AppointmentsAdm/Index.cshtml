@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MedicalAppointment.Application.Dto.Dtosappointments.AppointmentsDtos.AppoinmentsGetDto>
+﻿@model IEnumerable<MedicalAppointment.Persistance.Models.appointments.AppointmentsCRUD.AppointmentsModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Appointments List</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -28,10 +28,10 @@
                 @Html.DisplayNameFor(model => model.StatusID)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreateAt)
+                @Html.DisplayNameFor(model => model.CreatedAt)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdateAt)
+                @Html.DisplayNameFor(model => model.UpdatedAt)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
@@ -58,18 +58,18 @@
                 @Html.DisplayFor(modelItem => item.StatusID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreateAt)
+                @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UpdateAt)
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.AppointmentID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.AppointmentID }) |
-               
+                @Html.ActionLink("Details", "Details", new { id=item.AppointmentID }) 
+                
             </td>
         </tr>
 }

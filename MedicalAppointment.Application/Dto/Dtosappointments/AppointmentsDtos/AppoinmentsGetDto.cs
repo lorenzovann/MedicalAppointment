@@ -5,6 +5,7 @@ namespace MedicalAppointment.Application.Dto.Dtosappointments.AppointmentsDtos
 {
     public class AppoinmentsGetDto : AppointmentsBaseDto
     {
+        public int AppointmentID { get; set; }
         
     }
 }

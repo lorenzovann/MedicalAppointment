@@ -5,6 +5,7 @@ namespace MedicalAppointment.Persistance.Models.Insurance.InsuranceProvidersCRUD
     public class InsuranceProvidersModel
     {
         public int InsuranceProviderID { get; set; }
+        public string Name { get; set; }
         public string ContactNumber { get; set; }
         public string Email { get; set; }
         public string? WebSite { get; set; }
@@ -20,5 +21,6 @@ namespace MedicalAppointment.Persistance.Models.Insurance.InsuranceProvidersCRUD
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegions { get; set; }
         public decimal? MaxCoverageAmount { get; set; }
+
     }
 }

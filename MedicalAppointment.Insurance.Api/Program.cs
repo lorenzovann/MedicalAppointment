@@ -1,4 +1,6 @@
 
+using MedicalAppointment.Application.Contracts.InsuranceContracts;
+using MedicalAppointment.Application.Services.InsuranceService;
 using MedicalAppointment.Persistance.Context;
 using MedicalAppointment.Persistance.Interfaces.appointments;
 using MedicalAppointment.Persistance.Interfaces.Insurance;
@@ -15,6 +17,11 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(options => options.UseS
 //Registro de cada una de las dependencias repositorios de appointments
 builder.Services.AddScoped<IInsuranceProvidersRepository, InsuranceProvidersRepository>();
 builder.Services.AddScoped<INetworkTypeRepository, NetworkTypeRepository>();
+
+// Registro de cada uno de los servicios de Insurance
+
+builder.Services.AddTransient<IInsuranceProvidersService, InsuranceProvidersService>();
+builder.Services.AddTransient<INetworkTypeService, NetworkTypeService>();
 
 
 

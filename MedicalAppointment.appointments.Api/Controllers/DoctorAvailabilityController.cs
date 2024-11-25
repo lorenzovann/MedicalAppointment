@@ -21,7 +21,7 @@ namespace MedicalAppointment.appointments.Api.Controllers
 
 
 
-        [HttpGet("GetAppointments")]
+        [HttpGet("GetDoctorAvailability")]
         public async Task<IActionResult> Get()
         {
             var result = await _doctorAvailabilityService.GetAll();
@@ -30,7 +30,7 @@ namespace MedicalAppointment.appointments.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetAppointmentsById")]
+        [HttpGet("GetDoctorAvailabilityById")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _doctorAvailabilityService.GetById(id);

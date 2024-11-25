@@ -6,7 +6,7 @@ using MedicalAppointment.Application.Responses.InsuranceResponses;
 
 namespace MedicalAppointment.Application.Contracts.InsuranceContracts
 {
-    public interface INetworkTypeService : IBaseService<NetworkTypeResponse, NetworkTypeGetDto, NetworkTypeSaveDto, NetworkTypeUpdateDto>
+    public interface INetworkTypeService : IBaseService<NetworkTypeResponse, NetworkTypeSaveDto, NetworkTypeUpdateDto>
     {
     }
 }

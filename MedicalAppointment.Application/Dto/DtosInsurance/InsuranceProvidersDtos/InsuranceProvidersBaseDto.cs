@@ -1,8 +1,7 @@
 ﻿namespace MedicalAppointment.Application.Dto.DtosInsurance.InsuranceProvidersDtos
 {
-    public class InsuranceProvidersBaseDto : BaseDto , IBaseDtoForTwo
+    public class InsuranceProvidersBaseDto : BaseDto
     {
-        public int InsuranceProviderID { get; set; }
         public string Name { get; set; }
         public string ContactNumber { get; set; }
         public string Email { get; set; }
@@ -19,6 +18,7 @@
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegions { get; set; }
         public decimal? MaxCoverageAmount { get; set; }
+      
     }
 
 }

@@ -1,83 +1,60 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MedicalAppointment.Application.Contracts.InsuranceContracts;
+using MedicalAppointment.Application.Dto.DtosInsurance.NetworkTypeDtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointment.Insurance.Api.Controllers
 {
+    [Route("Api/[Controller]")]
+    [ApiController]
     public class NetworkTypeController : Controller
     {
-        // GET: NetworkTypeController
-        public ActionResult Index()
+        private readonly INetworkTypeService _networkTypeService;
+
+        public NetworkTypeController(INetworkTypeService networkTypeService)
         {
-            return View();
+            _networkTypeService = networkTypeService;
         }
 
-        // GET: NetworkTypeController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet("NetworkTypeGetAll")]
+        public async Task<IActionResult> Get()
         {
-            return View();
+            var result = await _networkTypeService.GetAll();
+            if (!result.IsSuccess) return BadRequest(result);
+
+            return Ok(result);
         }
 
-        // GET: NetworkTypeController/Create
-        public ActionResult Create()
+        [HttpGet("GetNetworkTypeById")]
+        public async Task<IActionResult> Get(int id)
         {
-            return View();
+            var result = await _networkTypeService.GetById(id);
+            if (!result.IsSuccess) return BadRequest(result);
+
+            return Ok(result);
+
+
         }
 
-        // POST: NetworkTypeController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpPost("NetworkTypeSave")]
+        public async Task<IActionResult> Post([FromBody] NetworkTypeSaveDto dto)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var result = await _networkTypeService.SaveAsync(dto);
+            if (!result.IsSuccess) return BadRequest();
+
+            return Ok();
+
         }
 
-        // GET: NetworkTypeController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpPut("NetworkTypeUpdate")]
+        public async Task<IActionResult> put([FromBody] NetworkTypeUpdateDto dto)
         {
-            return View();
+            var result = await _networkTypeService.UpdateAsync(dto);
+            if (!result.IsSuccess) return BadRequest();
+
+            return Ok();
         }
 
-        // POST: NetworkTypeController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: NetworkTypeController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: NetworkTypeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

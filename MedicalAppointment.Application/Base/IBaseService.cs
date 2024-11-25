@@ -2,7 +2,7 @@
 
 namespace MedicalAppointment.Application.Base
 {
-    public interface IBaseService<TResponse, TGetDto,TSaveDto, TUpdateDto>
+    public interface IBaseService<TResponse, TSaveDto, TUpdateDto>
     {
         Task<TResponse> SaveAsync(TSaveDto dto);
         Task<TResponse> UpdateAsync(TUpdateDto dto);

@@ -52,7 +52,7 @@ namespace MedicalAppointment.Insurance.Api.Controllers
 
         // PUT api/<DoctorsController>/5
         [HttpPut("UpdateAppointments")]
-        public async Task<IActionResult> Put(int id, [FromBody] AppointmentsUpdateDto dto )
+        public async Task<IActionResult> Put(int id, [FromBody] AppointmentsUpdateDto dto)
         {
 
             var result = await _appointmentsService.UpdateAsync(dto);

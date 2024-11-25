@@ -1,4 +1,4 @@
-﻿@model MedicalAppointment.Application.Dto.Dtosappointments.AppointmentsDtos.AppoinmentsGetDto
+﻿@model MedicalAppointment.Application.Dto.Dtosappointments.Appointments.AppointmentsSaveDto
 
 @{
     ViewData["Title"] = "Create";
@@ -13,9 +13,9 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="AppointmentID" class="control-label"></label>
-                <input asp-for="AppointmentID" class="form-control" />
-                <span asp-validation-for="AppointmentID" class="text-danger"></span>
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PatientID" class="control-label"></label>
@@ -36,16 +36,6 @@
                 <label asp-for="StatusID" class="control-label"></label>
                 <input asp-for="StatusID" class="form-control" />
                 <span asp-validation-for="StatusID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateAt" class="control-label"></label>
-                <input asp-for="CreateAt" class="form-control" />
-                <span asp-validation-for="CreateAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdateAt" class="control-label"></label>
-                <input asp-for="UpdateAt" class="form-control" />
-                <span asp-validation-for="UpdateAt" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">

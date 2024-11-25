@@ -40,7 +40,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
             }
 
 
-            if (entity.NetworkTypeID <= 0 || entity.InsuranceProviderID <= 0)
+            if (entity.NetworkTypeId <= 0 || entity.InsuranceProviderID <= 0)
             {
                 operationResult.Success = false;
                 operationResult.Message = "NetworkTypeID y InsuranceProviderID debe ser positivo.";
@@ -81,7 +81,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
             }
 
 
-            if (entity.NetworkTypeID <= 0 || entity.InsuranceProviderID <= 0)
+            if (entity.NetworkTypeId <= 0 || entity.InsuranceProviderID <= 0)
             {
                 operationResult.Success = false;
                 operationResult.Message = "NetworkTypeID y InsuranceProviderID debe ser positivo.";
@@ -114,7 +114,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
                 insuranceProvidersToUpdate.CoverageDetails = entity.CoverageDetails;
                 insuranceProvidersToUpdate.LogoUrl = entity.LogoUrl;
                 insuranceProvidersToUpdate.IsPreferred = entity.IsPreferred;
-                insuranceProvidersToUpdate.NetworkTypeID = entity.NetworkTypeID;
+                insuranceProvidersToUpdate.NetworkTypeId = entity.NetworkTypeId;
                 insuranceProvidersToUpdate.CustomerSupportContact = entity.CustomerSupportContact;
                 insuranceProvidersToUpdate.AcceptedRegions = entity.AcceptedRegions;
                 insuranceProvidersToUpdate.MaxCoverageAmount = entity.MaxCoverageAmount;
@@ -174,7 +174,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
             {
                 var insurance = await (from ip in _medicalAppointmentContext.InsuranceProviders
                                        where ip.InsuranceProviderID == id && ip.IsActive == true
-                                       select new
+                                       select new 
                                        {
                                            ip.InsuranceProviderID,
                                            ip.Name,
@@ -189,7 +189,7 @@ namespace MedicalAppointment.Persistance.Repositories.InsuranceRepositories
                                            ip.CoverageDetails,
                                            ip.LogoUrl,
                                            ip.IsPreferred,
-                                           ip.NetworkTypeID,
+                                           ip.NetworkTypeId,
                                            ip.CustomerSupportContact,
                                            ip.AcceptedRegions,
                                            ip.MaxCoverageAmount,

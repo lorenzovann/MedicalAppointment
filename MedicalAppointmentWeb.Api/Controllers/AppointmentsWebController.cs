@@ -28,13 +28,13 @@ namespace MedicalAppointmentWeb.Api.Controllers
                 {
                     var result = await _appointmentsService.GetAll();
 
-                    if (result.IsSuccess && result.Data is List<AppoinmentsGetDto> dto)
+                    if (result.IsSuccess && result.Data is List<Appointments> dto)
                     {
                         return View(dto);
                     }
 
                     ViewBag.Message = result.Message;
-                    return View(new List<AppoinmentsGetDto>());
+                    return View(new List<Appointments>());
                 }
 
                 public async Task<IActionResult> Details(int id)
@@ -64,6 +64,8 @@ namespace MedicalAppointmentWeb.Api.Controllers
                         ViewBag.Message = "Datos inválidos.";
                         return View();
                     }
+
+                    appointmentsSave.CreatedAt = DateTime.Now;
 
                     var result = await _appointmentsService.SaveAsync(appointmentsSave);
 

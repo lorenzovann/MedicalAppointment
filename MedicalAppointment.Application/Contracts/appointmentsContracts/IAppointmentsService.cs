@@ -6,7 +6,7 @@ using MedicalAppointment.Application.Responses.appointmentsResponses;
 
 namespace MedicalAppointment.Application.Contracts.appointmentsContracts
 {
-    public interface IAppointmentsService : IBaseService<AppointmentsResponse, AppoinmentsGetDto, AppointmentsSaveDto, AppointmentsUpdateDto>
+    public interface IAppointmentsService : IBaseService<AppointmentsResponse,  AppointmentsSaveDto, AppointmentsUpdateDto>
     {
 
     }

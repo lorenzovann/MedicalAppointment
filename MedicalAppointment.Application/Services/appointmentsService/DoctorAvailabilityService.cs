@@ -33,7 +33,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                 if (result.Data is List<DoctorAvailability> doctorAvailabilityList)
                 {
                     doctorAvailabilityResponse.Data = doctorAvailabilityList
-                                                .Select(doctorAvailability => new DoctorAvailabilityGetDto
+                                                .Select(doctorAvailability => new DoctorAvailability
                                                 {
                                                     AvailabilityID = doctorAvailability.AvailabilityID,
                                                     DoctorID = doctorAvailability.DoctorID,
@@ -99,7 +99,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
             {
                 DoctorAvailability doctorAvailability = new DoctorAvailability
                 {
-                    AvailabilityID = dto.AvailabilityID,
+                  
                     DoctorID = dto.DoctorID,
                     AvailableDate = dto.AvailableDate,
                     StartTime = dto.StartTime,
@@ -110,9 +110,9 @@ namespace MedicalAppointment.Application.Services.appointmentsService
 
                 if (saveResult.Success)
                 {
-                    DoctorAvailabilityGetDto getDto = new DoctorAvailabilityGetDto
+                    DoctorAvailabilitySaveDto getDto = new DoctorAvailabilitySaveDto
                     {
-                        AvailabilityID = doctorAvailability.AvailabilityID,
+                        
                         DoctorID = doctorAvailability.DoctorID,
                         AvailableDate = doctorAvailability.AvailableDate,
                         StartTime = doctorAvailability.StartTime,
@@ -156,7 +156,7 @@ namespace MedicalAppointment.Application.Services.appointmentsService
                 }
 
 
-                DoctorAvailability doctorAvailability = (DoctorAvailability)resultGetId.Data!;
+                DoctorAvailability? doctorAvailability = (DoctorAvailability)resultGetId.Data!;
 
                 doctorAvailability.AvailabilityID = dto.AvailabilityID;
                 doctorAvailability.DoctorID = dto.DoctorID;

@@ -58,7 +58,7 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
-
+                _medicalAppoitmentContext.Appointments.Add(entity);
                 await base.Save(entity);
 
                 operationResult.Data = entity;
@@ -79,7 +79,9 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
         {
             OperationResult operationResult = new OperationResult();
 
-            // Validaciones de entrada
+            if (entity.AppointmentID <= 0)
+                return new OperationResult { Success = false, Message = "AppointmentID es obligatorio y debe ser mayor a 0." };
+
             if (entity.AppointmentDate == DateTime.MinValue)
                 return new OperationResult { Success = false, Message = "AppointmentDate es obligatorio." };
 
@@ -91,19 +93,26 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
 
             try
             {
-                // Verificar si el registro existe
-                var appointmentToUpdate = await _medicalAppoitmentContext.Appointments
-                    .FirstOrDefaultAsync(a => a.AppointmentID == entity.AppointmentID);
+                    
+                Appointments? appointmentToUpdate = await _medicalAppoitmentContext.Appointments.FindAsync(entity.AppointmentID);
+                    
 
+                
                 if (appointmentToUpdate == null)
-                    return new OperationResult { Success = false, Message = "No se encontró el registro a actualizar." };
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = "Appointments no se actualizo";
+                    return operationResult;
+                }
 
-                // Actualizamos las propiedades necesarias
+                // Actualizar campos relevantes
+                appointmentToUpdate.AppointmentID = entity.AppointmentID;
                 appointmentToUpdate.PatientID = entity.PatientID;
                 appointmentToUpdate.DoctorID = entity.DoctorID;
                 appointmentToUpdate.AppointmentDate = entity.AppointmentDate;
                 appointmentToUpdate.StatusID = entity.StatusID;
 
+                // Guardar cambios
                 _medicalAppoitmentContext.Appointments.Update(appointmentToUpdate);
                 await _medicalAppoitmentContext.SaveChangesAsync();
 
@@ -114,17 +123,16 @@ namespace MedicalAppointment.Persistance.Repositories.appointmentsRepositories
                     Data = appointmentToUpdate
                 };
             }
-            catch (DbUpdateException ex)
-            {
-                _logger.LogError("Error actualizando la cita: {Error}", ex.Message);
-                return new OperationResult { Success = false, Message = "Error al actualizar el registro en la base de datos." };
-            }
             catch (Exception ex)
             {
-                _logger.LogError("Error inesperado: {Error}", ex.Message);
-                return new OperationResult { Success = false, Message = "Ocurrió un error inesperado." };
+                operationResult.Success = false;
+                operationResult.Message = $"Error {ex.Message} actualizando Appointments";
+                _logger.LogError(operationResult.Message , ex.ToString());
             }
+
+            return operationResult;
         }
+
 
 
 
